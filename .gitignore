@@ -1,0 +1,4 @@
+.worktrees/
+scripts/pdfs/*.pdf
+scripts/dist/
+scripts/node_modules/
