@@ -10,6 +10,31 @@
 
 ---
 
+## ⚠ Frontend Status: Lovable frontend in use (2026-05-06)
+
+The `frontend/` directory now contains the production frontend built on [Lovable](https://lovable.dev), sourced from `https://github.com/FabrizioIacuzio/pixel-perfect-ui.git`.
+
+**What is already built (do not rebuild):**
+- Onboarding wizard (4-step, company info + denomination selection)
+- Batch log form (14 parameters: acidity, density, sugars, alcohol, dry extract, SO₂, ash, etc.)
+- Real-time compliance validation against ABM IGP thresholds (currently hardcoded in `AppDataContext`)
+- Dashboard with volume and acidity trend charts (Recharts)
+- Production calendar with compliance status indicators
+- Lab report upload screen (mock extraction)
+- Compliance document generation screen (dichiarazione periodica)
+
+**What is missing — to be built as "Frontend API Integration" tasks:**
+1. Auth screens (login / register) — none exist yet
+2. `src/api/client.ts` — typed fetch wrapper pointing at the Express backend
+3. Replace all `localStorage` reads/writes in `AppDataContext` with API calls
+4. Move hardcoded ABM IGP validation rules out of `AppDataContext` → fetched from `GET /denominations/abm-igp`
+5. Backend-driven PDF generation (replace mock with `POST /declarations/generate`)
+6. Error handling and loading states for all API calls
+
+**Frontend all-tasks in original plan below are superseded.** Only build the API integration tasks above.
+
+---
+
 ## Out of Scope (Separate Plans)
 
 - Lab report PDF extraction via Claude API — Plan 2
