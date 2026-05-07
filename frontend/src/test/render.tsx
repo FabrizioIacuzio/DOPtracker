@@ -101,7 +101,6 @@ export function renderWithProviders(
   const user = userEvent.setup({
     // Don't block on pointer events that jsdom can't fully simulate.
     pointerEventsCheck: 0,
-    advanceTimers: vi.advanceTimersByTime.bind(vi),
   });
   const result = render(ui, {
     wrapper: ({ children }) => (
