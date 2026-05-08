@@ -27,27 +27,5 @@ export class DenominationService {
   }
 }
 
-let denominationServiceInstance: DenominationService | null = null
-
-export function getDenominationService(): DenominationService {
-  if (denominationServiceInstance === null) {
-    if (!fs.existsSync(DEFAULT_DIR)) {
-      fs.mkdirSync(DEFAULT_DIR, { recursive: true })
-    }
-    denominationServiceInstance = new DenominationService()
-  }
-  return denominationServiceInstance
-}
-
-// Export for backward compatibility and direct use in production
-export const denominationService = (() => {
-  try {
-    if (!fs.existsSync(DEFAULT_DIR)) {
-      fs.mkdirSync(DEFAULT_DIR, { recursive: true })
-    }
-    return new DenominationService()
-  } catch {
-    // If something goes wrong during initialization, return a lazy proxy
-    return getDenominationService() as DenominationService
-  }
-})()
+fs.mkdirSync(DEFAULT_DIR, { recursive: true })
+export const denominationService = new DenominationService()
