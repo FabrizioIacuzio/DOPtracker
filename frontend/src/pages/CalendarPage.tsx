@@ -9,6 +9,8 @@ import { ChevronLeft, ChevronRight, Plus, Pencil } from "lucide-react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isToday, isSameMonth } from "date-fns";
 import { it, enUS } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
+import { useQuery } from "@tanstack/react-query";
+import { submissionsApi } from "@/api/submissions";
 
 export default function CalendarPage() {
   const { t, lang } = useLanguage();
@@ -41,6 +43,12 @@ export default function CalendarPage() {
 
   const startDayOfWeek = getDay(startOfMonth(currentMonth));
   const offset = startDayOfWeek === 0 ? 6 : startDayOfWeek - 1;
+
+  const { data: schedulesData } = useQuery({
+    queryKey: ["submission-schedules"],
+    queryFn: () => submissionsApi.listSchedules(),
+  });
+  const schedules = schedulesData?.schedules ?? [];
 
   const weekDays = lang === "it"
     ? ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"]
@@ -160,6 +168,29 @@ export default function CalendarPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {schedules.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Scadenze Ricorrenti</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {schedules.map((s) => (
+                <div key={s.id} className="flex items-center justify-between text-sm">
+                  <div>
+                    <span className="font-medium">{s.denominationId}</span>
+                    <span className="text-muted-foreground ml-2">{s.ruleId}</span>
+                  </div>
+                  <Badge variant="outline">
+                    {format(new Date(s.nextRunAt), "dd/MM/yyyy")}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
