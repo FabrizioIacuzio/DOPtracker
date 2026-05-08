@@ -1,28 +1,168 @@
 # DOPtracker — Collaborator Onboarding
 
-Welcome. This doc gets you from zero to productive on the project. Read `CLAUDE.md` for the full coding conventions — this doc focuses on setup and what work is available.
+## The most important thing to understand
+
+The data in `products/` was generated automatically from PDF scans and AI inference — **it has not been validated by a human against the official regulations.** Before any new feature gets built, the compliance data must be correct. A batch form that shows the wrong thresholds, or a submission that goes to the wrong channel, is worse than no app at all.
+
+**The primary job for new collaborators is: find the official documents, read them, and validate or correct `products/{denomination}/`.**
+
+Software development is secondary to this.
 
 ---
 
-## What this product is
+## What this product does
 
-A SaaS for Italian food producers to manage DOP/IGP compliance. Producers log production batches, the app validates them against the official disciplinare rules, and generates/submits the required compliance documents to the certifying body (CSQA, Check Fruit, etc.).
+Italian DOP/IGP producers must submit compliance documentation to their certifying body (CSQA, Check Fruit, consortium, or ministry) on a schedule defined by the official *disciplinare* (production regulation) and *piano dei controlli* (control plan). This app:
 
-First market: 45 denominations across northern Italy — Aceto Balsamico di Modena IGP, Gorgonzola DOP, Fontina DOP, Chianti Classico DOCG, and 41 others.
+1. Lets producers log production batches with denomination-specific parameters
+2. Validates batch data against the disciplinare thresholds (e.g. ABM: acidity ≥ 6%, density ≥ 1.06 g/ml)
+3. Generates and routes the required documents to the right recipient via the right channel (PEC email, web portal, SIAN telematic system, etc.)
 
----
-
-## Stack
-
-| Layer    | Tech |
-|----------|------|
-| Backend  | Node 20 · Express 4 · TypeScript · Prisma + PostgreSQL 16 · Jest + Supertest |
-| Frontend | React 18 · Vite · TypeScript · Tailwind + shadcn/ui · React Router 6 · Vitest + RTL |
-| Infra    | Postgres via `docker-compose.yml`; everything else runs on the host |
+The data driving steps 2 and 3 lives in `products/`.
 
 ---
 
-## Dev setup
+## How `products/` works
+
+Each denomination has its own folder:
+
+```
+products/
+  aceto-balsamico-di-modena/
+    fields.json      ← what the batch form shows + what gets validated
+    submission.json  ← who to submit to, which channel, on what schedule
+    metadata.json    ← display name, category, certifying body
+    docs/            ← official PDFs (local only, not in git — ask repo owner)
+```
+
+**`fields.json` example:**
+```json
+{
+  "fields": [
+    { "key": "acidity", "label": "Acidità totale", "type": "number", "unit": "%", "hint": "Min 6%" }
+  ],
+  "rules": [
+    { "field": "acidity", "label": "Acidità totale", "min": 6, "unit": "%" }
+  ]
+}
+```
+
+**`submission.json` example:**
+```json
+{
+  "id": "aceto-balsamico-di-modena",
+  "name": "Aceto Balsamico di Modena IGP",
+  "type": "IGP",
+  "control_body": { "name": "CSQA Certificazioni Srl", "type": "csqa", "pec": "..." },
+  "submission_rules": [
+    { "id": "rule-01", "doc_type": "declaration", "label": "Dichiarazione annuale", "channel": "pec", "schedule": { "frequency": "monthly", "due_day": 15 } }
+  ]
+}
+```
+
+Changing any of these files immediately changes what producers see in the app and what gets submitted. **This is why accuracy is critical.**
+
+---
+
+## Primary task: Denomination validation
+
+### Step 1 — Get the official documents
+
+For each denomination you're working on:
+
+1. **Piano dei controlli** — The official control plan published by the certifying body. This is the most important document. It defines who does what, when, and how. Download from the MASAF (Ministero dell'Agricoltura) website:
+   - Go to: `https://www.masaf.gov.it` → Qualità → Prodotti DOP IGP STG → Piano dei controlli
+   - Or search: `"[denomination name]" "piano dei controlli" site:masaf.gov.it`
+   - The repo already has these downloaded for all 45 denominations in `products/{id}/docs/` (ask the repo owner to share the files — they're too large for git)
+
+2. **Disciplinare di produzione** — The production specification registered with the EU. Defines the product parameters (chemical thresholds, aging times, etc.). Find on:
+   - EUR-Lex: `https://eur-lex.europa.eu` → search the denomination name
+   - MASAF website same section
+
+3. **Certifying body website** — CSQA (`csqa.it`), Check Fruit, or the consortium directly. Often has forms, tariffs, and portal instructions that the piano dei controlli doesn't fully explain.
+
+### Step 2 — Read and map the compliance procedure
+
+Work through the piano dei controlli and answer these questions. Write your answers in `products/{id}/VALIDATION.md` (create this file):
+
+**About the producer:**
+- What types of producers exist? (e.g. for ABM: cantina, elaboratore, imbottigliatore — different rules apply to each)
+- What must each producer declare and when?
+- What documents must they submit?
+
+**About submission:**
+- What is the exact submission channel? (PEC address? Portal URL? SIAN? Fax number?)
+- What is the submission schedule? (Monthly by day X? Annual? Per-batch?)
+- What document types are required? (Registration, monthly declaration, lab analysis, etc.)
+- Are there different rules for different producer types?
+
+**About production parameters:**
+- What measurable parameters does the disciplinare specify? (acidity, density, aging time, fat content, etc.)
+- What are the exact minimum/maximum thresholds with units?
+- Are there parameters that vary by variety or typology?
+
+### Step 3 — Compare against `products/{id}/fields.json` and `submission.json`
+
+Open the current files and go through them line by line against the official document:
+
+- Is every field in `fields.json` actually required by the disciplinare?
+- Are the min/max values in `rules` exactly correct (right number, right unit)?
+- Are there parameters in the disciplinare that are missing from the file?
+- In `submission.json`, is the channel correct? The schedule? The PEC/portal address?
+- Is the certifying body correct?
+
+### Step 4 — Update and document
+
+- Correct any errors in `fields.json` and `submission.json`
+- In `products/{id}/VALIDATION.md`, write:
+  - Which documents you read (name, version/date, URL or local path)
+  - What you changed and why
+  - Anything you're uncertain about (open questions)
+  - Producer types covered (if the denomination has multiple)
+
+### Step 5 — Open a PR
+
+Branch name: `data/validate-{denomination-id}`
+PR title: `data(products): validate {Denomination Name} against official documents`
+PR body: paste your `VALIDATION.md` summary.
+
+---
+
+## Start here: ABM IGP
+
+Aceto Balsamico di Modena IGP is the reference denomination — the most documented, the first in the app, and the one to validate first. Everything else is based on the patterns established here.
+
+**Documents available locally** (in `products/aceto-balsamico-di-modena/docs/` — ask repo owner):
+- `DPC030 - rev 22052025.pdf` — Piano dei controlli, 30 pages. **Read this first.**
+- `MOD001 Domanda di adesione rev22052025.pdf` — Producer registration form
+- `Allegato 2 a MOD 001 rev22052025.pdf` — Technical annex to the registration
+- `Allegato 1 a MOD 001 - Elenco fornitori uve idonee ABM rev2025.pdf` — Approved grape suppliers list
+- `MOD 003 - Modello richiesta correzione-rev22052025.pdf` — Correction request form
+
+**Key things to clarify for ABM:**
+- The piano dei controlli lists multiple operator types (cantina, elaboratore, imbottigliatore). Does our batch form and submission config cover all of them, or only one? Which one?
+- What is the exact submission schedule and channel per operator type?
+- Are all 8 chemical parameters in `fields.json` (acidity, density, sugars, aging, alcohol, dry extract, SO₂, ash) actually required for every submission, or only for lab reports?
+
+**Current `products/aceto-balsamico-di-modena/fields.json`** has 12 fields and 8 validation rules. Compare every one of them against the DPC030 document.
+
+---
+
+## Priority order for validation
+
+| Priority | Denomination | Why |
+|----------|-------------|-----|
+| 1 | `aceto-balsamico-di-modena` | Reference denomination, most documentation available |
+| 2 | `gorgonzola` | Large producer base, CSQA-controlled, well-documented |
+| 3 | `fontina` | DOP, well-known, regulatory docs available |
+| 4 | `chianti-classico` | Wine — different regulatory framework (DOCG) |
+| 5 | `bresaola-della-valtellina` | Salumi — thin config, needs research |
+
+The fruit and vegetable denominations (23 total) have simpler rules and can be validated in batches once the pattern is established.
+
+---
+
+## Dev setup (for software contributors)
 
 ```bash
 # 1. Clone
@@ -34,172 +174,41 @@ docker compose up -d
 
 # 3. Backend
 cd backend
-cp .env.example .env          # fill in values (see below)
+cp .env.example .env     # fill in values (see below)
 npm install
-npm run db:migrate            # runs prisma migrate dev
-npm run dev                   # starts on :3000
+npm run db:migrate
+npm run dev              # :3000
 
 # 4. Frontend (new terminal)
 cd frontend
-cp .env.example .env          # VITE_API_URL=http://localhost:3000
 npm install
-npm run dev                   # starts on :8080
+npm run dev              # :8080
 ```
 
 **Minimum `.env` for backend:**
 ```
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/doptracker
-JWT_SECRET=<any-string-at-least-32-chars>
+JWT_SECRET=<any-string-32-chars-minimum>
 CORS_ORIGIN=http://localhost:8080
 PORT=3000
 JOB_WORKER_POLL_INTERVAL_SECONDS=30
 JOB_WORKER_BATCH_SIZE=10
 ```
 
----
-
-## Project layout
-
-```
-DOPtracker/
-├── products/                   ← SINGLE SOURCE OF TRUTH for denomination data
-│   ├── aceto-balsamico-di-modena/
-│   │   ├── fields.json         ← batch form fields + validation rules (used by frontend)
-│   │   ├── submission.json     ← compliance channel config (used by backend)
-│   │   ├── metadata.json       ← display name, category, protection type
-│   │   └── docs/               ← regulatory PDFs / piano di controllo (local only, git-ignored)
-│   ├── gorgonzola/
-│   └── ... (45 total)
-├── backend/
-│   ├── src/
-│   │   ├── denominations/      ← loader.ts reads products/*/submission.json
-│   │   ├── routes/             ← submissions.ts (only route so far)
-│   │   ├── services/           ← submissionService, jobWorker, denominationService, channels/
-│   │   ├── middleware/         ← error.ts, auth.ts (stub)
-│   │   └── config/env.ts       ← Zod-validated env loader
-│   └── prisma/schema.prisma    ← User, SubmissionSchedule, SubmissionJob, Submission
-└── frontend/
-    └── src/
-        ├── lib/denominationFields.ts   ← thin loader, reads products/*/fields.json via Vite glob
-        ├── pages/                      ← Onboarding, BatchForm, HomePage, CalendarPage, etc.
-        └── contexts/AppDataContext.tsx ← app state (localStorage-backed, transitional)
-```
-
----
-
-## Running tests
-
+**Tests:**
 ```bash
-# Frontend (183 tests)
-cd frontend && npm test
-
-# Backend (48 tests)
-cd backend && npm test
+cd frontend && npm test   # 183 tests
+cd backend && npm test    # 48 tests
 ```
 
-Tests must pass before every commit. Never `--no-verify`.
+Read `CLAUDE.md` for full coding conventions before writing any code. Key rules: TDD always, never mock the database, always branch off master.
 
 ---
 
-## Current state — what's built
+## Open software work (after data is validated)
 
-| Area | Status |
-|------|--------|
-| Onboarding flow (45 denominations) | ✅ Done |
-| Denomination-specific batch forms | ✅ Done |
-| Batch validation against disciplinare rules | ✅ Done |
-| Calendar + dashboard + charts | ✅ Done |
-| `products/` as single source of truth | ✅ Done |
-| Compliance submission job queue (backend) | ✅ Done |
-| Submission channel handlers (PEC, portal, SIAN, PDF) | ✅ Done |
-| Prisma schema (User, SubmissionJob, Submission) | ✅ Done |
+- **Authentication** — `POST /auth/register`, `POST /auth/login`, JWT middleware. User model already exists in Prisma.
+- **Batch CRUD API** — `POST/GET/PUT /batches`. Frontend currently uses localStorage; needs migration to the real API.
+- **PDF declaration generation** — Generate CSQA-style declaration PDFs using PDFKit when a submission is triggered.
 
----
-
-## Open work — pick something up
-
-### 1. Authentication (backend + frontend)
-**Scope:** `backend/src/routes/auth.ts`, `frontend/src/pages/Login.tsx`, `frontend/src/pages/Register.tsx`
-
-The `User` model already exists in the Prisma schema. What's missing:
-- `POST /auth/register` — hash password with bcrypt (cost ≥ 12), return JWT
-- `POST /auth/login` — verify password, return JWT
-- `GET /auth/me` — return current user from token
-- Apply `authMiddleware` (stub already in `backend/src/middleware/auth.ts`) to protected routes
-- Frontend Login and Register pages
-- Store JWT in `localStorage`, attach as `Authorization: Bearer ...` header via an Axios/fetch interceptor
-
-See `CLAUDE.md §7` for JWT and bcrypt requirements.
-
----
-
-### 2. Batch CRUD API (backend + frontend migration)
-**Scope:** `backend/src/routes/batches.ts`, update `frontend/src/pages/BatchForm.tsx`, `frontend/src/contexts/AppDataContext.tsx`
-
-The frontend currently saves batches to `localStorage`. Per `CLAUDE.md §5`, every new feature must hit the API — and touching a localStorage page means migrating it as part of that task.
-
-What's needed:
-- `POST /batches` — create a batch (denomination-aware, stores `fields` as JSON)
-- `GET /batches` — list batches for the authenticated producer
-- `GET /batches/:id` — get single batch
-- `PUT /batches/:id` — update batch fields, set `modifiedAt`
-- Update `BatchForm.tsx` to call the API instead of `AppDataContext.addBatch`
-- Update `HomePage.tsx` and `CalendarPage.tsx` to fetch from API instead of reading context
-
-Prisma model to add:
-```prisma
-model Batch {
-  id             String   @id @default(cuid())
-  producerId     String
-  denominationId String
-  batchId        String
-  date           String
-  fields         Json
-  notes          String   @default("")
-  hasWarnings    Boolean  @default(false)
-  createdAt      DateTime @default(now())
-  modifiedAt     DateTime?
-  producer       User     @relation(fields: [producerId], references: [id])
-}
-```
-
----
-
-### 3. Add a missing denomination
-**Scope:** `products/{new-id}/` only (+ one line in `Onboarding.tsx`)
-
-Some denominations currently have minimal configs. To add or improve one:
-
-1. Edit `products/{id}/fields.json` — add the batch form fields from the official disciplinare
-2. Edit `products/{id}/submission.json` — add the correct submission channel (PEC/portal/SIAN)
-3. Edit `products/{id}/metadata.json` — confirm display name and category are correct
-4. If it's a new denomination not yet in the onboarding list, add it to `frontend/src/pages/Onboarding.tsx` in the correct category
-
-Good starting candidates with thin configs today: `bresaola-della-valtellina`, `sopressa-vicentina`, `chianti-classico`, `amarene-brusche-di-modena`.
-
-The regulatory docs are in `products/{id}/docs/piano-di-controllo.zip` locally (not committed due to size — ask the repo owner to share them).
-
----
-
-### 4. PDF declaration generation
-**Scope:** `backend/src/services/pdfService.ts` (new), `backend/src/routes/submissions.ts` (add endpoint)
-
-When a submission is triggered, the backend should generate a CSQA-style declaration PDF using PDFKit. The PDF content is denomination-specific (different fields, different certifying body letterhead).
-
-- `GET /submissions/:id/pdf` — generate and stream the PDF for a completed submission
-- PDFs must include: producer name, denomination, batch date range, key production parameters from `fields`
-- Tests assert extracted text content (not pixel diffs) — inject a clock for deterministic dates
-
-See `CLAUDE.md §6` for PDF testing approach.
-
----
-
-## How to work on this project
-
-1. **Always branch off `master`**: `git checkout -b feat/your-feature`
-2. **Plan before coding**: enter plan mode, wait for approval, then TDD (red → green → refactor). See `CLAUDE.md §2`.
-3. **One feature per PR**, conventional commit title: `feat(scope): …`, `fix(scope): …`
-4. **Never mock the database** in backend integration tests — use the real Postgres from docker-compose
-5. **Never push directly to `master`** — open a PR
-
-If you're using Claude Code, it reads `CLAUDE.md` automatically and knows the full conventions.
+These should not be started until the denomination data they depend on is validated.
