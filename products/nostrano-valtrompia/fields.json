@@ -1,0 +1,62 @@
+{
+  "fields": [
+    {
+      "key": "cow_milk_liters",
+      "label": "Latte vaccino",
+      "type": "number",
+      "unit": "L",
+      "required": true
+    },
+    {
+      "key": "goat_milk_liters",
+      "label": "Latte caprino",
+      "type": "number",
+      "unit": "L",
+      "hint": "Max 30% sul totale"
+    },
+    {
+      "key": "goat_milk_percent",
+      "label": "% latte caprino",
+      "type": "number",
+      "unit": "%",
+      "hint": "Max 30%"
+    },
+    {
+      "key": "saffron_added",
+      "label": "Zafferano aggiunto",
+      "type": "select",
+      "options": [
+        "sì",
+        "no"
+      ]
+    },
+    {
+      "key": "aging_months",
+      "label": "Mesi di stagionatura",
+      "type": "number",
+      "unit": "mesi",
+      "hint": "Min 12 mesi"
+    },
+    {
+      "key": "wheel_weight_kg",
+      "label": "Peso forma",
+      "type": "number",
+      "unit": "kg",
+      "hint": "8–18 kg"
+    }
+  ],
+  "rules": [
+    {
+      "field": "goat_milk_percent",
+      "label": "% latte caprino",
+      "max": 30,
+      "unit": "%"
+    },
+    {
+      "field": "aging_months",
+      "label": "Mesi stagionatura",
+      "min": 12,
+      "unit": "mesi"
+    }
+  ]
+}

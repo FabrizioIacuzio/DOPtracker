@@ -1,0 +1,56 @@
+{
+  "fields": [
+    {
+      "key": "harvest_date",
+      "label": "Data raccolta",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso produzione",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "variety",
+      "label": "Varietà",
+      "type": "select",
+      "options": [
+        "bigarreau_moreau",
+        "durone",
+        "linda",
+        "ferrovia",
+        "lapins"
+      ],
+      "required": true
+    },
+    {
+      "key": "brix_degrees",
+      "label": "Gradi Brix",
+      "type": "number",
+      "hint": "Min 12"
+    },
+    {
+      "key": "caliber_mm",
+      "label": "Calibro",
+      "type": "number",
+      "unit": "mm",
+      "hint": "Min 22 mm"
+    }
+  ],
+  "rules": [
+    {
+      "field": "brix_degrees",
+      "label": "Gradi Brix",
+      "min": 12
+    },
+    {
+      "field": "caliber_mm",
+      "label": "Calibro",
+      "min": 22,
+      "unit": "mm"
+    }
+  ]
+}

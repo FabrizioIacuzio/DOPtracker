@@ -1,0 +1,50 @@
+{
+  "fields": [
+    {
+      "key": "harvest_date",
+      "label": "Data raccolta",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso produzione",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "variety",
+      "label": "Varietà",
+      "type": "select",
+      "options": [
+        "abate_fetel",
+        "kaiser",
+        "conference",
+        "william",
+        "decana"
+      ],
+      "required": true
+    },
+    {
+      "key": "caliber_mm",
+      "label": "Calibro",
+      "type": "number",
+      "unit": "mm",
+      "hint": "Min 55 mm"
+    },
+    {
+      "key": "brix_degrees",
+      "label": "Gradi Brix",
+      "type": "number"
+    }
+  ],
+  "rules": [
+    {
+      "field": "caliber_mm",
+      "label": "Calibro",
+      "min": 55,
+      "unit": "mm"
+    }
+  ]
+}

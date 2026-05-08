@@ -1,0 +1,47 @@
+{
+  "fields": [
+    {
+      "key": "harvest_date",
+      "label": "Data raccolta",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso produzione",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "variety",
+      "label": "Varietà",
+      "type": "select",
+      "options": [
+        "amarena_di_vignola",
+        "ravenna",
+        "altre"
+      ]
+    },
+    {
+      "key": "brix_degrees",
+      "label": "Gradi Brix",
+      "type": "number"
+    },
+    {
+      "key": "total_acidity_meq",
+      "label": "Acidità totale",
+      "type": "number",
+      "unit": "meq/100g",
+      "hint": "Min 10 meq/100g"
+    }
+  ],
+  "rules": [
+    {
+      "field": "total_acidity_meq",
+      "label": "Acidità totale",
+      "min": 10,
+      "unit": "meq/100g"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "fields": [
+    {
+      "key": "harvest_date",
+      "label": "Data raccolta",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso produzione",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "variety",
+      "label": "Varietà",
+      "type": "select",
+      "options": [
+        "spagnolit",
+        "calonega",
+        "canalino",
+        "spagnol"
+      ],
+      "required": true
+    },
+    {
+      "key": "type",
+      "label": "Tipo",
+      "type": "select",
+      "options": [
+        "fresco",
+        "secco"
+      ],
+      "required": true
+    },
+    {
+      "key": "moisture_percent",
+      "label": "Umidità (secco)",
+      "type": "number",
+      "unit": "%",
+      "hint": "Max 16% se secco"
+    }
+  ],
+  "rules": [
+    {
+      "field": "moisture_percent",
+      "label": "Umidità",
+      "max": 16,
+      "unit": "%"
+    }
+  ]
+}

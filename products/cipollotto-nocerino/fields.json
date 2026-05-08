@@ -1,0 +1,33 @@
+{
+  "fields": [
+    {
+      "key": "harvest_date",
+      "label": "Data raccolta",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso produzione",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "avg_bulb_diameter_mm",
+      "label": "Diametro bulbo",
+      "type": "number",
+      "unit": "mm",
+      "hint": "10–25 mm"
+    }
+  ],
+  "rules": [
+    {
+      "field": "avg_bulb_diameter_mm",
+      "label": "Diametro bulbo",
+      "min": 10,
+      "max": 25,
+      "unit": "mm"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "fields": [
+    {
+      "key": "milk_liters",
+      "label": "Latte vaccino parzialmente scremato",
+      "type": "number",
+      "unit": "L",
+      "required": true
+    },
+    {
+      "key": "fat_on_dry_matter_percent",
+      "label": "Grasso sulla sostanza secca",
+      "type": "number",
+      "unit": "%",
+      "hint": "Min 34%"
+    },
+    {
+      "key": "aging_days",
+      "label": "Giorni di stagionatura",
+      "type": "number",
+      "unit": "giorni",
+      "hint": "Min 70 giorni"
+    },
+    {
+      "key": "wheel_weight_kg",
+      "label": "Peso forma",
+      "type": "number",
+      "unit": "kg",
+      "hint": "7–12 kg"
+    }
+  ],
+  "rules": [
+    {
+      "field": "fat_on_dry_matter_percent",
+      "label": "Grasso s.s.",
+      "min": 34,
+      "unit": "%"
+    },
+    {
+      "field": "aging_days",
+      "label": "Giorni stagionatura",
+      "min": 70,
+      "unit": "giorni"
+    }
+  ]
+}

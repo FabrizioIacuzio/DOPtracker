@@ -1,0 +1,50 @@
+{
+  "fields": [
+    {
+      "key": "variety",
+      "label": "Tipologia",
+      "type": "select",
+      "options": [
+        "freschissimo",
+        "fresco",
+        "mezzano",
+        "vecchio",
+        "vecchio_selezione_oro"
+      ],
+      "required": true
+    },
+    {
+      "key": "milk_liters",
+      "label": "Latte utilizzato",
+      "type": "number",
+      "unit": "L",
+      "required": true
+    },
+    {
+      "key": "fat_on_dry_matter_percent",
+      "label": "Grasso sulla sostanza secca",
+      "type": "number",
+      "unit": "%"
+    },
+    {
+      "key": "aging_days",
+      "label": "Giorni di stagionatura",
+      "type": "number",
+      "unit": "giorni"
+    },
+    {
+      "key": "wheel_weight_kg",
+      "label": "Peso forma",
+      "type": "number",
+      "unit": "kg"
+    }
+  ],
+  "rules": [
+    {
+      "field": "aging_days",
+      "label": "Giorni stagionatura (freschissimo min 0, fresco min 20)",
+      "min": 0,
+      "unit": "giorni"
+    }
+  ]
+}

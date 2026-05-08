@@ -1,0 +1,60 @@
+{
+  "fields": [
+    {
+      "key": "milk_liters",
+      "label": "Latte parzialmente scremato",
+      "type": "number",
+      "unit": "L",
+      "required": true
+    },
+    {
+      "key": "skimming_hours",
+      "label": "Ore di affioramento",
+      "type": "number",
+      "unit": "h",
+      "hint": "Affioration naturale"
+    },
+    {
+      "key": "fat_on_dry_matter_percent",
+      "label": "Grasso sulla sostanza secca",
+      "type": "number",
+      "unit": "%",
+      "hint": "Min 44%"
+    },
+    {
+      "key": "aging_months",
+      "label": "Mesi di stagionatura",
+      "type": "number",
+      "unit": "mesi",
+      "hint": "Min 9 mesi (Riserva min 20)"
+    },
+    {
+      "key": "wheel_weight_kg",
+      "label": "Peso forma",
+      "type": "number",
+      "unit": "kg",
+      "hint": "24–40 kg"
+    }
+  ],
+  "rules": [
+    {
+      "field": "fat_on_dry_matter_percent",
+      "label": "Grasso s.s.",
+      "min": 44,
+      "unit": "%"
+    },
+    {
+      "field": "aging_months",
+      "label": "Mesi stagionatura",
+      "min": 9,
+      "unit": "mesi"
+    },
+    {
+      "field": "wheel_weight_kg",
+      "label": "Peso forma",
+      "min": 24,
+      "max": 40,
+      "unit": "kg"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "fields": [
+    {
+      "key": "harvest_date",
+      "label": "Data raccolta",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso produzione",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "variety",
+      "label": "Varietà",
+      "type": "select",
+      "options": [
+        "red_delicious",
+        "golden_delicious",
+        "renetta_canada"
+      ],
+      "required": true
+    },
+    {
+      "key": "brix_degrees",
+      "label": "Gradi Brix",
+      "type": "number",
+      "hint": "Min 11.5"
+    },
+    {
+      "key": "flesh_firmness_kg_cm2",
+      "label": "Durezza polpa",
+      "type": "number",
+      "unit": "kg/cm²"
+    },
+    {
+      "key": "caliber_mm",
+      "label": "Calibro",
+      "type": "number",
+      "unit": "mm",
+      "hint": "Min 65 mm"
+    }
+  ],
+  "rules": [
+    {
+      "field": "brix_degrees",
+      "label": "Gradi Brix",
+      "min": 11.5
+    },
+    {
+      "field": "caliber_mm",
+      "label": "Calibro",
+      "min": 65,
+      "unit": "mm"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "fields": [
+    {
+      "key": "harvest_date",
+      "label": "Data raccolta",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso produzione",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "variety",
+      "label": "Tipo",
+      "type": "select",
+      "options": [
+        "pesca",
+        "nettarina",
+        "percoca"
+      ],
+      "required": true
+    },
+    {
+      "key": "brix_degrees",
+      "label": "Gradi Brix",
+      "type": "number",
+      "hint": "Min 9 (pesca), min 9.5 (nettarina)"
+    },
+    {
+      "key": "caliber_mm",
+      "label": "Calibro",
+      "type": "number",
+      "unit": "mm",
+      "hint": "Min 56 mm"
+    }
+  ],
+  "rules": [
+    {
+      "field": "brix_degrees",
+      "label": "Gradi Brix",
+      "min": 9
+    },
+    {
+      "field": "caliber_mm",
+      "label": "Calibro",
+      "min": 56,
+      "unit": "mm"
+    }
+  ]
+}

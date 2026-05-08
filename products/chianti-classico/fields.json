@@ -1,0 +1,84 @@
+{
+  "fields": [
+    {
+      "key": "variety",
+      "label": "Tipologia",
+      "type": "select",
+      "options": [
+        "annata",
+        "riserva",
+        "gran_selezione"
+      ],
+      "required": true
+    },
+    {
+      "key": "sangiovese_percent",
+      "label": "Percentuale Sangiovese",
+      "type": "number",
+      "unit": "%",
+      "hint": "Min 80%",
+      "required": true
+    },
+    {
+      "key": "total_alcohol_percent",
+      "label": "Titolo alcolometrico totale",
+      "type": "number",
+      "unit": "% vol",
+      "hint": "Annata/Riserva min 12%, Gran Selezione min 13%"
+    },
+    {
+      "key": "actual_alcohol_percent",
+      "label": "Titolo alcolometrico effettivo",
+      "type": "number",
+      "unit": "% vol"
+    },
+    {
+      "key": "residual_sugar_g_l",
+      "label": "Zuccheri residui",
+      "type": "number",
+      "unit": "g/L",
+      "hint": "Vino secco: max 4 g/L"
+    },
+    {
+      "key": "total_acidity_g_l",
+      "label": "Acidità totale",
+      "type": "number",
+      "unit": "g/L",
+      "hint": "Min 4.5 g/L"
+    },
+    {
+      "key": "aging_months",
+      "label": "Mesi di affinamento",
+      "type": "number",
+      "unit": "mesi",
+      "hint": "Riserva min 24, Gran Selezione min 30"
+    },
+    {
+      "key": "total_liters",
+      "label": "Totale litri prodotti",
+      "type": "number",
+      "unit": "L",
+      "required": true
+    }
+  ],
+  "rules": [
+    {
+      "field": "sangiovese_percent",
+      "label": "Sangiovese",
+      "min": 80,
+      "unit": "%"
+    },
+    {
+      "field": "total_alcohol_percent",
+      "label": "Titolo alcolometrico totale",
+      "min": 12,
+      "unit": "% vol"
+    },
+    {
+      "field": "total_acidity_g_l",
+      "label": "Acidità totale",
+      "min": 4.5,
+      "unit": "g/L"
+    }
+  ]
+}

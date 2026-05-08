@@ -1,0 +1,34 @@
+{
+  "fields": [
+    {
+      "key": "harvest_date",
+      "label": "Data raccolta",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso produzione",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "variety",
+      "label": "Tipologia",
+      "type": "select",
+      "options": [
+        "precoce",
+        "tardivo"
+      ],
+      "required": true
+    },
+    {
+      "key": "avg_head_weight_g",
+      "label": "Peso medio cespo",
+      "type": "number",
+      "unit": "g"
+    }
+  ],
+  "rules": []
+}

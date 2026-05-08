@@ -1,0 +1,27 @@
+{
+  "id": "miele-delle-dolomiti-bellunesi",
+  "name": "Miele Delle Dolomiti Bellunesi DOP",
+  "type": "DOP",
+  "control_body": {
+    "name": "CSQA Certificazioni Srl",
+    "type": "csqa",
+    "pec": "regolamentato@pec.csqa.it",
+    "email": "regolamentato@csqa.it",
+    "address": "via S. Gaetano, 74, 36016 Thiene (VI)"
+  },
+  "submission_rules": [
+    {
+      "id": "rule-01-pec-document-generic",
+      "doc_type": "document_generic",
+      "label": "Documentazione via PEC",
+      "channel": "pec",
+      "automation": "automated",
+      "recipient": "csqa",
+      "schedule": {
+        "frequency": "monthly",
+        "due_day": 15
+      },
+      "instructions": null
+    }
+  ]
+}

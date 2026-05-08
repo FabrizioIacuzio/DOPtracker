@@ -1,0 +1,53 @@
+{
+  "fields": [
+    {
+      "key": "harvest_date",
+      "label": "Data raccolta",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso produzione",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "variety",
+      "label": "Varietà",
+      "type": "select",
+      "options": [
+        "italia",
+        "vittoria"
+      ],
+      "required": true
+    },
+    {
+      "key": "brix_degrees",
+      "label": "Gradi Brix",
+      "type": "number",
+      "hint": "Min 14"
+    },
+    {
+      "key": "avg_bunch_weight_g",
+      "label": "Peso medio grappolo",
+      "type": "number",
+      "unit": "g",
+      "hint": "Min 150 g"
+    }
+  ],
+  "rules": [
+    {
+      "field": "brix_degrees",
+      "label": "Gradi Brix",
+      "min": 14
+    },
+    {
+      "field": "avg_bunch_weight_g",
+      "label": "Peso medio grappolo",
+      "min": 150,
+      "unit": "g"
+    }
+  ]
+}

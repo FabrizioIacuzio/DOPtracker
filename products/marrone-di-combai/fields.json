@@ -1,0 +1,44 @@
+{
+  "fields": [
+    {
+      "key": "harvest_date",
+      "label": "Data raccolta",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso produzione",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "fruits_per_kg",
+      "label": "Frutti per kg",
+      "type": "number",
+      "hint": "Max 75 frutti/kg",
+      "required": true
+    },
+    {
+      "key": "moisture_percent",
+      "label": "Umidità",
+      "type": "number",
+      "unit": "%",
+      "hint": "Max 14%"
+    }
+  ],
+  "rules": [
+    {
+      "field": "fruits_per_kg",
+      "label": "Frutti per kg",
+      "max": 75
+    },
+    {
+      "field": "moisture_percent",
+      "label": "Umidità",
+      "max": 14,
+      "unit": "%"
+    }
+  ]
+}

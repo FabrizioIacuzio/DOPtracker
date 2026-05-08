@@ -1,0 +1,53 @@
+{
+  "fields": [
+    {
+      "key": "pork_weight_kg",
+      "label": "Carne suina",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "fat_percent",
+      "label": "Contenuto di grasso",
+      "type": "number",
+      "unit": "%",
+      "hint": "Tipicamente 20–30%"
+    },
+    {
+      "key": "diameter_cm",
+      "label": "Diametro insaccato",
+      "type": "number",
+      "unit": "cm"
+    },
+    {
+      "key": "aging_days",
+      "label": "Giorni di stagionatura",
+      "type": "number",
+      "unit": "giorni",
+      "hint": "Min 60 giorni (grandi min 120)"
+    },
+    {
+      "key": "weight_kg",
+      "label": "Peso pezzo",
+      "type": "number",
+      "unit": "kg",
+      "hint": "3–15 kg"
+    }
+  ],
+  "rules": [
+    {
+      "field": "aging_days",
+      "label": "Giorni stagionatura",
+      "min": 60,
+      "unit": "giorni"
+    },
+    {
+      "field": "weight_kg",
+      "label": "Peso pezzo",
+      "min": 3,
+      "max": 15,
+      "unit": "kg"
+    }
+  ]
+}

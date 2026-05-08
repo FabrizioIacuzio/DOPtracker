@@ -1,0 +1,76 @@
+{
+  "fields": [
+    {
+      "key": "wine_type",
+      "label": "Tipologia",
+      "type": "select",
+      "options": [
+        "bianco",
+        "rosso",
+        "rosato",
+        "spumante",
+        "frizzante"
+      ],
+      "required": true
+    },
+    {
+      "key": "grape_variety",
+      "label": "Varietà principale",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "total_alcohol_percent",
+      "label": "Titolo alcolometrico totale",
+      "type": "number",
+      "unit": "% vol",
+      "hint": "Min 10.5% vol"
+    },
+    {
+      "key": "actual_alcohol_percent",
+      "label": "Titolo alcolometrico effettivo",
+      "type": "number",
+      "unit": "% vol"
+    },
+    {
+      "key": "residual_sugar_g_l",
+      "label": "Zuccheri residui",
+      "type": "number",
+      "unit": "g/L"
+    },
+    {
+      "key": "total_acidity_g_l",
+      "label": "Acidità totale",
+      "type": "number",
+      "unit": "g/L",
+      "hint": "Min 4.5 g/L"
+    },
+    {
+      "key": "aging_months",
+      "label": "Mesi di affinamento",
+      "type": "number",
+      "unit": "mesi"
+    },
+    {
+      "key": "total_liters",
+      "label": "Totale litri prodotti",
+      "type": "number",
+      "unit": "L",
+      "required": true
+    }
+  ],
+  "rules": [
+    {
+      "field": "total_alcohol_percent",
+      "label": "Titolo alcolometrico totale",
+      "min": 10.5,
+      "unit": "% vol"
+    },
+    {
+      "field": "total_acidity_g_l",
+      "label": "Acidità totale",
+      "min": 4.5,
+      "unit": "g/L"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "fields": [
+    {
+      "key": "cow_milk_liters",
+      "label": "Latte vaccino",
+      "type": "number",
+      "unit": "L",
+      "required": true
+    },
+    {
+      "key": "goat_milk_liters",
+      "label": "Latte caprino",
+      "type": "number",
+      "unit": "L",
+      "hint": "Max 10–20% sul totale"
+    },
+    {
+      "key": "goat_milk_percent",
+      "label": "% latte caprino",
+      "type": "number",
+      "unit": "%",
+      "hint": "Max 20%"
+    },
+    {
+      "key": "fat_on_dry_matter_percent",
+      "label": "Grasso sulla sostanza secca",
+      "type": "number",
+      "unit": "%"
+    },
+    {
+      "key": "aging_days",
+      "label": "Giorni di stagionatura",
+      "type": "number",
+      "unit": "giorni",
+      "hint": "Min 70 giorni"
+    },
+    {
+      "key": "wheel_weight_kg",
+      "label": "Peso forma",
+      "type": "number",
+      "unit": "kg",
+      "hint": "8–25 kg"
+    }
+  ],
+  "rules": [
+    {
+      "field": "goat_milk_percent",
+      "label": "% latte caprino",
+      "max": 20,
+      "unit": "%"
+    },
+    {
+      "field": "aging_days",
+      "label": "Giorni stagionatura",
+      "min": 70,
+      "unit": "giorni"
+    }
+  ]
+}

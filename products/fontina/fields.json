@@ -1,0 +1,65 @@
+{
+  "fields": [
+    {
+      "key": "milk_liters",
+      "label": "Latte intero crudo utilizzato",
+      "type": "number",
+      "unit": "L",
+      "required": true
+    },
+    {
+      "key": "milk_fat_percent",
+      "label": "Tenore grasso latte",
+      "type": "number",
+      "unit": "%"
+    },
+    {
+      "key": "fat_on_dry_matter_percent",
+      "label": "Grasso sulla sostanza secca",
+      "type": "number",
+      "unit": "%",
+      "hint": "Min 45%"
+    },
+    {
+      "key": "aging_days",
+      "label": "Giorni di stagionatura",
+      "type": "number",
+      "unit": "giorni",
+      "hint": "Min 90 giorni"
+    },
+    {
+      "key": "wheel_weight_kg",
+      "label": "Peso forma",
+      "type": "number",
+      "unit": "kg",
+      "hint": "7.5–12 kg"
+    },
+    {
+      "key": "cellar_humidity_percent",
+      "label": "Umidità cantina",
+      "type": "number",
+      "unit": "%"
+    }
+  ],
+  "rules": [
+    {
+      "field": "fat_on_dry_matter_percent",
+      "label": "Grasso s.s.",
+      "min": 45,
+      "unit": "%"
+    },
+    {
+      "field": "aging_days",
+      "label": "Giorni stagionatura",
+      "min": 90,
+      "unit": "giorni"
+    },
+    {
+      "field": "wheel_weight_kg",
+      "label": "Peso forma",
+      "min": 7.5,
+      "max": 12,
+      "unit": "kg"
+    }
+  ]
+}

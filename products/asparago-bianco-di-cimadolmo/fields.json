@@ -1,0 +1,43 @@
+{
+  "fields": [
+    {
+      "key": "harvest_date",
+      "label": "Data raccolta",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso produzione",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "caliber_class",
+      "label": "Classe calibro",
+      "type": "select",
+      "options": [
+        "extra",
+        "prima",
+        "seconda"
+      ],
+      "required": true
+    },
+    {
+      "key": "avg_diameter_mm",
+      "label": "Diametro medio",
+      "type": "number",
+      "unit": "mm",
+      "hint": "Min 10 mm"
+    }
+  ],
+  "rules": [
+    {
+      "field": "avg_diameter_mm",
+      "label": "Diametro",
+      "min": 10,
+      "unit": "mm"
+    }
+  ]
+}

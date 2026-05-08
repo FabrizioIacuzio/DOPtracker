@@ -1,0 +1,82 @@
+{
+  "fields": [
+    {
+      "key": "honey_type",
+      "label": "Tipo di miele",
+      "type": "select",
+      "options": [
+        "millefiori",
+        "acacia",
+        "castagno",
+        "tiglio",
+        "rododendro"
+      ],
+      "required": true
+    },
+    {
+      "key": "harvest_date",
+      "label": "Data raccolta",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso produzione",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "moisture_percent",
+      "label": "Contenuto di acqua",
+      "type": "number",
+      "unit": "%",
+      "hint": "Max 18%"
+    },
+    {
+      "key": "hmf_mg_kg",
+      "label": "HMF",
+      "type": "number",
+      "unit": "mg/kg",
+      "hint": "Max 15 mg/kg"
+    },
+    {
+      "key": "diastase_index",
+      "label": "Indice diastatico (Göthe)",
+      "type": "number",
+      "hint": "Min 8"
+    },
+    {
+      "key": "fructose_glucose_percent",
+      "label": "Fruttosio + Glucosio",
+      "type": "number",
+      "unit": "%",
+      "hint": "Min 60%"
+    }
+  ],
+  "rules": [
+    {
+      "field": "moisture_percent",
+      "label": "Contenuto di acqua",
+      "max": 18,
+      "unit": "%"
+    },
+    {
+      "field": "hmf_mg_kg",
+      "label": "HMF",
+      "max": 15,
+      "unit": "mg/kg"
+    },
+    {
+      "field": "diastase_index",
+      "label": "Indice diastatico",
+      "min": 8
+    },
+    {
+      "field": "fructose_glucose_percent",
+      "label": "Fruttosio + Glucosio",
+      "min": 60,
+      "unit": "%"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "fields": [
+    {
+      "key": "milk_liters",
+      "label": "Latte vaccino intero pastorizzato",
+      "type": "number",
+      "unit": "L",
+      "required": true
+    },
+    {
+      "key": "fat_on_dry_matter_percent",
+      "label": "Grasso sulla sostanza secca",
+      "type": "number",
+      "unit": "%",
+      "hint": "Min 48%"
+    },
+    {
+      "key": "form_weight_g",
+      "label": "Peso forma",
+      "type": "number",
+      "unit": "g",
+      "hint": "300–2200 g"
+    }
+  ],
+  "rules": [
+    {
+      "field": "fat_on_dry_matter_percent",
+      "label": "Grasso s.s.",
+      "min": 48,
+      "unit": "%"
+    },
+    {
+      "field": "form_weight_g",
+      "label": "Peso forma",
+      "min": 300,
+      "max": 2200,
+      "unit": "g"
+    }
+  ]
+}

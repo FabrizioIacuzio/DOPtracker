@@ -1,0 +1,54 @@
+{
+  "fields": [
+    {
+      "key": "slaughter_date",
+      "label": "Data macellazione",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "batch_count",
+      "label": "Numero capi",
+      "type": "number",
+      "required": true
+    },
+    {
+      "key": "avg_weight_g",
+      "label": "Peso medio macellazione",
+      "type": "number",
+      "unit": "g",
+      "hint": "150–700 g",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso totale",
+      "type": "number",
+      "unit": "kg"
+    },
+    {
+      "key": "water_source",
+      "label": "Sorgente d'acqua",
+      "type": "text",
+      "hint": "Sorgente montana certificata"
+    },
+    {
+      "key": "feed_type",
+      "label": "Tipo di mangime",
+      "type": "select",
+      "options": [
+        "certificato_dop",
+        "biologico"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "field": "avg_weight_g",
+      "label": "Peso medio macellazione",
+      "min": 150,
+      "max": 700,
+      "unit": "g"
+    }
+  ]
+}

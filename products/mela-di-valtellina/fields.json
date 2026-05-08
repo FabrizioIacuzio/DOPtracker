@@ -1,0 +1,57 @@
+{
+  "fields": [
+    {
+      "key": "harvest_date",
+      "label": "Data raccolta",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "total_weight_kg",
+      "label": "Peso produzione",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "variety",
+      "label": "Varietà",
+      "type": "select",
+      "options": [
+        "golden_delicious",
+        "gala",
+        "braeburn",
+        "jonagold",
+        "fuji",
+        "morgenduft"
+      ],
+      "required": true
+    },
+    {
+      "key": "caliber_mm",
+      "label": "Calibro",
+      "type": "number",
+      "unit": "mm",
+      "hint": "Min 60 mm"
+    },
+    {
+      "key": "brix_degrees",
+      "label": "Gradi Brix",
+      "type": "number",
+      "hint": "Min 10"
+    }
+  ],
+  "rules": [
+    {
+      "field": "caliber_mm",
+      "label": "Calibro",
+      "min": 60,
+      "unit": "mm"
+    },
+    {
+      "field": "brix_degrees",
+      "label": "Gradi Brix",
+      "min": 10
+    }
+  ]
+}

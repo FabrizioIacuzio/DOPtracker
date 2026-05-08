@@ -30,3 +30,7 @@ frontend/.env
 # Test / coverage
 coverage/
 *.log
+
+# Products: binary regulatory docs (large, source is .worktrees)
+products/*/docs/*.zip
+products/*/docs/*.pdf

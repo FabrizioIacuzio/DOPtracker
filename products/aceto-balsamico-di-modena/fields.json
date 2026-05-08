@@ -1,0 +1,133 @@
+{
+  "fields": [
+    {
+      "key": "supplier",
+      "label": "Fornitore mosto",
+      "type": "text"
+    },
+    {
+      "key": "volume",
+      "label": "Volume",
+      "type": "number",
+      "unit": "L",
+      "required": true
+    },
+    {
+      "key": "acidity",
+      "label": "Acidità totale",
+      "type": "number",
+      "unit": "%",
+      "hint": "Min 6%"
+    },
+    {
+      "key": "density",
+      "label": "Densità a 20°C",
+      "type": "number",
+      "unit": "g/ml",
+      "hint": "Min 1.06 g/ml"
+    },
+    {
+      "key": "sugars",
+      "label": "Zuccheri riduttori",
+      "type": "number",
+      "unit": "g/L",
+      "hint": "Min 110 g/L"
+    },
+    {
+      "key": "alcohol",
+      "label": "Titolo alcolometrico",
+      "type": "number",
+      "unit": "% vol",
+      "hint": "Max 1.5% vol"
+    },
+    {
+      "key": "dryExtract",
+      "label": "Estratto secco netto",
+      "type": "number",
+      "unit": "g/L",
+      "hint": "Min 30 g/L"
+    },
+    {
+      "key": "so2",
+      "label": "SO₂ totale",
+      "type": "number",
+      "unit": "mg/L",
+      "hint": "Max 100 mg/L"
+    },
+    {
+      "key": "ash",
+      "label": "Ceneri",
+      "type": "number",
+      "unit": "‰",
+      "hint": "Min 2.5‰"
+    },
+    {
+      "key": "agingMonths",
+      "label": "Invecchiamento",
+      "type": "number",
+      "unit": "mesi",
+      "hint": "Min 2 mesi (60 gg)"
+    },
+    {
+      "key": "barrelId",
+      "label": "ID barile / vasca",
+      "type": "text"
+    },
+    {
+      "key": "temperature",
+      "label": "Temperatura",
+      "type": "number",
+      "unit": "°C"
+    }
+  ],
+  "rules": [
+    {
+      "field": "acidity",
+      "label": "Acidità totale",
+      "min": 6,
+      "unit": "%"
+    },
+    {
+      "field": "density",
+      "label": "Densità",
+      "min": 1.06,
+      "unit": "g/ml"
+    },
+    {
+      "field": "sugars",
+      "label": "Zuccheri riduttori",
+      "min": 110,
+      "unit": "g/L"
+    },
+    {
+      "field": "agingMonths",
+      "label": "Invecchiamento",
+      "min": 2,
+      "unit": "mesi"
+    },
+    {
+      "field": "alcohol",
+      "label": "Titolo alcolometrico",
+      "max": 1.5,
+      "unit": "% vol"
+    },
+    {
+      "field": "dryExtract",
+      "label": "Estratto secco netto",
+      "min": 30,
+      "unit": "g/L"
+    },
+    {
+      "field": "so2",
+      "label": "SO₂ totale",
+      "max": 100,
+      "unit": "mg/L"
+    },
+    {
+      "field": "ash",
+      "label": "Ceneri",
+      "min": 2.5,
+      "unit": "‰"
+    }
+  ]
+}

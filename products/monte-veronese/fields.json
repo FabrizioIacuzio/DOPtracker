@@ -1,0 +1,53 @@
+{
+  "fields": [
+    {
+      "key": "variety",
+      "label": "Tipologia",
+      "type": "select",
+      "options": [
+        "latte",
+        "d_allevo"
+      ],
+      "required": true
+    },
+    {
+      "key": "milk_liters",
+      "label": "Latte utilizzato",
+      "type": "number",
+      "unit": "L",
+      "required": true
+    },
+    {
+      "key": "fat_on_dry_matter_percent",
+      "label": "Grasso sulla sostanza secca",
+      "type": "number",
+      "unit": "%"
+    },
+    {
+      "key": "aging_days",
+      "label": "Giorni di stagionatura",
+      "type": "number",
+      "unit": "giorni"
+    },
+    {
+      "key": "wheel_weight_kg",
+      "label": "Peso forma",
+      "type": "number",
+      "unit": "kg"
+    }
+  ],
+  "rules": [
+    {
+      "field": "fat_on_dry_matter_percent",
+      "label": "Grasso s.s. (latte min 44%, d'allevo min 27%)",
+      "min": 27,
+      "unit": "%"
+    },
+    {
+      "field": "aging_days",
+      "label": "Giorni stagionatura (latte min 30, d'allevo min 180)",
+      "min": 30,
+      "unit": "giorni"
+    }
+  ]
+}

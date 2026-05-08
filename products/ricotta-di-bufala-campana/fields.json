@@ -1,0 +1,45 @@
+{
+  "fields": [
+    {
+      "key": "whey_liters",
+      "label": "Siero di bufala",
+      "type": "number",
+      "unit": "L",
+      "required": true
+    },
+    {
+      "key": "fat_on_dry_matter_percent",
+      "label": "Grasso sulla sostanza secca",
+      "type": "number",
+      "unit": "%",
+      "hint": "Min 16%"
+    },
+    {
+      "key": "protein_on_dry_matter_percent",
+      "label": "Proteine sulla sostanza secca",
+      "type": "number",
+      "unit": "%",
+      "hint": "Min 12%"
+    },
+    {
+      "key": "weight_kg",
+      "label": "Peso confezione",
+      "type": "number",
+      "unit": "kg"
+    }
+  ],
+  "rules": [
+    {
+      "field": "fat_on_dry_matter_percent",
+      "label": "Grasso s.s.",
+      "min": 16,
+      "unit": "%"
+    },
+    {
+      "field": "protein_on_dry_matter_percent",
+      "label": "Proteine s.s.",
+      "min": 12,
+      "unit": "%"
+    }
+  ]
+}
