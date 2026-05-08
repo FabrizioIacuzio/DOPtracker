@@ -14,6 +14,8 @@ const cfg = {
   submission_rules:[
     { id:'pec-rule', doc_type:'self_monitoring', label:'Auto', channel:'pec', automation:'automated',
       recipient:'csqa', schedule:null, instructions:null },
+    { id:'scheduled-rule', doc_type:'notification', label:'Mensile', channel:'pec', automation:'automated',
+      recipient:'csqa', schedule:{ frequency:'monthly', due_day:15 }, instructions:null },
   ],
 }
 
@@ -90,6 +92,48 @@ describe('JobWorker.tick', () => {
     await worker.tick()
     const untouched = await prisma.submissionJob.findUniqueOrThrow({ where:{ id:job.id } })
     expect(untouched.status).toBe('pending')
+    await prisma.submissionJob.delete({ where:{ id:job.id } })
+  })
+
+  it('enqueues next job when schedule exists after success', async () => {
+    ;(mockHandler.send as jest.Mock).mockResolvedValueOnce(
+      { success:true, recipient:'t@pec.csqa.it', externalRef:'<m-next>' } satisfies ChannelResult
+    )
+    // create a schedule
+    const schedule = await prisma.submissionSchedule.create({
+      data:{ producerId, denominationId:'test-dop', ruleId:'scheduled-rule',
+             nextRunAt:new Date(), active:true }
+    })
+    // create a job linked to the schedule
+    const job = await prisma.submissionJob.create({
+      data:{ producerId, denominationId:'test-dop', ruleId:'scheduled-rule',
+             scheduleId:schedule.id, runAt:new Date(Date.now()-1000), payload:{} }
+    })
+    await worker.tick()
+    // the original job is done
+    const updated = await prisma.submissionJob.findUniqueOrThrow({ where:{ id:job.id } })
+    expect(updated.status).toBe('done')
+    // a new job was enqueued
+    const nextJob = await prisma.submissionJob.findFirst({
+      where:{ scheduleId:schedule.id, id:{ not:job.id } }
+    })
+    expect(nextJob).not.toBeNull()
+    // schedule nextRunAt was advanced
+    const updatedSchedule = await prisma.submissionSchedule.findUniqueOrThrow({ where:{ id:schedule.id } })
+    expect(updatedSchedule.nextRunAt.getTime()).toBeGreaterThan(schedule.nextRunAt.getTime())
+    // cleanup
+    if (nextJob) await prisma.submissionJob.delete({ where:{ id:nextJob.id } })
+    await prisma.submissionSchedule.delete({ where:{ id:schedule.id } })
+  })
+
+  it('propagates handler exception as unhandled rejection', async () => {
+    ;(mockHandler.send as jest.Mock).mockRejectedValueOnce(new Error('handler crashed'))
+    const job = await prisma.submissionJob.create({
+      data:{ producerId, denominationId:'test-dop', ruleId:'pec-rule',
+             runAt:new Date(Date.now()-1000), payload:{} }
+    })
+    await expect(worker.tick()).rejects.toThrow('handler crashed')
+    // cleanup job (it was left in processing state)
     await prisma.submissionJob.delete({ where:{ id:job.id } })
   })
 })
