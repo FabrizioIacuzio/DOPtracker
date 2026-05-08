@@ -86,6 +86,14 @@ A **mobile app + web app** that configures itself per denomination and takes awa
 
 ### The TurboTax Analogy
 
+
+
+
+
+
+
+
+
 TurboTax does not file your taxes for you. You click Submit. But TurboTax did 99% of the work, and you pay €40/year for it. Your product does 99% of the compliance work, and producers pay €99–149/month for it. The final upload is the producer's legal act — which is correct, because the declaration is their legal declaration.
 
 ---

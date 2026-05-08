@@ -3,6 +3,7 @@ backend/dist/
 frontend/dist/
 scripts/dist/
 scripts/pdfs/*.pdf
+docs/denominations/**/*.zip
 
 # Dependencies
 backend/node_modules/
