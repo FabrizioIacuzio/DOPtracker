@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  schedules   SubmissionSchedule[]
+  jobs        SubmissionJob[]
+  submissions Submission[]
+}
+
+enum SubmissionJobStatus {
+  pending
+  processing
+  done
+  failed
+  dead
+}
+
+enum SubmissionStatus {
+  sent
+  failed
+  manual_pending
+}
+
+model SubmissionSchedule {
+  id             String   @id @default(cuid())
+  producerId     String
+  denominationId String
+  ruleId         String
+  active         Boolean  @default(true)
+  nextRunAt      DateTime
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  producer User            @relation(fields: [producerId], references: [id])
+  jobs     SubmissionJob[]
+
+  @@unique([producerId, denominationId, ruleId])
+}
+
+model SubmissionJob {
+  id             String              @id @default(cuid())
+  scheduleId     String?
+  producerId     String
+  denominationId String
+  ruleId         String
+  status         SubmissionJobStatus @default(pending)
+  runAt          DateTime
+  attempts       Int                 @default(0)
+  maxAttempts    Int                 @default(3)
+  payload        Json
+  errorMessage   String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  schedule   SubmissionSchedule? @relation(fields: [scheduleId], references: [id])
+  producer   User                @relation(fields: [producerId], references: [id])
+  submission Submission?
+}
+
+model Submission {
+  id             String           @id @default(cuid())
+  jobId          String?          @unique
+  producerId     String
+  denominationId String
+  ruleId         String
+  channel        String
+  status         SubmissionStatus
+  recipient      String?
+  sentAt         DateTime?
+  externalRef    String?
+  errorMessage   String?
+  createdAt      DateTime         @default(now())
+
+  job      SubmissionJob? @relation(fields: [jobId], references: [id])
+  producer User           @relation(fields: [producerId], references: [id])
+}
