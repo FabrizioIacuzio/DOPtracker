@@ -1,11 +1,11 @@
-// Run with: npx ts-node --project scripts/tsconfig.json scripts/migrate-to-products.ts
+// Run with: npx tsx scripts/migrate-to-products.ts
 import fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
+import { DENOMINATION_CONFIGS } from '../frontend/src/lib/denominationFields.js'
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { DENOMINATION_CONFIGS } = require('../frontend/src/lib/denominationFields') as {
-  DENOMINATION_CONFIGS: Record<string, { fields: unknown[]; rules: unknown[] }>
-}
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const ROOT = path.resolve(__dirname, '..')
 const PRODUCTS_DIR = path.join(ROOT, 'products')
@@ -89,14 +89,18 @@ for (const [id, config] of Object.entries(DENOMINATION_CONFIGS)) {
     const raw = JSON.parse(fs.readFileSync(metaSrc, 'utf-8')) as {
       name: string; type: string; controlBody: string
     }
-    const meta = {
-      id,
-      displayName: `${raw.name} ${raw.type}`,
-      protectionType: raw.type,
-      category: CATEGORY_MAP[id] ?? 'Altro',
-      certifyingBody: raw.controlBody,
+    if (!raw.name || !raw.type || !raw.controlBody) {
+      console.warn(`  WARNING: incomplete metadata for ${id} — skipping metadata.json`)
+    } else {
+      const meta = {
+        id,
+        displayName: `${raw.name} ${raw.type}`,
+        protectionType: raw.type,
+        category: CATEGORY_MAP[id] ?? 'Altro',
+        certifyingBody: raw.controlBody,
+      }
+      fs.writeFileSync(path.join(dir, 'metadata.json'), JSON.stringify(meta, null, 2) + '\n', 'utf-8')
     }
-    fs.writeFileSync(path.join(dir, 'metadata.json'), JSON.stringify(meta, null, 2) + '\n', 'utf-8')
   } else {
     console.warn(`  WARNING: no worktree metadata for ${id}`)
   }

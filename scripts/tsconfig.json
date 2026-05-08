@@ -4,6 +4,7 @@
     "esModuleInterop": true,
     "target": "es2020",
     "strict": false,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "noEmit": true
   }
 }
