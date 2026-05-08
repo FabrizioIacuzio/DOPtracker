@@ -1,0 +1,37 @@
+{
+  "id": "asparago-bianco-di-bassano",
+  "name": "Asparago Bianco Di Bassano IGP",
+  "type": "IGP",
+  "control_body": {
+    "name": "CSQA Certificazioni Srl",
+    "type": "csqa",
+    "pec": "regolamentato@pec.csqa.it",
+    "email": "regolamentato@csqa.it",
+    "address": "via S. Gaetano, 74, 36016 Thiene (VI)"
+  },
+  "submission_rules": [
+    {
+      "id": "rule-01-pec-self-monitoring",
+      "doc_type": "self_monitoring",
+      "label": "Documenti di autocontrollo",
+      "channel": "pec",
+      "automation": "automated",
+      "recipient": "csqa",
+      "schedule": null,
+      "instructions": null
+    },
+    {
+      "id": "rule-02-pec-notification",
+      "doc_type": "notification",
+      "label": "Comunicazione periodica via PEC",
+      "channel": "pec",
+      "automation": "automated",
+      "recipient": "csqa",
+      "schedule": {
+        "frequency": "monthly",
+        "due_day": 15
+      },
+      "instructions": null
+    }
+  ]
+}

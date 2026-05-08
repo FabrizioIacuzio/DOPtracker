@@ -1,0 +1,60 @@
+{
+  "id": "uva-da-tavola-di-canicatti",
+  "name": "Uva Da Tavola Di Canicatti IGP",
+  "type": "IGP",
+  "control_body": {
+    "name": "CSQA Certificazioni Srl",
+    "type": "csqa",
+    "pec": "regolamentato@pec.csqa.it",
+    "email": "regolamentato@csqa.it",
+    "address": "via S. Gaetano, 74, 36016 Thiene (VI)"
+  },
+  "submission_rules": [
+    {
+      "id": "rule-01-pec-register",
+      "doc_type": "register",
+      "label": "Registro produzioni",
+      "channel": "pec",
+      "automation": "automated",
+      "recipient": "csqa",
+      "schedule": {
+        "frequency": "monthly",
+        "due_day": 15
+      },
+      "instructions": null
+    },
+    {
+      "id": "rule-02-telematic-sian-label",
+      "doc_type": "label",
+      "label": "Etichette telematiche SIAN",
+      "channel": "telematic_sian",
+      "automation": "manual",
+      "recipient": "csqa",
+      "schedule": null,
+      "instructions": "Accedere al SIAN con le proprie credenziali e trasmettere la comunicazione prevista."
+    },
+    {
+      "id": "rule-03-pec-document-generic",
+      "doc_type": "document_generic",
+      "label": "Documentazione via PEC",
+      "channel": "pec",
+      "automation": "automated",
+      "recipient": "csqa",
+      "schedule": {
+        "frequency": "monthly",
+        "due_day": 15
+      },
+      "instructions": null
+    },
+    {
+      "id": "rule-04-pec-self-monitoring",
+      "doc_type": "self_monitoring",
+      "label": "Documenti di autocontrollo",
+      "channel": "pec",
+      "automation": "automated",
+      "recipient": "csqa",
+      "schedule": null,
+      "instructions": null
+    }
+  ]
+}
