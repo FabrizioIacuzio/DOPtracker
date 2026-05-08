@@ -57,6 +57,17 @@ export function submissionsRouter(svc: SubmissionService): Router {
     } catch (e) { next(e) }
   })
 
+  r.delete('/schedules/:id', async (req, res, next) => {
+    try {
+      const { count } = await prisma.submissionSchedule.updateMany({
+        where: { id: req.params['id'], producerId: (req as unknown as AuthRequest).user.id },
+        data: { active: false },
+      })
+      if (count === 0) { res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Not found' } }); return }
+      res.status(204).send()
+    } catch (e) { next(e) }
+  })
+
   r.get('/:id', async (req, res, next) => {
     try {
       const sub = await prisma.submission.findFirst({
@@ -64,17 +75,6 @@ export function submissionsRouter(svc: SubmissionService): Router {
       })
       if (!sub) { res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Not found' } }); return }
       res.json(sub)
-    } catch (e) { next(e) }
-  })
-
-  r.delete('/schedules/:id', async (req, res, next) => {
-    try {
-      const s = await prisma.submissionSchedule.findFirst({
-        where: { id: req.params['id'], producerId: (req as unknown as AuthRequest).user.id },
-      })
-      if (!s) { res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Not found' } }); return }
-      await prisma.submissionSchedule.update({ where: { id: s.id }, data: { active: false } })
-      res.status(204).send()
     } catch (e) { next(e) }
   })
 
