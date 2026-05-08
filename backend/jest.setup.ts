@@ -1,0 +1,5 @@
+process.env['DATABASE_URL'] = process.env['DATABASE_URL'] ?? 'postgresql://dop:dop@localhost:5432/dop'
+process.env['JWT_SECRET'] = process.env['JWT_SECRET'] ?? 'test-secret-minimum-32-characters-xx'
+process.env['JWT_EXPIRES_IN'] = '15m'
+process.env['PORT'] = '3001'
+process.env['CORS_ORIGIN'] = 'http://localhost:5173'
