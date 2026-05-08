@@ -1,16 +1,12 @@
-import path from 'path'
-import fs from 'fs'
 import { loadAllConfigs } from '../denominations/loader'
 import { DenominationConfig, SubmissionRule } from '../denominations/types'
 import { DomainError } from '../errors'
 
-const DEFAULT_DIR = path.join(__dirname, '../denominations/configs')
-
 export class DenominationService {
   private readonly configs: Map<string, DenominationConfig>
 
-  constructor(configsDir: string = DEFAULT_DIR) {
-    this.configs = loadAllConfigs(configsDir)
+  constructor(configsDir?: string) {
+    this.configs = loadAllConfigs(configsDir!)
   }
 
   getConfig(id: string): DenominationConfig {
@@ -27,5 +23,4 @@ export class DenominationService {
   }
 }
 
-fs.mkdirSync(DEFAULT_DIR, { recursive: true })
 export const denominationService = new DenominationService()

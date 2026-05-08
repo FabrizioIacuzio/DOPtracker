@@ -20,7 +20,9 @@ describe('DenominationService', () => {
   let dir: string, svc: DenominationService
   beforeEach(() => {
     dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dsvc-'))
-    fs.writeFileSync(path.join(dir, 'grana-padano.json'), JSON.stringify(config))
+    const denomDir = path.join(dir, 'grana-padano')
+    fs.mkdirSync(denomDir)
+    fs.writeFileSync(path.join(denomDir, 'submission.json'), JSON.stringify(config))
     svc = new DenominationService(dir)
   })
   afterEach(() => { fs.rmSync(dir, { recursive: true }) })

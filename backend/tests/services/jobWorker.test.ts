@@ -25,7 +25,9 @@ let dir: string, worker: JobWorker, producerId: string
 
 beforeAll(async () => {
   dir = fs.mkdtempSync(path.join(os.tmpdir(), 'worker-'))
-  fs.writeFileSync(path.join(dir, 'test-dop.json'), JSON.stringify(cfg))
+  const denomDir = path.join(dir, 'test-dop')
+  fs.mkdirSync(denomDir)
+  fs.writeFileSync(path.join(denomDir, 'submission.json'), JSON.stringify(cfg))
   const denom = new DenominationService(dir)
   const user = await prisma.user.create({ data:{ email:`wk-${Date.now()}@t.it`, password:'x', name:'W' } })
   producerId = user.id

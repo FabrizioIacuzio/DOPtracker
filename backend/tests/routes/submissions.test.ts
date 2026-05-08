@@ -29,7 +29,9 @@ let app: express.Express, producerId: string, token: string, dir: string
 
 beforeAll(async () => {
   dir = fs.mkdtempSync(path.join(os.tmpdir(), 'routes-'))
-  fs.writeFileSync(path.join(dir, 'test-igp.json'), JSON.stringify(cfg))
+  const denomDir = path.join(dir, 'test-igp')
+  fs.mkdirSync(denomDir)
+  fs.writeFileSync(path.join(denomDir, 'submission.json'), JSON.stringify(cfg))
   const denom = new DenominationService(dir)
   const svc = new SubmissionService(prisma, denom)
   const user = await prisma.user.create({ data:{ email:`rt-${Date.now()}@t.it`, password:'x', name:'R' } })

@@ -21,22 +21,28 @@ describe('loadAllConfigs', () => {
   })
 
   it('loads a valid config file keyed by id', () => {
-    fs.writeFileSync(path.join(dir, 'test-dop.json'), JSON.stringify(valid))
+    const denomDir = path.join(dir, 'test-dop')
+    fs.mkdirSync(denomDir)
+    fs.writeFileSync(path.join(denomDir, 'submission.json'), JSON.stringify(valid))
     const map = loadAllConfigs(dir)
     expect(map.get('test-dop')?.name).toBe('Test DOP')
   })
 
-  it('throws with filename when config is invalid', () => {
+  it('throws with dirname when config is invalid', () => {
+    const badDir = path.join(dir, 'bad-denom')
+    fs.mkdirSync(badDir)
     fs.writeFileSync(
-      path.join(dir, 'bad.json'),
+      path.join(badDir, 'submission.json'),
       JSON.stringify({ ...valid, type: 'UNKNOWN' })
     )
-    expect(() => loadAllConfigs(dir)).toThrow('bad.json')
+    expect(() => loadAllConfigs(dir)).toThrow('bad-denom')
   })
 
-  it('ignores non-JSON files', () => {
+  it('ignores non-directories and missing submission.json', () => {
     fs.writeFileSync(path.join(dir, 'README.md'), '# hi')
-    fs.writeFileSync(path.join(dir, 'ok.json'), JSON.stringify(valid))
+    const okDir = path.join(dir, 'ok-denom')
+    fs.mkdirSync(okDir)
+    fs.writeFileSync(path.join(okDir, 'submission.json'), JSON.stringify(valid))
     expect(() => loadAllConfigs(dir)).not.toThrow()
   })
 
