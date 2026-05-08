@@ -112,3 +112,5 @@ export function renderWithProviders(
   });
   return { user, ...result };
 }
+
+export { renderWithProviders as render }

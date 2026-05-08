@@ -1,9 +1,14 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderWithProviders } from "@/test/render";
-import { freezeTime } from "@/test/fakes";
-import { makeBatch } from "@/test/fixtures";
-import { screen, within } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import DocumentsPage from "./DocumentsPage";
+import * as mod from "../api/submissions";
+
+vi.mock("../api/submissions", () => ({
+  submissionsApi: { list: vi.fn(), submit: vi.fn() },
+}))
+
+const mockList = vi.mocked(mod.submissionsApi.list)
 
 function mount(opts: Parameters<typeof renderWithProviders>[1] = {}) {
   return renderWithProviders(<DocumentsPage />, {
@@ -14,93 +19,91 @@ function mount(opts: Parameters<typeof renderWithProviders>[1] = {}) {
 
 describe("<DocumentsPage />", () => {
   beforeEach(() => {
-    freezeTime("2026-05-15T12:00:00.000Z");
-  });
+    mockList.mockResolvedValue({ submissions: [], total: 0, page: 1 })
+  })
 
-  it("renders the page title and the checklist trigger", () => {
+  it("renders the page title", async () => {
     mount();
     expect(screen.getByRole("heading", { name: "Documenti di Conformità" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Checklist di Invio/i })).toBeInTheDocument();
   });
 
-  it("renders three rows for the current month and the two prior months", () => {
+  it("shows loading state while fetching", () => {
+    mockList.mockReturnValue(new Promise(() => {})); // never resolves
     mount();
-    const rows = screen.getAllByRole("row");
-    // 1 header + 3 data rows = 4
-    expect(rows).toHaveLength(4);
+    expect(screen.getByText("Caricamento…")).toBeInTheDocument();
   });
 
-  it("status badges are 'Bozza' (current month), 'Pronto' (prev), 'Inviato' (prev-prev)", () => {
+  it("shows empty state when there are no submissions", async () => {
     mount();
-    expect(screen.getByText("Bozza")).toBeInTheDocument();
-    expect(screen.getByText("Pronto")).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText("Nessun documento.")).toBeInTheDocument());
+  });
+
+  it("renders a row per submission with denomination, ruleId, channel, status badge, and date", async () => {
+    mockList.mockResolvedValue({
+      submissions: [
+        {
+          id: "s1", jobId: null, producerId: "p1", denominationId: "abm-igp",
+          ruleId: "dichiarazione-mensile", channel: "web_portal", status: "sent",
+          recipient: null, sentAt: "2026-05-01T10:00:00Z", externalRef: null,
+          errorMessage: null, createdAt: "2026-05-01T09:00:00Z",
+        },
+      ],
+      total: 1, page: 1,
+    });
+    mount();
+    await waitFor(() => expect(screen.getByText("abm-igp")).toBeInTheDocument());
+    expect(screen.getByText("dichiarazione-mensile")).toBeInTheDocument();
+    expect(screen.getByText("web_portal")).toBeInTheDocument();
     expect(screen.getByText("Inviato")).toBeInTheDocument();
   });
 
-  it("aggregates batch counts and volumes per period", () => {
-    const batches = [
-      makeBatch({ id: "a", date: "2026-05-01", volume: 100 }),
-      makeBatch({ id: "b", date: "2026-05-02", volume: 200 }),
-      makeBatch({ id: "c", date: "2026-04-15", volume: 50 }),
-    ];
-    mount({ preload: { batches, onboardingComplete: true } });
-    const rows = screen.getAllByRole("row");
-    const dataRows = rows.slice(1); // skip header
-    // First data row is the current month (May): 2 batches, 300 L (allow ICU variance).
-    expect(within(dataRows[0]).getByText("2")).toBeInTheDocument();
-    expect(within(dataRows[0]).getByText(/300\s*L/)).toBeInTheDocument();
-    // Second row is April: 1 batch.
-    expect(within(dataRows[1]).getByText("1")).toBeInTheDocument();
+  it("shows 'Errore' badge for failed submissions", async () => {
+    mockList.mockResolvedValue({
+      submissions: [{
+        id: "s2", jobId: null, producerId: "p1", denominationId: "abm-igp",
+        ruleId: "monthly-report", channel: "email", status: "failed",
+        recipient: null, sentAt: null, externalRef: null,
+        errorMessage: "SMTP timeout", createdAt: new Date().toISOString(),
+      }],
+      total: 1, page: 1,
+    });
+    mount();
+    await waitFor(() => expect(screen.getByText("Errore")).toBeInTheDocument());
   });
 
-  describe("PDF preview dialog", () => {
-    it("opens when the row's 'Visualizza PDF' button is clicked", async () => {
+  describe("details dialog", () => {
+    it("opens when the 'Dettagli' button is clicked", async () => {
+      mockList.mockResolvedValue({
+        submissions: [{
+          id: "s3", jobId: null, producerId: "p1", denominationId: "asiago",
+          ruleId: "monthly-report", channel: "web_portal", status: "manual_pending",
+          recipient: null, sentAt: null, externalRef: null,
+          errorMessage: null, createdAt: new Date().toISOString(),
+        }],
+        total: 1, page: 1,
+      });
       const { user } = mount();
-      const viewButtons = screen.getAllByRole("button", { name: /Visualizza PDF/i });
-      await user.click(viewButtons[0]);
+      await waitFor(() => screen.getByText("Dettagli"));
+      await user.click(screen.getByRole("button", { name: /Dettagli/i }));
       const dialog = await screen.findByRole("dialog");
-      expect(within(dialog).getByText("DICHIARAZIONE PERIODICA DI PRODUZIONE")).toBeInTheDocument();
+      expect(within(dialog).getByText("Dettagli Invio")).toBeInTheDocument();
     });
 
-    it("shows the operator and ICQRF code (currently hardcoded)", async () => {
+    it("shows 'Avvia invio' button only for manual_pending submissions", async () => {
+      mockList.mockResolvedValue({
+        submissions: [{
+          id: "s4", jobId: null, producerId: "p1", denominationId: "asiago",
+          ruleId: "monthly-report", channel: "web_portal", status: "manual_pending",
+          recipient: null, sentAt: null, externalRef: null,
+          errorMessage: null, createdAt: new Date().toISOString(),
+        }],
+        total: 1, page: 1,
+      });
       const { user } = mount();
-      await user.click(screen.getAllByRole("button", { name: /Visualizza PDF/i })[0]);
+      await waitFor(() => screen.getByText("Dettagli"));
+      await user.click(screen.getByRole("button", { name: /Dettagli/i }));
       const dialog = await screen.findByRole("dialog");
-      expect(within(dialog).getByText("Acetaia Esempio S.r.l.")).toBeInTheDocument();
-      expect(within(dialog).getByText("IT-041-BIO-123")).toBeInTheDocument();
-      // "CSQA Certificazioni S.r.l." appears twice (header subtitle + body); both required.
-      expect(within(dialog).getAllByText("CSQA Certificazioni S.r.l.").length).toBeGreaterThanOrEqual(2);
-    });
-
-    it("the summary table reflects this period's batch count + volume", async () => {
-      const batches = [
-        makeBatch({ id: "a", date: "2026-05-01", volume: 1000 }),
-        makeBatch({ id: "b", date: "2026-05-02", volume: 1500 }),
-      ];
-      const { user } = mount({ preload: { batches, onboardingComplete: true } });
-      await user.click(screen.getAllByRole("button", { name: /Visualizza PDF/i })[0]);
-      const dialog = await screen.findByRole("dialog");
-      expect(within(dialog).getByText(/2[,.]?500/)).toBeInTheDocument();
-    });
-  });
-
-  describe("checklist dialog", () => {
-    it("opens with the four documented submission steps in source order", async () => {
-      const { user } = mount();
-      await user.click(screen.getByRole("button", { name: /Checklist di Invio/i }));
-      const dialog = await screen.findByRole("dialog");
-      const text = dialog.textContent ?? "";
-      expect(text.indexOf("Accedi al portale CSQA")).toBeGreaterThan(-1);
-      expect(text.indexOf("Naviga su 'Dichiarazioni > Nuova Dichiarazione'")).toBeGreaterThan(-1);
-      expect(text.indexOf("Allega il file PDF generato")).toBeGreaterThan(-1);
-      expect(text.indexOf("Verifica i dati e clicca 'Invia'")).toBeGreaterThan(-1);
-    });
-
-    it("contains a 'Vai al portale CSQA' button (currently informational only)", async () => {
-      const { user } = mount();
-      await user.click(screen.getByRole("button", { name: /Checklist di Invio/i }));
-      const dialog = await screen.findByRole("dialog");
-      expect(within(dialog).getByRole("button", { name: /Vai al portale CSQA/i })).toBeInTheDocument();
+      expect(within(dialog).getByRole("button", { name: /Avvia invio/i })).toBeInTheDocument();
     });
   });
 });
