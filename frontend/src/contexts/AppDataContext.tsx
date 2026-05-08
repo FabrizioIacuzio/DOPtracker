@@ -4,18 +4,8 @@ export interface BatchEntry {
   id: string;
   date: string;
   batchId: string;
-  supplier: string;
-  volume: number;
-  acidity: number;
-  density: number;
-  sugars: number;
-  agingMonths: number;
-  alcohol: number;
-  dryExtract: number;
-  so2: number;
-  ash: number;
-  barrelId: string;
-  temperature: number;
+  denominationId: string;
+  fields: Record<string, string | number>;
   notes: string;
   createdAt: string;
   modifiedAt?: string;
@@ -42,40 +32,7 @@ export interface CompanyInfo {
   province: string;
   employees: string;
   denomination: string;
-}
-
-// ABM IGP validation rules
-// ABM IGP validation rules — from official disciplinare Art. 2
-export const ABM_RULES = {
-  acidity: { min: 6, label: "Acidità totale" },
-  density: { min: 1.06, label: "Densità a 20°C" },
-  sugars: { min: 110, label: "Zuccheri riduttori" },
-  agingMonths: { min: 2, label: "Invecchiamento (mesi)" }, // 60 days ≈ 2 months
-  alcohol: { max: 1.5, label: "Titolo alcolometrico" },
-  dryExtract: { min: 30, label: "Estratto secco netto" },
-  so2: { max: 100, label: "Anidride solforosa totale" },
-  ash: { min: 2.5, label: "Ceneri" },
-};
-
-export function validateBatch(batch: Partial<BatchEntry>): string[] {
-  const warnings: string[] = [];
-  if (batch.acidity !== undefined && batch.acidity > 0 && batch.acidity < ABM_RULES.acidity.min)
-    warnings.push(`Acidità sotto il minimo (${ABM_RULES.acidity.min}%)`);
-  if (batch.density !== undefined && batch.density > 0 && batch.density < ABM_RULES.density.min)
-    warnings.push(`Densità sotto il minimo (${ABM_RULES.density.min} g/ml)`);
-  if (batch.sugars !== undefined && batch.sugars > 0 && batch.sugars < ABM_RULES.sugars.min)
-    warnings.push(`Zuccheri sotto il minimo (${ABM_RULES.sugars.min} g/l)`);
-  if (batch.agingMonths !== undefined && batch.agingMonths > 0 && batch.agingMonths < ABM_RULES.agingMonths.min)
-    warnings.push(`Invecchiamento insufficiente (min. ${ABM_RULES.agingMonths.min} mesi / 60 gg)`);
-  if (batch.alcohol !== undefined && batch.alcohol > 0 && batch.alcohol > ABM_RULES.alcohol.max)
-    warnings.push(`Titolo alcolometrico sopra il massimo (${ABM_RULES.alcohol.max}% vol)`);
-  if (batch.dryExtract !== undefined && batch.dryExtract > 0 && batch.dryExtract < ABM_RULES.dryExtract.min)
-    warnings.push(`Estratto secco netto sotto il minimo (${ABM_RULES.dryExtract.min} g/l)`);
-  if (batch.so2 !== undefined && batch.so2 > 0 && batch.so2 > ABM_RULES.so2.max)
-    warnings.push(`SO₂ totale sopra il massimo (${ABM_RULES.so2.max} mg/l)`);
-  if (batch.ash !== undefined && batch.ash > 0 && batch.ash < ABM_RULES.ash.min)
-    warnings.push(`Ceneri sotto il minimo (${ABM_RULES.ash.min}‰)`);
-  return warnings;
+  denominationId: string;
 }
 
 interface AppDataContextType {

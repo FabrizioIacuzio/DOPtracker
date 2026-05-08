@@ -88,29 +88,29 @@ describe("useAppData (state + persistence)", () => {
     it("merges the partial onto the matching batch", () => {
       localStorage.setItem(
         "dop_batches",
-        JSON.stringify([makeBatch({ id: "x", supplier: "Old" })]),
+        JSON.stringify([makeBatch({ id: "x", notes: "old-notes" })]),
       );
       const { result } = renderHook(() => useAppData(), { wrapper: wrap });
-      act(() => result.current.updateBatch("x", { supplier: "New" }));
-      expect(result.current.batches[0].supplier).toBe("New");
+      act(() => result.current.updateBatch("x", { notes: "new-notes" }));
+      expect(result.current.batches[0].notes).toBe("new-notes");
     });
 
     it("sets modifiedAt to the current ISO timestamp", () => {
       freezeTime("2026-06-01T08:30:00.000Z");
       localStorage.setItem("dop_batches", JSON.stringify([makeBatch({ id: "x" })]));
       const { result } = renderHook(() => useAppData(), { wrapper: wrap });
-      act(() => result.current.updateBatch("x", { volume: 999 }));
+      act(() => result.current.updateBatch("x", { notes: "updated" }));
       expect(result.current.batches[0].modifiedAt).toBe("2026-06-01T08:30:00.000Z");
     });
 
     it("leaves other batches untouched", () => {
       localStorage.setItem(
         "dop_batches",
-        JSON.stringify([makeBatch({ id: "a", supplier: "A" }), makeBatch({ id: "b", supplier: "B" })]),
+        JSON.stringify([makeBatch({ id: "a", notes: "A" }), makeBatch({ id: "b", notes: "B" })]),
       );
       const { result } = renderHook(() => useAppData(), { wrapper: wrap });
-      act(() => result.current.updateBatch("a", { supplier: "AA" }));
-      expect(result.current.batches.find((b) => b.id === "b")?.supplier).toBe("B");
+      act(() => result.current.updateBatch("a", { notes: "AA" }));
+      expect(result.current.batches.find((b) => b.id === "b")?.notes).toBe("B");
     });
 
     it("is a no-op when no batch matches the id", () => {
