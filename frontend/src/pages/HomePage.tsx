@@ -27,6 +27,9 @@ export default function HomePage() {
     return eachDayOfInterval({ start, end });
   }, [currentMonth]);
 
+  const getPrimaryVolume = (b: typeof batches[0]) =>
+    Number(b.fields['volume'] ?? b.fields['total_liters'] ?? b.fields['total_weight_kg'] ?? b.fields['milk_liters'] ?? b.fields['cow_milk_liters'] ?? 0)
+
   const batchDates = useMemo(() => {
     const map: Record<string, { count: number; hasWarnings: boolean }> = {};
     batches.forEach((b) => {
@@ -67,7 +70,7 @@ export default function HomePage() {
     const now = new Date();
     const thisMonth = format(now, "yyyy-MM");
     const monthBatches = batches.filter((b) => b.date.startsWith(thisMonth));
-    const totalVolume = monthBatches.reduce((s, b) => s + b.volume, 0);
+    const totalVolume = monthBatches.reduce((s, b) => s + getPrimaryVolume(b), 0);
     const conformant = monthBatches.filter((b) => !b.hasWarnings).length;
     const rate = monthBatches.length > 0 ? Math.round((conformant / monthBatches.length) * 100) : 100;
     const nonConf = monthBatches.filter((b) => b.hasWarnings).length;
@@ -78,7 +81,7 @@ export default function HomePage() {
     const months: Record<string, number> = {};
     batches.forEach((b) => {
       const m = format(parseISO(b.date), "yyyy-MM");
-      months[m] = (months[m] || 0) + b.volume;
+      months[m] = (months[m] || 0) + getPrimaryVolume(b);
     });
     return Object.entries(months)
       .sort(([a], [b]) => a.localeCompare(b))
@@ -87,7 +90,7 @@ export default function HomePage() {
   }, [batches]);
 
   const acidityData = useMemo(() => {
-    return batches.slice(-20).map((b) => ({ batch: b.batchId.slice(-4), acidity: b.acidity, min: 6 }));
+    return batches.slice(-20).map((b) => ({ batch: b.batchId.slice(-4), acidity: Number(b.fields['acidity'] ?? 0), min: 6 }));
   }, [batches]);
 
   const kpis = [
@@ -178,7 +181,7 @@ export default function HomePage() {
                     <div>
                       <p className="font-semibold">{batch.batchId}</p>
                       <p className="text-sm text-muted-foreground">
-                        {batch.date} · {batch.volume}L · {batch.supplier || "—"}
+                        {batch.date} · {getPrimaryVolume(batch)}{batch.fields['volume'] !== undefined ? 'L' : ''} · {String(batch.fields['supplier'] ?? '—')}
                       </p>
                     </div>
                   </div>
@@ -280,7 +283,7 @@ export default function HomePage() {
                 <div className="text-left">
                   <div className="font-medium">{batch.batchId}</div>
                   <div className="text-xs text-muted-foreground">
-                    {batch.volume}L · {batch.supplier || "—"}
+                    {getPrimaryVolume(batch)}{batch.fields['volume'] !== undefined ? 'L' : ''} · {String(batch.fields['supplier'] ?? '—')}
                     {batch.hasWarnings && <Badge variant="destructive" className="ml-2 text-[10px] px-1 py-0">⚠</Badge>}
                   </div>
                 </div>

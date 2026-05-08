@@ -1,40 +1,53 @@
 import type { BatchEntry, CompanyInfo, LabReport } from "@/contexts/AppDataContext";
 
-/**
- * A fully-populated, validation-passing ABM IGP batch.
- * Override individual fields per test as needed.
- */
-export function makeBatch(overrides: Partial<BatchEntry> = {}): BatchEntry {
+type ABMFieldShortcuts = {
+  volume?: number
+  acidity?: number
+  density?: number
+  sugars?: number
+  agingMonths?: number
+  alcohol?: number
+  dryExtract?: number
+  so2?: number
+  ash?: number
+  barrelId?: string
+  temperature?: number
+  supplier?: string
+}
+
+export function makeBatch(
+  overrides: Partial<BatchEntry> & ABMFieldShortcuts = {},
+): BatchEntry {
+  const {
+    volume, acidity, density, sugars, agingMonths, alcohol,
+    dryExtract, so2, ash, barrelId, temperature, supplier,
+    ...batchOverrides
+  } = overrides
+
   return {
     id: "batch-id-1",
     date: "2026-05-07",
     batchId: "ABM-20260507-A1B2",
-    supplier: "Cantine Modena",
-    volume: 1000,
-    acidity: 6.5,
-    density: 1.07,
-    sugars: 120,
-    agingMonths: 6,
-    alcohol: 1.0,
-    dryExtract: 35,
-    so2: 50,
-    ash: 3.0,
-    barrelId: "B-001",
-    temperature: 18,
+    denominationId: "aceto-balsamico-di-modena",
+    fields: {
+      supplier: supplier ?? "Cantine Modena",
+      volume: volume ?? 1000,
+      acidity: acidity ?? 6.5,
+      density: density ?? 1.07,
+      sugars: sugars ?? 120,
+      agingMonths: agingMonths ?? 6,
+      alcohol: alcohol ?? 1.0,
+      dryExtract: dryExtract ?? 35,
+      so2: so2 ?? 50,
+      ash: ash ?? 3.0,
+      barrelId: barrelId ?? "B-001",
+      temperature: temperature ?? 18,
+    },
     notes: "",
     createdAt: "2026-05-07T12:00:00.000Z",
     hasWarnings: false,
-    ...overrides,
+    ...batchOverrides,
   };
-}
-
-/**
- * A batch with one numeric field forced to a specific value, useful for
- * exercising single-rule violations in validator tests without copying the
- * full literal.
- */
-export function makeBatchWith(field: keyof BatchEntry, value: number): BatchEntry {
-  return makeBatch({ [field]: value } as Partial<BatchEntry>);
 }
 
 export function makeCompany(overrides: Partial<CompanyInfo> = {}): CompanyInfo {
@@ -43,6 +56,7 @@ export function makeCompany(overrides: Partial<CompanyInfo> = {}): CompanyInfo {
     province: "Modena",
     employees: "20",
     denomination: "Aceto Balsamico di Modena IGP",
+    denominationId: "aceto-balsamico-di-modena",
     ...overrides,
   };
 }

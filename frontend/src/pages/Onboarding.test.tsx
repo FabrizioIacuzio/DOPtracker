@@ -19,15 +19,16 @@ async function advanceToStep1(user: ReturnType<typeof renderWithProviders>["user
 
 async function advanceToStep2(user: ReturnType<typeof renderWithProviders>["user"]) {
   await advanceToStep1(user);
-  await user.click(screen.getByText("Aceto Balsamico IGP"));
+  // Click the "Aceto" category card, then pick the ABM denomination from the scroll list
+  await user.click(screen.getByText("Aceto"));
   await user.click(screen.getByText("Aceto Balsamico di Modena IGP"));
   await user.click(screen.getByRole("button", { name: /Avanti/i }));
 }
 
 async function advanceToStep3(user: ReturnType<typeof renderWithProviders>["user"]) {
   await advanceToStep2(user);
-  await user.type(screen.getByPlaceholderText("Acetaia Rossi S.r.l."), "My Co");
-  await user.type(screen.getByPlaceholderText("Modena"), "MO");
+  await user.type(screen.getByPlaceholderText("Azienda Agricola Rossi S.r.l."), "My Co");
+  await user.type(screen.getByPlaceholderText(/es\. Modena/i), "MO");
   await user.click(screen.getByRole("button", { name: /Avanti/i }));
 }
 
@@ -49,7 +50,6 @@ describe("<Onboarding />", () => {
 
     it("the language toggle in the header switches the welcome strings to English", async () => {
       const { user } = mount();
-      // The header toggle is the only button whose text is exactly "EN" before toggling.
       const toggle = screen.getAllByRole("button").find((b) => b.textContent?.trim() === "EN")!;
       await user.click(toggle);
       expect(screen.getByRole("heading", { name: "Manage DOP/IGP Compliance" })).toBeInTheDocument();
@@ -64,29 +64,34 @@ describe("<Onboarding />", () => {
       expect(screen.getByRole("button", { name: /Avanti/i })).toBeDisabled();
     });
 
-    it("clicking the vinegar category reveals its denominations list", async () => {
+    it("clicking the Aceto category reveals Aceto Balsamico di Modena IGP", async () => {
       const { user } = mount();
       await advanceToStep1(user);
-      await user.click(screen.getByText("Aceto Balsamico IGP"));
+      await user.click(screen.getByText("Aceto"));
       expect(screen.getByText("Aceto Balsamico di Modena IGP")).toBeInTheDocument();
     });
 
-    it("non-ABM denominations show 'Prossimamente' and clicking them does not enable Next", async () => {
+    it("clicking a cheese denomination enables the Next button", async () => {
       const { user } = mount();
       await advanceToStep1(user);
-      await user.click(screen.getByText("Formaggi DOP"));
-      const gorgonzola = screen.getByText("Gorgonzola DOP");
-      expect(screen.getAllByText("Prossimamente").length).toBeGreaterThan(0);
-      await user.click(gorgonzola);
-      expect(screen.getByRole("button", { name: /Avanti/i })).toBeDisabled();
+      await user.click(screen.getByText("Formaggi"));
+      await user.click(screen.getByText("Gorgonzola DOP"));
+      expect(screen.getByRole("button", { name: /Avanti/i })).toBeEnabled();
     });
 
     it("selecting ABM enables the Next button", async () => {
       const { user } = mount();
       await advanceToStep1(user);
-      await user.click(screen.getByText("Aceto Balsamico IGP"));
+      await user.click(screen.getByText("Aceto"));
       await user.click(screen.getByText("Aceto Balsamico di Modena IGP"));
       expect(screen.getByRole("button", { name: /Avanti/i })).toBeEnabled();
+    });
+
+    it("category cards show the denomination count", async () => {
+      const { user } = mount();
+      await advanceToStep1(user);
+      // Formaggi has 15 denominations
+      expect(screen.getByText("15 prodotti")).toBeInTheDocument();
     });
 
     it("Back button returns to step 0", async () => {
@@ -104,18 +109,18 @@ describe("<Onboarding />", () => {
       const nextBtn = screen.getByRole("button", { name: /Avanti/i });
       expect(nextBtn).toBeDisabled();
 
-      await user.type(screen.getByPlaceholderText("Acetaia Rossi S.r.l."), "Some Co");
-      expect(nextBtn).toBeDisabled(); // province still empty
+      await user.type(screen.getByPlaceholderText("Azienda Agricola Rossi S.r.l."), "Some Co");
+      expect(nextBtn).toBeDisabled();
 
-      await user.type(screen.getByPlaceholderText("Modena"), "MO");
+      await user.type(screen.getByPlaceholderText(/es\. Modena/i), "MO");
       expect(nextBtn).toBeEnabled();
     });
 
     it("Next remains enabled even with empty employees field (employees is optional)", async () => {
       const { user } = mount();
       await advanceToStep2(user);
-      await user.type(screen.getByPlaceholderText("Acetaia Rossi S.r.l."), "Co");
-      await user.type(screen.getByPlaceholderText("Modena"), "MO");
+      await user.type(screen.getByPlaceholderText("Azienda Agricola Rossi S.r.l."), "Co");
+      await user.type(screen.getByPlaceholderText(/es\. Modena/i), "MO");
       expect(screen.getByRole("button", { name: /Avanti/i })).toBeEnabled();
     });
 
@@ -123,9 +128,7 @@ describe("<Onboarding />", () => {
       const { user } = mount();
       await advanceToStep2(user);
       await user.click(screen.getByRole("button", { name: /Indietro/i }));
-      // Step 1 is visible again …
       expect(screen.getByRole("heading", { name: "Seleziona la tua denominazione" })).toBeInTheDocument();
-      // … and Next is still enabled because the denom selection persisted.
       expect(screen.getByRole("button", { name: /Avanti/i })).toBeEnabled();
     });
   });
@@ -143,15 +146,14 @@ describe("<Onboarding />", () => {
       await advanceToStep3(user);
       await user.click(screen.getByRole("button", { name: /Vai alla dashboard/i }));
 
-      // We landed on /home (which we wired up as a test route)
       expect(screen.getByTestId("route-home")).toBeInTheDocument();
 
-      // Persistence: localStorage was written by the AppDataProvider's effects
       const stored = JSON.parse(localStorage.getItem("dop_company") ?? "null");
       expect(stored).toMatchObject({
         name: "My Co",
         province: "MO",
         denomination: "Aceto Balsamico di Modena IGP",
+        denominationId: "aceto-balsamico-di-modena",
       });
       expect(JSON.parse(localStorage.getItem("dop_onboarded") ?? "false")).toBe(true);
     });

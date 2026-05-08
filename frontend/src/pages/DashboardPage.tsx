@@ -10,11 +10,14 @@ export default function DashboardPage() {
   const { t } = useLanguage();
   const { batches } = useAppData();
 
+  const getPrimaryVolume = (b: typeof batches[0]) =>
+    Number(b.fields['volume'] ?? b.fields['total_liters'] ?? b.fields['total_weight_kg'] ?? b.fields['milk_liters'] ?? b.fields['cow_milk_liters'] ?? 0)
+
   const stats = useMemo(() => {
     const now = new Date();
     const thisMonth = format(now, "yyyy-MM");
     const monthBatches = batches.filter((b) => b.date.startsWith(thisMonth));
-    const totalVolume = monthBatches.reduce((s, b) => s + b.volume, 0);
+    const totalVolume = monthBatches.reduce((s, b) => s + getPrimaryVolume(b), 0);
     const conformant = monthBatches.filter((b) => !b.hasWarnings).length;
     const rate = monthBatches.length > 0 ? Math.round((conformant / monthBatches.length) * 100) : 100;
     const nonConf = monthBatches.filter((b) => b.hasWarnings).length;
@@ -25,7 +28,7 @@ export default function DashboardPage() {
     const months: Record<string, number> = {};
     batches.forEach((b) => {
       const m = format(parseISO(b.date), "yyyy-MM");
-      months[m] = (months[m] || 0) + b.volume;
+      months[m] = (months[m] || 0) + getPrimaryVolume(b);
     });
     return Object.entries(months)
       .sort(([a], [b]) => a.localeCompare(b))
@@ -36,7 +39,7 @@ export default function DashboardPage() {
   const acidityData = useMemo(() => {
     return batches
       .slice(-20)
-      .map((b) => ({ batch: b.batchId.slice(-4), acidity: b.acidity, min: 6 }));
+      .map((b) => ({ batch: b.batchId.slice(-4), acidity: Number(b.fields['acidity'] ?? 0), min: 6 }));
   }, [batches]);
 
   const kpis = [
