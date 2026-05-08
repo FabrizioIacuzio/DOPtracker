@@ -86,6 +86,17 @@ test('GET /submissions → 200 with submissions array', async () => {
   expect(Array.isArray(r.body.submissions)).toBe(true)
 })
 
+test('GET /submissions → 400 for invalid status filter', async () => {
+  const r = await request(app).get('/submissions?status=garbage').set('Authorization',`Bearer ${token}`)
+  expect(r.status).toBe(400)
+})
+
+test('GET /submissions → 200 with valid status filter', async () => {
+  const r = await request(app).get('/submissions?status=sent').set('Authorization',`Bearer ${token}`)
+  expect(r.status).toBe(200)
+  expect(Array.isArray(r.body.submissions)).toBe(true)
+})
+
 test('POST /submissions/schedules → 201 creates schedule', async () => {
   const r = await request(app).post('/submissions/schedules').set('Authorization',`Bearer ${token}`)
     .send({ denominationId:'test-igp', ruleId:'portal-rule' })

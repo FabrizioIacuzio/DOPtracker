@@ -6,6 +6,7 @@ import { SubmissionService } from '../services/submissionService'
 
 const SubmitBody = z.object({ denominationId: z.string(), ruleId: z.string(), payload: z.record(z.string(), z.unknown()).default({}) })
 const ScheduleBody = z.object({ denominationId: z.string(), ruleId: z.string() })
+const StatusQuery = z.nativeEnum(SubmissionStatus).optional()
 
 export function submissionsRouter(svc: SubmissionService, prisma: PrismaClient): Router {
   const r = Router()
@@ -24,10 +25,11 @@ export function submissionsRouter(svc: SubmissionService, prisma: PrismaClient):
       const pid = (req as AuthRequest).user.id
       const page = Math.max(1, Number(req.query['page'] ?? 1))
       const limit = Math.min(50, Math.max(1, Number(req.query['limit'] ?? 20)))
+      const status = StatusQuery.parse(req.query['status'])
       const where = {
         producerId: pid,
         ...(req.query['denominationId'] ? { denominationId: String(req.query['denominationId']) } : {}),
-        ...(req.query['status'] ? { status: req.query['status'] as SubmissionStatus } : {}),
+        ...(status ? { status } : {}),
       }
       const [submissions, total] = await Promise.all([
         prisma.submission.findMany({ where, orderBy: { createdAt: 'desc' }, skip: (page - 1) * limit, take: limit }),
