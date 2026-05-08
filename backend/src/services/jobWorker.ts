@@ -18,7 +18,15 @@ export class JobWorker {
 
   start(): void {
     const schedule = () => {
-      this.timer = setTimeout(async () => { await this.tick(); schedule() }, this.config.pollIntervalMs)
+      this.timer = setTimeout(async () => {
+        try {
+          await this.tick()
+        } catch (err) {
+          console.error('[JobWorker] tick error:', err)
+        } finally {
+          schedule()
+        }
+      }, this.config.pollIntervalMs)
     }
     schedule()
   }
@@ -27,19 +35,19 @@ export class JobWorker {
 
   async tick(): Promise<void> {
     const now = new Date()
-    const jobs = await this.prisma.$transaction(async (tx) => {
-      const candidates = await tx.submissionJob.findMany({
-        where: { status:'pending', runAt:{ lte:now } },
-        take: this.config.batchSize, orderBy:{ runAt:'asc' },
-      })
-      if (!candidates.length) return []
-      await tx.submissionJob.updateMany({
-        where: { id:{ in:candidates.map(j => j.id) }, status:'pending' },
-        data: { status:'processing' },
-      })
-      return candidates
-    })
-    await Promise.all(jobs.map(j => this.processJob(j.id)))
+    const jobs = await this.prisma.$queryRaw<Array<{ id: string }>>`
+      UPDATE "SubmissionJob"
+      SET status = 'processing'
+      WHERE id IN (
+        SELECT id FROM "SubmissionJob"
+        WHERE status = 'pending' AND "runAt" <= ${now}
+        ORDER BY "runAt" ASC
+        LIMIT ${this.config.batchSize}
+        FOR UPDATE SKIP LOCKED
+      )
+      RETURNING id
+    `
+    await Promise.all(jobs.map((j) => this.processJob(j.id)))
   }
 
   private async processJob(jobId: string): Promise<void> {

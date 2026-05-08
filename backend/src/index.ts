@@ -21,7 +21,7 @@ const app = express()
 app.use(cors({ origin: env.CORS_ORIGIN }))
 app.use(express.json())
 app.get('/health', (_req, res) => res.json({ status: 'ok' }))
-app.use('/submissions', submissionsRouter(submissionService))
+app.use('/submissions', submissionsRouter(submissionService, prisma))
 app.use(errorMiddleware)
 
 app.listen(env.PORT, () => {

@@ -16,7 +16,8 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
     const payload = jwt.verify(header.slice(7), env.JWT_SECRET) as { sub: string }
     ;(req as AuthRequest).user = { id: payload.sub }
     next()
-  } catch {
+  } catch (err) {
+    console.warn('[auth] invalid token:', err instanceof Error ? err.message : String(err))
     res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Invalid token' } })
   }
 }

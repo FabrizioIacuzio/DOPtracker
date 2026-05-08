@@ -37,7 +37,7 @@ beforeAll(async () => {
   token = jwt.sign({ sub:producerId }, SECRET, { expiresIn:'1h' })
   app = express()
   app.use(express.json())
-  app.use('/submissions', submissionsRouter(svc))
+  app.use('/submissions', submissionsRouter(svc, prisma))
   app.use(errorMiddleware)
 })
 

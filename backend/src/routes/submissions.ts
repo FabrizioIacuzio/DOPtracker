@@ -1,15 +1,13 @@
 import { Router } from 'express'
 import { z } from 'zod'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, SubmissionStatus } from '@prisma/client'
 import { requireAuth, AuthRequest } from '../middleware/auth'
 import { SubmissionService } from '../services/submissionService'
 
-const prisma = new PrismaClient()
-
-const SubmitBody = z.object({ denominationId: z.string(), ruleId: z.string(), payload: z.unknown().default({}) })
+const SubmitBody = z.object({ denominationId: z.string(), ruleId: z.string(), payload: z.record(z.string(), z.unknown()).default({}) })
 const ScheduleBody = z.object({ denominationId: z.string(), ruleId: z.string() })
 
-export function submissionsRouter(svc: SubmissionService): Router {
+export function submissionsRouter(svc: SubmissionService, prisma: PrismaClient): Router {
   const r = Router()
   r.use(requireAuth)
 
@@ -29,6 +27,7 @@ export function submissionsRouter(svc: SubmissionService): Router {
       const where = {
         producerId: pid,
         ...(req.query['denominationId'] ? { denominationId: String(req.query['denominationId']) } : {}),
+        ...(req.query['status'] ? { status: req.query['status'] as SubmissionStatus } : {}),
       }
       const [submissions, total] = await Promise.all([
         prisma.submission.findMany({ where, orderBy: { createdAt: 'desc' }, skip: (page - 1) * limit, take: limit }),
