@@ -1,6 +1,17 @@
 {
   "fields": [
     {
+      "key": "product_type",
+      "label": "Tipologia",
+      "type": "select",
+      "options": [
+        "standard",
+        "riserva"
+      ],
+      "defaultValue": "standard",
+      "required": true
+    },
+    {
       "key": "milk_liters",
       "label": "Latte parzialmente scremato",
       "type": "number",
@@ -12,42 +23,50 @@
       "label": "Ore di affioramento",
       "type": "number",
       "unit": "h",
-      "hint": "Affioration naturale"
+      "hint": "Affioramento naturale"
     },
     {
       "key": "fat_on_dry_matter_percent",
       "label": "Grasso sulla sostanza secca",
       "type": "number",
       "unit": "%",
-      "hint": "Min 44%"
+      "hint": "Min 32%"
     },
     {
       "key": "aging_months",
       "label": "Mesi di stagionatura",
       "type": "number",
       "unit": "mesi",
-      "hint": "Min 9 mesi (Riserva min 20)"
+      "hint": "Standard min 9 mesi; Riserva min 20 mesi"
     },
     {
       "key": "wheel_weight_kg",
       "label": "Peso forma",
       "type": "number",
       "unit": "kg",
-      "hint": "24–40 kg"
+      "hint": "24-40 kg"
     }
   ],
   "rules": [
     {
       "field": "fat_on_dry_matter_percent",
-      "label": "Grasso s.s.",
-      "min": 44,
+      "label": "Grasso sulla sostanza secca",
+      "min": 32,
       "unit": "%"
     },
     {
       "field": "aging_months",
-      "label": "Mesi stagionatura",
+      "label": "Mesi stagionatura (standard)",
       "min": 9,
-      "unit": "mesi"
+      "unit": "mesi",
+      "when": { "field": "product_type", "equals": "standard" }
+    },
+    {
+      "field": "aging_months",
+      "label": "Mesi stagionatura (Riserva)",
+      "min": 20,
+      "unit": "mesi",
+      "when": { "field": "product_type", "equals": "riserva" }
     },
     {
       "field": "wheel_weight_kg",

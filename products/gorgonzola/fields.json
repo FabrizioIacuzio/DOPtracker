@@ -6,7 +6,8 @@
       "type": "select",
       "options": [
         "dolce",
-        "piccante"
+        "piccante",
+        "piccola_piccante"
       ],
       "required": true
     },
@@ -27,13 +28,15 @@
       "key": "aging_days",
       "label": "Giorni di stagionatura",
       "type": "number",
-      "unit": "giorni"
+      "unit": "giorni",
+      "hint": "Dolce 50-150; piccante 80-270; piccola piccante 60-200"
     },
     {
       "key": "wheel_weight_kg",
       "label": "Peso forma",
       "type": "number",
-      "unit": "kg"
+      "unit": "kg",
+      "hint": "Dolce/piccante 9-13.5 kg; piccola piccante 5.5-<9 kg"
     }
   ],
   "rules": [
@@ -45,16 +48,51 @@
     },
     {
       "field": "aging_days",
-      "label": "Giorni maturazione (dolce min 50, piccante min 80)",
+      "label": "Giorni stagionatura (dolce)",
       "min": 50,
-      "unit": "giorni"
+      "max": 150,
+      "unit": "giorni",
+      "when": { "field": "variety", "equals": "dolce" }
+    },
+    {
+      "field": "aging_days",
+      "label": "Giorni stagionatura (piccante)",
+      "min": 80,
+      "max": 270,
+      "unit": "giorni",
+      "when": { "field": "variety", "equals": "piccante" }
+    },
+    {
+      "field": "aging_days",
+      "label": "Giorni stagionatura (piccola piccante)",
+      "min": 60,
+      "max": 200,
+      "unit": "giorni",
+      "when": { "field": "variety", "equals": "piccola_piccante" }
     },
     {
       "field": "wheel_weight_kg",
-      "label": "Peso forma",
-      "min": 6,
-      "max": 13,
-      "unit": "kg"
+      "label": "Peso forma (dolce)",
+      "min": 9,
+      "max": 13.5,
+      "unit": "kg",
+      "when": { "field": "variety", "equals": "dolce" }
+    },
+    {
+      "field": "wheel_weight_kg",
+      "label": "Peso forma (piccante)",
+      "min": 9,
+      "max": 13.5,
+      "unit": "kg",
+      "when": { "field": "variety", "equals": "piccante" }
+    },
+    {
+      "field": "wheel_weight_kg",
+      "label": "Peso forma (piccola piccante)",
+      "min": 5.5,
+      "maxExclusive": 9,
+      "unit": "kg",
+      "when": { "field": "variety", "equals": "piccola_piccante" }
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "id": "insalata-di-lusia",
-  "name": "Insalata Di Lusia IGP",
+  "name": "Insalata di Lusia IGP",
   "type": "IGP",
   "control_body": {
     "name": "CSQA Certificazioni Srl",
@@ -11,40 +11,75 @@
   },
   "submission_rules": [
     {
-      "id": "rule-01-pec-notification",
-      "doc_type": "notification",
-      "label": "Comunicazione periodica via PEC",
+      "id": "rule-mod001-access-request",
+      "doc_type": "application_form",
+      "label": "MOD001 - Richiesta di adesione al sistema dei controlli",
+      "operator_type": "produttore_agricolo_confezionatore_confezionatore_iv_gamma",
+      "control_code": "MOD001",
+      "deadline": "Prima dell'accesso al sistema di controllo",
       "channel": "pec",
-      "automation": "automated",
+      "automation": "manual",
       "recipient": "csqa",
-      "schedule": {
-        "frequency": "monthly",
-        "due_day": 15
-      },
-      "instructions": null
+      "schedule": null,
+      "instructions": "Trasmettere a CSQA la richiesta di adesione sottoscritta con la documentazione accessoria prevista per le attivita svolte dall'operatore."
     },
     {
-      "id": "rule-02-telematic-sian-notification",
-      "doc_type": "notification",
-      "label": "Comunicazione telematica SIAN",
-      "channel": "telematic_sian",
+      "id": "rule-mod002-production-declaration",
+      "doc_type": "declaration",
+      "label": "MOD002 - Denuncia di produzione",
+      "operator_type": "produttore_agricolo",
+      "control_code": "MOD002",
+      "deadline": "Per ogni ciclo, subito dopo la raccolta e comunque entro 7 giorni",
+      "channel": "pec",
+      "automation": "manual",
+      "recipient": "csqa",
+      "schedule": null,
+      "instructions": "Per ogni ciclo di coltivazione, trasmettere a CSQA la denuncia di produzione con varieta, SAU e quantitativi di prodotto raccolto potenzialmente idoneo."
+    },
+    {
+      "id": "rule-mod004-mod005-monthly-packer",
+      "doc_type": "declaration",
+      "label": "MOD004/MOD005 - Comunicazione mensile confezionatore",
+      "operator_type": "confezionatore",
+      "control_code": "MOD004, MOD005",
+      "deadline": "Mensile, entro il 15 del mese successivo",
+      "channel": "pec",
       "automation": "manual",
       "recipient": "csqa",
       "schedule": {
         "frequency": "monthly",
         "due_day": 15
       },
-      "instructions": "Accedere al SIAN con le proprie credenziali e trasmettere la comunicazione prevista."
+      "instructions": "Trasmettere mensilmente a CSQA, anche con produzioni nulle, le quantita approvvigionate per varieta e produttore agricolo riconosciuto (MOD004) e le quantita confezionate come Insalata di Lusia IGP, rese al mittente o declassate (MOD005)."
     },
     {
-      "id": "rule-04-pec-self-monitoring",
-      "doc_type": "self_monitoring",
-      "label": "Documenti di autocontrollo",
+      "id": "rule-mod004a-mod006-monthly-iv-gamma",
+      "doc_type": "declaration",
+      "label": "MOD004_a/MOD006 - Comunicazione mensile IV Gamma",
+      "operator_type": "confezionatore_iv_gamma",
+      "control_code": "MOD004_a, MOD006",
+      "deadline": "Mensile, entro il 15 del mese successivo",
       "channel": "pec",
-      "automation": "automated",
+      "automation": "manual",
+      "recipient": "csqa",
+      "schedule": {
+        "frequency": "monthly",
+        "due_day": 15
+      },
+      "instructions": "Trasmettere mensilmente a CSQA, anche con produzioni nulle, le quantita di Insalata di Lusia IGP approvvigionate da ogni confezionatore riconosciuto (MOD004_a), lavorate per varieta ed eventualmente rese al mittente (MOD006)."
+    },
+    {
+      "id": "rule-self-monitoring-records",
+      "doc_type": "self_monitoring",
+      "label": "Registrazioni di autocontrollo e tracciabilita",
+      "operator_type": "produttore_agricolo_confezionatore_confezionatore_iv_gamma",
+      "control_code": "DPC041-7.1",
+      "deadline": "Conservazione per almeno 5 anni; disponibili a richiesta CSQA",
+      "channel": "pdf_format",
+      "automation": "manual",
       "recipient": "csqa",
       "schedule": null,
-      "instructions": null
+      "instructions": "Produrre e conservare la documentazione di autocontrollo a evidenza dei requisiti di conformita, identificazione e tracciabilita; renderla disponibile durante i controlli CSQA."
     }
   ]
 }

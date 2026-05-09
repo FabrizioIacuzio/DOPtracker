@@ -11,56 +11,40 @@
   },
   "submission_rules": [
     {
-      "id": "rule-01-pec-document-generic",
-      "doc_type": "document_generic",
-      "label": "Documentazione via PEC",
-      "channel": "pec",
-      "automation": "automated",
-      "recipient": "ministry",
-      "schedule": {
-        "frequency": "monthly",
-        "due_day": 15
-      },
-      "instructions": null
-    },
-    {
-      "id": "rule-02-telematic-sian-document-generic",
-      "doc_type": "document_generic",
-      "label": "Documentazione telematica SIAN",
-      "channel": "telematic_sian",
-      "automation": "manual",
-      "recipient": "ministry",
-      "schedule": {
-        "frequency": "monthly",
-        "due_day": 15
-      },
-      "instructions": "Accedere al SIAN con le proprie credenziali e trasmettere la comunicazione prevista."
-    },
-    {
-      "id": "rule-03-web-portal-document-generic",
-      "doc_type": "document_generic",
-      "label": "Documentazione su portale CSQA",
+      "id": "rule-ac01-annual-milk-production",
+      "doc_type": "declaration",
+      "label": "AC01 - Dichiarazione latte prodotto",
       "channel": "web_portal",
       "automation": "manual",
-      "recipient": "ministry",
-      "schedule": {
-        "frequency": "monthly",
-        "due_day": 15
-      },
-      "instructions": "Accedere al portale dedicato dell'organismo di controllo e caricare la documentazione."
+      "recipient": "csqa",
+      "schedule": null,
+      "instructions": "Trasmettere la dichiarazione annuale del latte prodotto entro il 31 gennaio tramite portale CSQA dedicato; se il portale non e presente o disponibile, inviare a dati.reg@csqa.it."
     },
     {
-      "id": "rule-04-web-portal-notification",
+      "id": "rule-cc04-monthly-cheese-production",
+      "doc_type": "declaration",
+      "label": "CC04 - Formaggio idoneo DOP ottenuto",
+      "channel": "web_portal",
+      "automation": "manual",
+      "recipient": "csqa",
+      "schedule": {
+        "frequency": "monthly",
+        "due_day": 5
+      },
+      "instructions": "Il trasformatore deve caricare sul portale CSQA i dati di produzione del formaggio idoneo alla DOP entro il giorno 5 del mese successivo; se il portale non e presente o disponibile, inviare a dati.reg@csqa.it."
+    },
+    {
+      "id": "rule-monthly-periodic-data",
       "doc_type": "notification",
-      "label": "Comunicazione periodica su portale",
+      "label": "Comunicazioni periodiche mensili DPC012",
       "channel": "web_portal",
       "automation": "manual",
-      "recipient": "ministry",
+      "recipient": "csqa",
       "schedule": {
         "frequency": "monthly",
-        "due_day": 15
+        "due_day": 10
       },
-      "instructions": "Accedere al portale dedicato dell'organismo di controllo e caricare la documentazione."
+      "instructions": "Trasmettere entro il giorno 10 del mese successivo le comunicazioni periodiche di Tabella 2 tramite portale CSQA dedicato; se il portale non e presente o disponibile, inviare a dati.reg@csqa.it."
     }
   ]
 }

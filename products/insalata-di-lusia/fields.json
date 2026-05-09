@@ -7,6 +7,17 @@
       "required": true
     },
     {
+      "key": "variety",
+      "label": "Varieta",
+      "type": "select",
+      "options": [
+        "cappuccia",
+        "gentile"
+      ],
+      "defaultValue": "cappuccia",
+      "required": true
+    },
+    {
       "key": "total_weight_kg",
       "label": "Peso produzione",
       "type": "number",
@@ -14,22 +25,63 @@
       "required": true
     },
     {
-      "key": "variety",
-      "label": "Varietà",
-      "type": "select",
-      "options": [
-        "lattuga_romana",
-        "lattuga_cappuccina",
-        "iceberg"
-      ],
-      "required": true
+      "key": "yield_t_per_ha",
+      "label": "Resa per ettaro/ciclo",
+      "type": "number",
+      "unit": "t/ha",
+      "hint": "Cappuccia max 55 t/ha; Gentile max 50 t/ha"
     },
     {
       "key": "avg_head_weight_g",
       "label": "Peso medio cespo",
       "type": "number",
-      "unit": "g"
+      "unit": "g",
+      "hint": "Cappuccia 200-500 g; Gentile 150-450 g"
+    },
+    {
+      "key": "stem_length_cm",
+      "label": "Lunghezza fusto",
+      "type": "number",
+      "unit": "cm",
+      "hint": "Max 6 cm"
     }
   ],
-  "rules": []
+  "rules": [
+    {
+      "field": "avg_head_weight_g",
+      "label": "Peso medio cespo (Cappuccia)",
+      "min": 200,
+      "max": 500,
+      "unit": "g",
+      "when": { "field": "variety", "equals": "cappuccia" }
+    },
+    {
+      "field": "avg_head_weight_g",
+      "label": "Peso medio cespo (Gentile)",
+      "min": 150,
+      "max": 450,
+      "unit": "g",
+      "when": { "field": "variety", "equals": "gentile" }
+    },
+    {
+      "field": "stem_length_cm",
+      "label": "Fusto",
+      "max": 6,
+      "unit": "cm"
+    },
+    {
+      "field": "yield_t_per_ha",
+      "label": "Resa per ettaro/ciclo (Cappuccia)",
+      "max": 55,
+      "unit": "t/ha",
+      "when": { "field": "variety", "equals": "cappuccia" }
+    },
+    {
+      "field": "yield_t_per_ha",
+      "label": "Resa per ettaro/ciclo (Gentile)",
+      "max": 50,
+      "unit": "t/ha",
+      "when": { "field": "variety", "equals": "gentile" }
+    }
+  ]
 }

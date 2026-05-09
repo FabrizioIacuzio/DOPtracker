@@ -11,40 +11,111 @@
   },
   "submission_rules": [
     {
-      "id": "rule-01-pec-document-generic",
-      "doc_type": "document_generic",
-      "label": "Documentazione via PEC",
-      "channel": "pec",
-      "automation": "automated",
-      "recipient": "ministry",
-      "schedule": {
-        "frequency": "monthly",
-        "due_day": 15
-      },
-      "instructions": null
-    },
-    {
-      "id": "rule-02-web-portal-label",
-      "doc_type": "label",
-      "label": "Etichette su portale",
+      "id": "rule-ac01-annual-milk-production",
+      "doc_type": "declaration",
+      "label": "AC01 - Dichiarazione latte prodotto",
+      "operator_type": "producer_latte",
+      "control_code": "AC01",
+      "deadline": "Annuale, entro il 31 gennaio",
       "channel": "web_portal",
       "automation": "manual",
-      "recipient": "ministry",
+      "recipient": "csqa",
       "schedule": null,
-      "instructions": "Accedere al portale dedicato dell'organismo di controllo e caricare la documentazione."
+      "instructions": "Trasmettere la dichiarazione annuale del latte prodotto tramite portale CSQA dedicato; se il portale non e presente o disponibile, inviare a dati.reg@csqa.it."
     },
     {
-      "id": "rule-03-web-portal-notification",
-      "doc_type": "notification",
-      "label": "Comunicazione periodica su portale",
+      "id": "rule-bc-monthly-milk-collection",
+      "doc_type": "declaration",
+      "label": "BC01/BC02 - Latte idoneo DOP approvvigionato e ceduto",
+      "operator_type": "raccoglitore_latte",
+      "control_code": "BC01, BC02",
+      "deadline": "Mensile, entro il mese successivo",
       "channel": "web_portal",
       "automation": "manual",
-      "recipient": "ministry",
+      "recipient": "csqa",
+      "schedule": null,
+      "instructions": "Il raccoglitore latte comunica mensilmente le quantita di latte idoneo DOP approvvigionato e ceduto, distinte per fornitore o destinatario riconosciuto, tramite portale CSQA o dati.reg@csqa.it."
+    },
+    {
+      "id": "rule-cc-monthly-transformation",
+      "doc_type": "declaration",
+      "label": "CC01/CC02/CC03/CC05/CC06/CC07 - Dati mensili trasformazione",
+      "operator_type": "trasformatore",
+      "control_code": "CC01, CC02, CC03, CC05, CC06, CC07",
+      "deadline": "Mensile, entro il mese successivo",
+      "channel": "web_portal",
+      "automation": "manual",
+      "recipient": "csqa",
+      "schedule": null,
+      "instructions": "Il trasformatore comunica mensilmente latte idoneo approvvigionato, ceduto e avviato a trasformazione, prodotto idoneo DOP ottenuto, prodotto escluso in autocontrollo e formaggio idoneo ceduto, tramite portale CSQA o dati.reg@csqa.it."
+    },
+    {
+      "id": "rule-cc-event-use-notifications",
+      "doc_type": "notification",
+      "label": "CC04/CC08/CC09 - Notifiche preventive di utilizzo",
+      "operator_type": "trasformatore",
+      "control_code": "CC04, CC08, CC09",
+      "deadline": "Ad ogni utilizzo",
+      "channel": "web_portal",
+      "automation": "manual",
+      "recipient": "csqa",
+      "schedule": null,
+      "instructions": "Notificare preventivamente l'utilizzo di batteri lattici, latte da allevamenti certificati destinato a formaggio duro similare, o latte precedentemente escluso dal circuito e riammesso ai fini DOP."
+    },
+    {
+      "id": "rule-dc-monthly-aging-and-marking",
+      "doc_type": "declaration",
+      "label": "DC01/DC02/DC03 - Dati mensili stagionatura e marchiatura",
+      "operator_type": "stagionatore",
+      "control_code": "DC01, DC02, DC03",
+      "deadline": "Mensile, entro il mese successivo",
+      "channel": "web_portal",
+      "automation": "manual",
+      "recipient": "csqa",
+      "schedule": null,
+      "instructions": "Lo stagionatore comunica mensilmente il formaggio idoneo DOP presentato alla marchiatura, il prodotto escluso in autocontrollo e le forme a cui e stato apposto il marchio, con trasformatore e mese/anno di produzione."
+    },
+    {
+      "id": "rule-mod003-marking-request",
+      "doc_type": "application_form",
+      "label": "MOD003 - Richiesta di marchiatura a fuoco",
+      "operator_type": "proprietario_o_detentore_formaggio",
+      "control_code": "MOD003",
+      "deadline": "Prima dell'espertizzazione e marchiatura",
+      "channel": "web_portal",
+      "automation": "manual",
+      "recipient": "csqa_and_consortium",
+      "schedule": null,
+      "instructions": "Trasmettere a CSQA e al Consorzio la richiesta di marchiatura identificando matricola del caseificio, mese e anno di produzione, numero delle forme e sito di immagazzinamento."
+    },
+    {
+      "id": "rule-ec01-weekly-grating-programs",
+      "doc_type": "notification",
+      "label": "EC01 - Programmi settimanali di grattugia",
+      "operator_type": "grattugiatore",
+      "control_code": "EC01",
+      "deadline": "Entro il giovedi della settimana precedente",
+      "channel": "web_portal",
+      "automation": "manual",
+      "recipient": "csqa",
+      "schedule": null,
+      "instructions": "Trasmettere i programmi settimanali di lavorazione entro il giovedi della settimana precedente a quella di svolgimento dell'attivita tramite portale CSQA o dati.reg@csqa.it."
+    },
+    {
+      "id": "rule-ec02-monthly-grating-register",
+      "doc_type": "register",
+      "label": "EC02 - Registro lavorazioni giornaliere",
+      "operator_type": "grattugiatore",
+      "control_code": "EC02",
+      "deadline": "Mensile, entro il 10 del mese successivo",
+      "channel": "web_portal",
+      "automation": "manual",
+      "recipient": "csqa",
       "schedule": {
         "frequency": "monthly",
-        "due_day": 15
+        "due_day": 10
       },
-      "instructions": "Accedere al portale dedicato dell'organismo di controllo e caricare la documentazione."
+      "instructions": "Trasmettere le schede CSQA Registro lavorazioni giornaliere entro il giorno 10 del mese successivo tramite portale CSQA o dati.reg@csqa.it."
     }
   ]
 }

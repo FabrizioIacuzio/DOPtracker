@@ -41,7 +41,9 @@ export default function BatchForm() {
         Object.entries(existingBatch.fields).map(([k, v]) => [k, String(v)])
       )
     }
-    return Object.fromEntries(config.fields.map((f) => [f.key, '']))
+    return Object.fromEntries(
+      config.fields.map((f) => [f.key, f.defaultValue === undefined ? '' : String(f.defaultValue)])
+    )
   })
 
   const [warnings, setWarnings] = useState<string[]>([])

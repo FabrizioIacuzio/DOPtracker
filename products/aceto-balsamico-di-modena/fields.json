@@ -13,18 +13,27 @@
       "required": true
     },
     {
+      "key": "productType",
+      "label": "Tipologia prodotto",
+      "type": "select",
+      "options": ["affinato", "invecchiato", "riserva"],
+      "defaultValue": "affinato",
+      "required": true,
+      "hint": "Affinato, invecchiato (min 3 anni) o riserva (min 5 anni)"
+    },
+    {
       "key": "acidity",
       "label": "Acidità totale",
       "type": "number",
       "unit": "%",
-      "hint": "Min 6%"
+      "hint": "Min 6% affinato; min 5.5% invecchiato/riserva"
     },
     {
       "key": "density",
       "label": "Densità a 20°C",
       "type": "number",
       "unit": "g/ml",
-      "hint": "Min 1.06 g/ml"
+      "hint": "Min 1.06 affinato; 1.15 invecchiato; 1.25 riserva"
     },
     {
       "key": "sugars",
@@ -66,7 +75,7 @@
       "label": "Invecchiamento",
       "type": "number",
       "unit": "mesi",
-      "hint": "Min 2 mesi (60 gg)"
+      "hint": "Min 2 mesi; 36 mesi invecchiato; 60 mesi riserva"
     },
     {
       "key": "barrelId",
@@ -85,13 +94,36 @@
       "field": "acidity",
       "label": "Acidità totale",
       "min": 6,
-      "unit": "%"
+      "unit": "%",
+      "when": { "field": "productType", "equals": "affinato" }
+    },
+    {
+      "field": "acidity",
+      "label": "Acidità totale",
+      "min": 5.5,
+      "unit": "%",
+      "when": { "field": "productType", "equals": ["invecchiato", "riserva"] }
     },
     {
       "field": "density",
       "label": "Densità",
       "min": 1.06,
-      "unit": "g/ml"
+      "unit": "g/ml",
+      "when": { "field": "productType", "equals": "affinato" }
+    },
+    {
+      "field": "density",
+      "label": "Densità",
+      "min": 1.15,
+      "unit": "g/ml",
+      "when": { "field": "productType", "equals": "invecchiato" }
+    },
+    {
+      "field": "density",
+      "label": "Densità",
+      "min": 1.25,
+      "unit": "g/ml",
+      "when": { "field": "productType", "equals": "riserva" }
     },
     {
       "field": "sugars",
@@ -103,7 +135,22 @@
       "field": "agingMonths",
       "label": "Invecchiamento",
       "min": 2,
-      "unit": "mesi"
+      "unit": "mesi",
+      "when": { "field": "productType", "equals": "affinato" }
+    },
+    {
+      "field": "agingMonths",
+      "label": "Invecchiamento",
+      "min": 36,
+      "unit": "mesi",
+      "when": { "field": "productType", "equals": "invecchiato" }
+    },
+    {
+      "field": "agingMonths",
+      "label": "Invecchiamento",
+      "min": 60,
+      "unit": "mesi",
+      "when": { "field": "productType", "equals": "riserva" }
     },
     {
       "field": "alcohol",

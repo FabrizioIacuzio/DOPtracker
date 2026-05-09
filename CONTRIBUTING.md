@@ -150,6 +150,19 @@ Aceto Balsamico di Modena IGP is the reference denomination — the most documen
 
 ## Priority order for validation
 
+## AI-assisted audit status (not human-validated)
+
+The following product folders have been analyzed and corrected by Codex against the cited official documents. Treat them as **AI-audited, pending human regulatory review**. Do not present them as legally validated until a human reviewer has checked the sources and signed off.
+
+| Denomination | Status | Primary sources checked |
+|--------------|--------|-------------------------|
+| `aceto-balsamico-di-modena` | AI-audited, pending human review | MASAF 2025 disciplinare and local CSQA DPC030 package |
+| `gorgonzola` | AI-audited, pending human review | Official disciplinare, CSQA product page, local CSQA DPC012 package |
+| `grana-padano` | AI-audited, pending human review | Consorzio disciplinare page/PDF, local CSQA DPC001 package |
+| `insalata-di-lusia` | AI-audited, pending human review | EU 2019/C 3/11 single document, CSQA product page, local CSQA DPC041 package |
+
+Each audited product has a `products/{id}/VALIDATION.md` file with the document list, modeled rules, submission mapping, and open questions.
+
 | Priority | Denomination | Why |
 |----------|-------------|-----|
 | 1 | `aceto-balsamico-di-modena` | Reference denomination, most documentation available |

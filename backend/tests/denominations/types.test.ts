@@ -34,6 +34,20 @@ describe('DenominationConfigSchema', () => {
       ...base, submission_rules: [{ ...base.submission_rules[0]!, schedule: null }]
     })).not.toThrow()
   })
+  it('keeps operator-specific DOPS metadata for auditability', () => {
+    const parsed = DenominationConfigSchema.parse({
+      ...base,
+      submission_rules: [{
+        ...base.submission_rules[0]!,
+        operator_type: 'elaboratore',
+        control_code: 'M321',
+        deadline: 'Al termine del periodo di affinamento/invecchiamento',
+      }],
+    })
+    expect(parsed.submission_rules[0]?.operator_type).toBe('elaboratore')
+    expect(parsed.submission_rules[0]?.control_code).toBe('M321')
+    expect(parsed.submission_rules[0]?.deadline).toBe('Al termine del periodo di affinamento/invecchiamento')
+  })
   it('rejects due_day > 28', () => {
     expect(() => DenominationConfigSchema.parse({
       ...base, submission_rules: [{
