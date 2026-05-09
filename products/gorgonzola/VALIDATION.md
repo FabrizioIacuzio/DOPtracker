@@ -29,6 +29,6 @@ Configured rules:
 
 ## Open questions
 
-- The current app schema cannot represent role-specific forms in detail. Gorgonzola has at least these operator roles: milk producer, milk collector, transformer, aging operator, portioning operator, and pre-packager.
+- `products/gorgonzola/workflow.json` now maps the DPC012 role-specific forms for milk producer, milk collector, transformer, aging operator, portioning operator, and pre-packager. This is pending human regulatory review and exact CSQA portal field matching.
 - The current scheduler cannot represent annual deadlines such as AC01 by January 31.
 - DPC012 also describes PEC use for analysis revision requests. This is not configured as a scheduled submission because it is an exception workflow, not a periodic declaration.

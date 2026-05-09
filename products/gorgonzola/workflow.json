@@ -1,0 +1,217 @@
+{
+  "sections": [
+    {
+      "id": "milk_production",
+      "title": "Produzione latte",
+      "description": "Registrazioni AC01 e tracciabilita del latte idoneo alla DOP.",
+      "fields": [
+        {
+          "key": "milk_producer_name",
+          "label": "Produttore latte",
+          "type": "text"
+        },
+        {
+          "key": "milk_producer_code",
+          "label": "Codice produttore latte",
+          "type": "text"
+        },
+        {
+          "key": "annual_milk_produced_t",
+          "label": "Latte prodotto annuo",
+          "type": "number",
+          "unit": "t"
+        },
+        {
+          "key": "eligible_milk_delivery_date",
+          "label": "Data consegna latte idoneo",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "id": "milk_collection",
+      "title": "Raccolta latte",
+      "description": "Registrazioni BC01/BC02: latte idoneo approvvigionato e ceduto per fornitore e destinatario.",
+      "fields": [
+        {
+          "key": "milk_collector_name",
+          "label": "Raccoglitore latte",
+          "type": "text"
+        },
+        {
+          "key": "milk_supplier_name",
+          "label": "Fornitore latte",
+          "type": "text"
+        },
+        {
+          "key": "eligible_milk_procured_t",
+          "label": "Quantita latte idoneo approvvigionato",
+          "type": "number",
+          "unit": "t"
+        },
+        {
+          "key": "eligible_milk_transferred_t",
+          "label": "Quantita latte idoneo ceduto",
+          "type": "number",
+          "unit": "t"
+        },
+        {
+          "key": "milk_destination",
+          "label": "Destinazione latte",
+          "type": "text"
+        },
+        {
+          "key": "transport_vehicle_id",
+          "label": "Mezzo di trasporto",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "transformation",
+      "title": "Trasformazione",
+      "description": "Registro produzione/lavorazione e comunicazioni CC01-CC06.",
+      "fields": [
+        {
+          "key": "production_date",
+          "label": "Data produzione",
+          "type": "date"
+        },
+        {
+          "key": "milk_tank_id",
+          "label": "Serbatoio latte",
+          "type": "text"
+        },
+        {
+          "key": "rennet_type",
+          "label": "Tipologia caglio",
+          "type": "text"
+        },
+        {
+          "key": "eligible_cheese_obtained_forms",
+          "label": "Quantita formaggio idoneo ottenuto",
+          "type": "number",
+          "unit": "forme"
+        },
+        {
+          "key": "eligible_cheese_excluded_forms",
+          "label": "Quantita formaggio escluso in autocontrollo",
+          "type": "number",
+          "unit": "forme"
+        },
+        {
+          "key": "aging_operator_name",
+          "label": "Stagionatore destinatario",
+          "type": "text"
+        }
+      ],
+      "fieldKeys": [
+        "variety",
+        "milk_liters",
+        "wheel_weight_kg"
+      ]
+    },
+    {
+      "id": "aging",
+      "title": "Stagionatura",
+      "description": "Registro carico/scarico e valutazione interna del prodotto.",
+      "fields": [
+        {
+          "key": "aging_supplier_name",
+          "label": "Fornitore formaggio da stagionare",
+          "type": "text"
+        },
+        {
+          "key": "producer_lot_id",
+          "label": "Lotto produttore",
+          "type": "text"
+        },
+        {
+          "key": "reassigned_lot_id",
+          "label": "Lotto riassegnato",
+          "type": "text"
+        },
+        {
+          "key": "aged_cheese_released_forms",
+          "label": "Quantita formaggio stagionato immesso nel circuito",
+          "type": "number",
+          "unit": "forme"
+        }
+      ],
+      "fieldKeys": [
+        "aging_days",
+        "fat_on_dry_matter_percent"
+      ]
+    },
+    {
+      "id": "portioning",
+      "title": "Porzionatura",
+      "description": "Registro di carico/scarico EC01-EC03 per prodotto DOP goffrato.",
+      "fields": [
+        {
+          "key": "portioning_supplier_name",
+          "label": "Fornitore per porzionatura",
+          "type": "text"
+        },
+        {
+          "key": "portioning_work_date",
+          "label": "Giorno lavorazione porzionatura",
+          "type": "date"
+        },
+        {
+          "key": "portioning_worked_forms",
+          "label": "Numero forme lavorate",
+          "type": "number",
+          "unit": "forme"
+        },
+        {
+          "key": "portioning_output_forms",
+          "label": "Quantita formaggio porzionato/preconfezionato",
+          "type": "number",
+          "unit": "forme"
+        },
+        {
+          "key": "portioning_excluded_forms",
+          "label": "Quantita formaggio escluso o reso",
+          "type": "number",
+          "unit": "forme"
+        }
+      ]
+    },
+    {
+      "id": "prepackaging",
+      "title": "Preconfezionamento",
+      "description": "Registro di carico/scarico FC01-FC03 per prodotto DOP preconfezionato.",
+      "fields": [
+        {
+          "key": "prepackaging_supplier_name",
+          "label": "Fornitore per preconfezionamento",
+          "type": "text"
+        },
+        {
+          "key": "prepackaging_work_date",
+          "label": "Giorno lavorazione preconfezionamento",
+          "type": "date"
+        },
+        {
+          "key": "prepackaging_worked_forms",
+          "label": "Numero forme preconfezionate lavorate",
+          "type": "number",
+          "unit": "forme"
+        },
+        {
+          "key": "prepackaging_output_forms",
+          "label": "Quantita formaggio preconfezionato",
+          "type": "number",
+          "unit": "forme"
+        },
+        {
+          "key": "prepackaging_excluded_forms",
+          "label": "Quantita formaggio escluso o reso dal preconfezionamento",
+          "type": "number",
+          "unit": "forme"
+        }
+      ]
+    }
+  ]
+}

@@ -178,21 +178,32 @@ describe("<BatchForm /> — new mode (ABM IGP)", () => {
   });
 });
 
-describe("<BatchForm /> - workflow fallback (Gorgonzola DOP)", () => {
+describe("<BatchForm /> - product workflow (Gorgonzola DOP)", () => {
   beforeEach(() => {
     freezeTime("2026-04-15T10:00:00.000Z");
     seedMathRandom([0.123]);
     seedRandomUuid("uuid");
   });
 
-  it("renders products without workflow.json as a single denomination-specific lotto section", () => {
+  it("renders the DPC012 operator phases as separate workflow sections", () => {
     mount({
       route: "/batch/new",
       preload: { company: GORGONZOLA_COMPANY, onboardingComplete: true },
     });
-    expect(screen.getByRole("heading", { name: "Lotto Gorgonzola DOP" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Produzione latte" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Raccolta latte" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Trasformazione" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Stagionatura" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Porzionatura" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Preconfezionamento" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Lotto Gorgonzola DOP" })).not.toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Produttore uve" })).not.toBeInTheDocument();
     expect(screen.getByText("Latte utilizzato")).toBeInTheDocument();
+    expect(screen.getByText("Quantita latte idoneo approvvigionato")).toBeInTheDocument();
+    expect(screen.getByText("Quantita formaggio idoneo ottenuto")).toBeInTheDocument();
+    expect(screen.getByText("Quantita formaggio stagionato immesso nel circuito")).toBeInTheDocument();
+    expect(screen.getByText("Quantita formaggio porzionato/preconfezionato")).toBeInTheDocument();
+    expect(screen.getByText("Quantita formaggio preconfezionato")).toBeInTheDocument();
     expect(screen.getByText("Grasso sulla sostanza secca")).toBeInTheDocument();
     expect(screen.getByText("Giorni di stagionatura")).toBeInTheDocument();
   });
