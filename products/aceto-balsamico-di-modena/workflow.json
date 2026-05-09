@@ -1,0 +1,57 @@
+{
+  "sections": [
+    {
+      "id": "grape_producer",
+      "title": "Produttore uve",
+      "description": "Dati di tracciabilita del fornitore uve collegato al lotto o alla massa ABM.",
+      "fields": [
+        {
+          "key": "grape_producer_name",
+          "label": "Produttore uve",
+          "type": "text"
+        },
+        {
+          "key": "grape_producer_cuaa",
+          "label": "CUAA produttore uve",
+          "type": "text"
+        },
+        {
+          "key": "vineyard_municipality",
+          "label": "Comune vigneto",
+          "type": "text"
+        },
+        {
+          "key": "grape_variety",
+          "label": "Varieta uve",
+          "type": "text"
+        },
+        {
+          "key": "grape_quantity_kg",
+          "label": "Quantita uve conferite",
+          "type": "number",
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "id": "abm_lot",
+      "title": "Lotto Aceto Balsamico di Modena IGP",
+      "description": "Dati di lavorazione, affinamento e parametri analitici del lotto.",
+      "fieldKeys": [
+        "supplier",
+        "volume",
+        "productType",
+        "acidity",
+        "density",
+        "sugars",
+        "alcohol",
+        "dryExtract",
+        "so2",
+        "ash",
+        "agingMonths",
+        "barrelId",
+        "temperature"
+      ]
+    }
+  ]
+}

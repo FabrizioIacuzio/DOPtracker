@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAppData, type BatchEntry } from "@/contexts/AppDataContext";
-import { getDenominationConfig, validateDenominationFields } from "@/lib/denominationFields";
+import { getDenominationConfig, validateDenominationFields, type DenominationField } from "@/lib/denominationFields";
+import { getDenominationWorkflow, getWorkflowFields } from "@/lib/productWorkflows";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,11 @@ export default function BatchForm() {
 
   const denominationId = companyInfo?.denominationId ?? 'aceto-balsamico-di-modena'
   const config = getDenominationConfig(denominationId)
+  const workflow = getDenominationWorkflow(
+    denominationId,
+    config,
+    companyInfo?.denomination ?? denominationId,
+  )
 
   const existingBatch = id ? batches.find((b) => b.id === id) : null;
   const prefillDate = searchParams.get("date") || format(new Date(), "yyyy-MM-dd");
@@ -42,7 +48,7 @@ export default function BatchForm() {
       )
     }
     return Object.fromEntries(
-      config.fields.map((f) => [f.key, f.defaultValue === undefined ? '' : String(f.defaultValue)])
+      getWorkflowFields(workflow).map((f) => [f.key, f.defaultValue === undefined ? '' : String(f.defaultValue)])
     )
   })
 
@@ -54,6 +60,40 @@ export default function BatchForm() {
 
   const setField = (key: string, value: string) =>
     setFields((prev) => ({ ...prev, [key]: value }))
+
+  const renderField = (field: DenominationField) => (
+    <div key={field.key} className="space-y-1.5">
+      <Label>
+        {field.label}
+        {field.unit && <span className="ml-1 text-xs text-muted-foreground">({field.unit})</span>}
+      </Label>
+      {field.type === 'select' && field.options ? (
+        <Select
+          value={fields[field.key] ?? ''}
+          onValueChange={(value) => setField(field.key, value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Seleziona..." />
+          </SelectTrigger>
+          <SelectContent>
+            {field.options.map((option) => (
+              <SelectItem key={option} value={option}>
+                {option.replace(/_/g, ' ')}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ) : (
+        <Input
+          type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'}
+          step={field.type === 'number' ? 'any' : undefined}
+          value={fields[field.key] ?? ''}
+          onChange={(event) => setField(field.key, event.target.value)}
+        />
+      )}
+      {field.hint && <p className="text-xs text-muted-foreground">{field.hint}</p>}
+    </div>
+  )
 
   const handleSave = () => {
     const entry: BatchEntry = {
@@ -102,9 +142,8 @@ export default function BatchForm() {
       )}
 
       <Card>
-        <CardContent className="p-6 space-y-5">
+        <CardContent className="p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {/* Fixed header fields */}
             <div className="space-y-1.5">
               <Label>{t("batch.date")}</Label>
               <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
@@ -113,43 +152,28 @@ export default function BatchForm() {
               <Label>{t("batch.batchId")}</Label>
               <Input value={batchId} readOnly className="bg-muted" />
             </div>
-
-            {/* Denomination-specific fields */}
-            {config.fields.map((f) => (
-              <div key={f.key} className="space-y-1.5">
-                <Label>
-                  {f.label}
-                  {f.unit && <span className="ml-1 text-xs text-muted-foreground">({f.unit})</span>}
-                </Label>
-                {f.type === 'select' && f.options ? (
-                  <Select
-                    value={fields[f.key] ?? ''}
-                    onValueChange={(v) => setField(f.key, v)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Seleziona..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {f.options.map((opt) => (
-                        <SelectItem key={opt} value={opt}>
-                          {opt.replace(/_/g, ' ')}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                ) : (
-                  <Input
-                    type={f.type === 'number' ? 'number' : f.type === 'date' ? 'date' : 'text'}
-                    step={f.type === 'number' ? 'any' : undefined}
-                    value={fields[f.key] ?? ''}
-                    onChange={(e) => setField(f.key, e.target.value)}
-                  />
-                )}
-                {f.hint && <p className="text-xs text-muted-foreground">{f.hint}</p>}
-              </div>
-            ))}
           </div>
+        </CardContent>
+      </Card>
 
+      {workflow.sections.map((section) => (
+        <Card key={section.id}>
+          <CardContent className="p-6 space-y-5">
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold">{section.title}</h2>
+              {section.description && (
+                <p className="text-sm text-muted-foreground">{section.description}</p>
+              )}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {section.fields.map(renderField)}
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+
+      <Card>
+        <CardContent className="p-6">
           <div className="space-y-1.5">
             <Label>{t("batch.notes")}</Label>
             <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} />

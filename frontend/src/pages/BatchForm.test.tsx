@@ -21,6 +21,10 @@ function fieldByLabel(text: string | RegExp): HTMLInputElement | HTMLTextAreaEle
 }
 
 const ABM_COMPANY = makeCompany();
+const GORGONZOLA_COMPANY = makeCompany({
+  denomination: "Gorgonzola DOP",
+  denominationId: "gorgonzola",
+});
 
 function mount(opts: Parameters<typeof renderWithProviders>[1] = {}) {
   return renderWithProviders(<BatchForm />, {
@@ -57,6 +61,16 @@ describe("<BatchForm /> — new mode (ABM IGP)", () => {
     expect(fieldByLabel(/^Ceneri$/)).toBeInTheDocument();
     expect(fieldByLabel(/Invecchiamento/)).toBeInTheDocument();
     expect(fieldByLabel(/^Note$/)).toBeInTheDocument();
+  });
+
+  it("renders ABM as multiple workflow sections including grape producer data", () => {
+    mount({ route: "/batch/new" });
+    expect(screen.getByRole("heading", { name: "Produttore uve" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Lotto Aceto Balsamico di Modena IGP" })).toBeInTheDocument();
+    expect(fieldByLabel(/CUAA produttore uve/)).toBeInTheDocument();
+    expect(fieldByLabel(/Comune vigneto/)).toBeInTheDocument();
+    expect(fieldByLabel(/Quantita uve conferite/)).toBeInTheDocument();
+    expect(fieldByLabel(/Fornitore mosto/)).toBeInTheDocument();
   });
 
   it("auto-generates a batchId using the denomination prefix", () => {
@@ -161,6 +175,26 @@ describe("<BatchForm /> — new mode (ABM IGP)", () => {
       await user.click(screen.getByRole("button", { name: /Salva lotto/i }));
       expect(screen.getByTestId("route-home")).toBeInTheDocument();
     });
+  });
+});
+
+describe("<BatchForm /> - workflow fallback (Gorgonzola DOP)", () => {
+  beforeEach(() => {
+    freezeTime("2026-04-15T10:00:00.000Z");
+    seedMathRandom([0.123]);
+    seedRandomUuid("uuid");
+  });
+
+  it("renders products without workflow.json as a single denomination-specific lotto section", () => {
+    mount({
+      route: "/batch/new",
+      preload: { company: GORGONZOLA_COMPANY, onboardingComplete: true },
+    });
+    expect(screen.getByRole("heading", { name: "Lotto Gorgonzola DOP" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Produttore uve" })).not.toBeInTheDocument();
+    expect(screen.getByText("Latte utilizzato")).toBeInTheDocument();
+    expect(screen.getByText("Grasso sulla sostanza secca")).toBeInTheDocument();
+    expect(screen.getByText("Giorni di stagionatura")).toBeInTheDocument();
   });
 });
 
