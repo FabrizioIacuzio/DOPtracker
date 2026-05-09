@@ -1,0 +1,58 @@
+{
+  "fields": [
+    {
+      "key": "buffalo_milk_kg",
+      "label": "Latte di bufala idoneo a DOP utilizzato",
+      "type": "number",
+      "unit": "kg",
+      "required": true
+    },
+    {
+      "key": "milk_fat_percent",
+      "label": "Grasso latte",
+      "type": "number",
+      "unit": "%",
+      "hint": "Min 7.2%"
+    },
+    {
+      "key": "milk_protein_percent",
+      "label": "Proteine latte",
+      "type": "number",
+      "unit": "%",
+      "hint": "Min 4.2%"
+    },
+    {
+      "key": "milk_to_processing_hours",
+      "label": "Tempo mungitura-trasformazione",
+      "type": "number",
+      "unit": "ore",
+      "hint": "Max 60 ore"
+    },
+    {
+      "key": "finished_product_kg",
+      "label": "Prodotto finito",
+      "type": "number",
+      "unit": "kg"
+    }
+  ],
+  "rules": [
+    {
+      "field": "milk_fat_percent",
+      "label": "Grasso latte",
+      "min": 7.2,
+      "unit": "%"
+    },
+    {
+      "field": "milk_protein_percent",
+      "label": "Proteine latte",
+      "min": 4.2,
+      "unit": "%"
+    },
+    {
+      "field": "milk_to_processing_hours",
+      "label": "Tempo mungitura-trasformazione",
+      "max": 60,
+      "unit": "ore"
+    }
+  ]
+}

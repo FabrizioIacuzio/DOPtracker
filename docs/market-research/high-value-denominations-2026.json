@@ -72,8 +72,9 @@
       "marketValue2024EurMillion": 1760,
       "yoyGrowthPercent": 10.1,
       "sourceRankBy2024Value": 2,
-      "currentRepositoryStatus": "missing",
-      "strategicRationale": "Second-largest food denomination with double-digit growth; should be added because it is a much larger opportunity than most current long-tail folders."
+      "currentRepositoryStatus": "skipped_by_user",
+      "implementationDecision": "Skipped on 2026-05-09 per product-owner instruction.",
+      "strategicRationale": "Second-largest food denomination with double-digit growth, but currently excluded from implementation focus by explicit product-owner decision."
     },
     {
       "priorityRank": 3,
@@ -85,7 +86,7 @@
       "marketValue2024EurMillion": 529,
       "yoyGrowthPercent": 0.2,
       "sourceRankBy2024Value": 4,
-      "currentRepositoryStatus": "missing",
+      "currentRepositoryStatus": "present",
       "strategicRationale": "Large market even with flat YoY growth; worth supporting before small fruit/vegetable denominations because the addressable compliance base is materially larger."
     },
     {

@@ -160,6 +160,7 @@ The following product folders have been analyzed and corrected by Codex against 
 | `gorgonzola` | AI-audited, pending human review | Official disciplinare, CSQA product page, local CSQA DPC012 package |
 | `grana-padano` | AI-audited, pending human review | Consorzio disciplinare page/PDF, local CSQA DPC001 package |
 | `insalata-di-lusia` | AI-audited, pending human review | EU 2019/C 3/11 single document, CSQA product page, local CSQA DPC041 package |
+| `mozzarella-di-bufala-campana` | AI-audited initial config, pending human review | Official disciplinare/Consorzio source, RINA AGRIFOOD production register, MASAF RINA authorization, MASAF buffalo milk traceability page |
 
 Each audited product has a `products/{id}/VALIDATION.md` file with the document list, modeled rules, submission mapping, and open questions.
 

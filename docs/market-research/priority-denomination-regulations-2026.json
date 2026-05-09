@@ -1,0 +1,286 @@
+{
+  "schemaVersion": 1,
+  "researchDate": "2026-05-09",
+  "scope": "Regulatory source map for the 2026 high-value denomination priority list.",
+  "notes": [
+    "This file identifies source-of-truth documents and control-body pages for implementation planning.",
+    "Status values describe repository implementation state, not legal validation. Human regulatory review is still required.",
+    "Parmigiano Reggiano is intentionally excluded from implementation after product-owner instruction on 2026-05-09."
+  ],
+  "denominations": [
+    {
+      "priorityRank": 1,
+      "slug": "grana-padano",
+      "name": "Grana Padano DOP",
+      "implementationStatus": "implemented_ai_audited_pending_human",
+      "sourceStatus": "regulation_and_control_plan_identified",
+      "sources": [
+        {
+          "type": "disciplinare",
+          "publisher": "Consorzio Tutela Grana Padano",
+          "url": "https://www.granapadano.it/it-it/larte-della-produzione/la-dop/disciplinare-grana-padano-dop/"
+        },
+        {
+          "type": "control_body_page",
+          "publisher": "CSQA Certificazioni",
+          "url": "https://www.csqa.it/it-it/dop-igp-stg/grana-padano-dop"
+        },
+        {
+          "type": "local_control_plan",
+          "publisher": "CSQA Certificazioni",
+          "path": "products/grana-padano/docs/piano-di-controllo.zip"
+        }
+      ],
+      "nextAction": "Human review of products/grana-padano/VALIDATION.md and CSQA DPC001 details."
+    },
+    {
+      "priorityRank": 2,
+      "slug": "parmigiano-reggiano",
+      "name": "Parmigiano Reggiano DOP",
+      "implementationStatus": "skipped_by_user",
+      "sourceStatus": "not_collected_after_skip_instruction",
+      "sources": [],
+      "nextAction": "Do not implement until the product owner explicitly reopens this denomination."
+    },
+    {
+      "priorityRank": 3,
+      "slug": "mozzarella-di-bufala-campana",
+      "name": "Mozzarella di Bufala Campana DOP",
+      "implementationStatus": "implemented_ai_audited_pending_human",
+      "sourceStatus": "disciplinare_traceability_and_control_body_sources_identified",
+      "sources": [
+        {
+          "type": "disciplinare_summary",
+          "publisher": "Consorzio Tutela Mozzarella di Bufala Campana DOP",
+          "url": "https://www.mozzarelladop.it/"
+        },
+        {
+          "type": "disciplinare_text",
+          "publisher": "Disciplinare.it archive of official production specification",
+          "url": "https://www.disciplinare.it/mozzarella-di-bufala-campana-dop.html"
+        },
+        {
+          "type": "production_register",
+          "publisher": "RINA AGRIFOOD",
+          "url": "https://scresources.rina.org/it/food/Registro-di-produzione-mozzarella-bufala-campana-dop.pdf"
+        },
+        {
+          "type": "control_body_authorization",
+          "publisher": "MASAF",
+          "url": "https://www.masaf.gov.it/flex/cm/pages/ServeBLOB.php/L/IT/IDPagina/23952"
+        },
+        {
+          "type": "milk_traceability",
+          "publisher": "MASAF",
+          "url": "https://www.masaf.gov.it/flex/cm/pages/ServeBLOB.php/L/IT/IDPagina/6381"
+        }
+      ],
+      "nextAction": "Human review of RINA piano dei controlli and exact portal/submission fields."
+    },
+    {
+      "priorityRank": 4,
+      "slug": "gorgonzola",
+      "name": "Gorgonzola DOP",
+      "implementationStatus": "implemented_ai_audited_pending_human",
+      "sourceStatus": "regulation_and_control_plan_identified",
+      "sources": [
+        {
+          "type": "disciplinare",
+          "publisher": "Consorzio per la tutela del Formaggio Gorgonzola DOP",
+          "url": "https://gorgonzola.com/wp-content/uploads/2023/08/Disciplinare_Gorgonzola_22.9.2017.pdf"
+        },
+        {
+          "type": "control_body_page",
+          "publisher": "CSQA Certificazioni",
+          "url": "https://www.csqa.it/it-it/dop-igp-stg/gorgonzola-dop"
+        },
+        {
+          "type": "local_control_plan",
+          "publisher": "CSQA Certificazioni",
+          "path": "products/gorgonzola/docs/piano-di-controllo.zip"
+        }
+      ],
+      "nextAction": "Human review of products/gorgonzola/VALIDATION.md and CSQA DPC012 workflow sections."
+    },
+    {
+      "priorityRank": 5,
+      "slug": "prosciutto-di-san-daniele",
+      "name": "Prosciutto di San Daniele DOP",
+      "implementationStatus": "source_identified_not_implemented",
+      "sourceStatus": "ifcq_documents_identified",
+      "sources": [
+        {
+          "type": "disciplinare_and_control_plan_package",
+          "publisher": "IFCQ Certificazioni",
+          "url": "https://ifcq.it/prosciutto-san-daniele-dop/"
+        },
+        {
+          "type": "control_body_authorization",
+          "publisher": "MASAF",
+          "url": "https://www.masaf.gov.it/flex/cm/pages/ServeBLOB.php/L/IT/IDPagina/20743"
+        }
+      ],
+      "nextAction": "Implement after Mozzarella if the product owner wants the next high-value missing denomination."
+    },
+    {
+      "priorityRank": 6,
+      "slug": "aceto-balsamico-di-modena",
+      "name": "Aceto Balsamico di Modena IGP",
+      "implementationStatus": "implemented_ai_audited_pending_human",
+      "sourceStatus": "regulation_and_control_plan_identified",
+      "sources": [
+        {
+          "type": "disciplinare",
+          "publisher": "MASAF",
+          "url": "https://www.masaf.gov.it/flex/cm/pages/ServeAttachment.php/L/IT/D/1%252Fa%252F1%252FD.87188f5f32d178a6d2ad/P/BLOB%3AID%3D3345/E/pdf?mode=download"
+        },
+        {
+          "type": "control_body_page",
+          "publisher": "CSQA Certificazioni",
+          "url": "https://www.csqa.it/it-it/dop-igp-stg/aceto-balsamico-di-modena-igp"
+        },
+        {
+          "type": "local_control_plan",
+          "publisher": "CSQA Certificazioni",
+          "path": "products/aceto-balsamico-di-modena/docs/piano-di-controllo.zip"
+        }
+      ],
+      "nextAction": "Human review of DOPS 4.0 portal field mapping."
+    },
+    {
+      "priorityRank": 7,
+      "slug": "mortadella-bologna",
+      "name": "Mortadella Bologna IGP",
+      "implementationStatus": "source_identified_not_implemented",
+      "sourceStatus": "ifcq_documents_identified",
+      "sources": [
+        {
+          "type": "disciplinare_and_control_plan_package",
+          "publisher": "IFCQ Certificazioni",
+          "url": "https://ifcq.it/mortadella-bologna-igp/"
+        },
+        {
+          "type": "control_scheme",
+          "publisher": "IFCQ Certificazioni",
+          "url": "https://ifcq.it/wp-content/uploads/mortadella-bologna/Schema-di-controlli-MB-Rev_-5-del-27_01_2023.pdf"
+        }
+      ],
+      "nextAction": "Implement after San Daniele if prioritizing high-value meat products."
+    },
+    {
+      "priorityRank": 8,
+      "slug": "pasta-di-gragnano",
+      "name": "Pasta di Gragnano IGP",
+      "implementationStatus": "source_identified_not_implemented",
+      "sourceStatus": "disciplinare_and_csqa_identified",
+      "sources": [
+        {
+          "type": "disciplinare",
+          "publisher": "Consorzio di Tutela della Pasta di Gragnano IGP",
+          "url": "https://www.pastadigragnanoigp.it/disciplinare/"
+        },
+        {
+          "type": "control_body_page",
+          "publisher": "CSQA Certificazioni",
+          "url": "https://www.csqa.it/it-it/dop-igp-stg/pasta-di-gragnano-i-g-p"
+        },
+        {
+          "type": "control_body_authorization",
+          "publisher": "MASAF",
+          "url": "https://www.masaf.gov.it/flex/cm/pages/ServeBLOB.php/L/IT/IDPagina/22273"
+        }
+      ],
+      "nextAction": "Implement as the first high-value dry-goods workflow after the meat queue."
+    },
+    {
+      "priorityRank": 9,
+      "slug": "bresaola-della-valtellina",
+      "name": "Bresaola della Valtellina IGP",
+      "implementationStatus": "present_needs_deeper_audit",
+      "sourceStatus": "disciplinare_and_control_body_identified",
+      "sources": [
+        {
+          "type": "disciplinare",
+          "publisher": "Consorzio di Tutela Bresaola della Valtellina",
+          "url": "https://bresaolavaltellina.it/disciplinare-di-produzione/"
+        },
+        {
+          "type": "control_body_page",
+          "publisher": "CSQA Certificazioni",
+          "url": "https://www.csqa.it/it-it/dop-igp-stg/bresaola-della-valtellina-i-g-p"
+        }
+      ],
+      "nextAction": "Audit existing thin config before adding a new missing product of lower value."
+    },
+    {
+      "priorityRank": 10,
+      "slug": "speck-alto-adige",
+      "name": "Speck Alto Adige IGP",
+      "implementationStatus": "source_identified_not_implemented",
+      "sourceStatus": "ifcq_control_plan_identified",
+      "sources": [
+        {
+          "type": "consortium_quality_page",
+          "publisher": "Consorzio Tutela Speck Alto Adige",
+          "url": "https://www.speck.it/it/qualita/"
+        },
+        {
+          "type": "control_plan",
+          "publisher": "IFCQ Certificazioni",
+          "url": "https://ifcq.it/wp-content/uploads/speck-alto-adige/PDC-SAA-Rev_-3-del-6_3_2026.pdf"
+        },
+        {
+          "type": "control_scheme",
+          "publisher": "IFCQ Certificazioni",
+          "url": "https://ifcq.it/wp-content/uploads/speck-alto-adige/Schema-dei-controlli-SAA-Rev_-3-del-6_3_2026.pdf"
+        }
+      ],
+      "nextAction": "Implement after Mortadella if reusing the cured-meat workflow."
+    },
+    {
+      "priorityRank": 11,
+      "slug": "mela-alto-adige",
+      "name": "Mela Alto Adige IGP",
+      "implementationStatus": "source_identified_not_implemented",
+      "sourceStatus": "sqk_documents_identified",
+      "sources": [
+        {
+          "type": "disciplinare_and_control_plan_documents",
+          "publisher": "SQK - Qualita certificata dall'Alto Adige",
+          "url": "https://sqk.it/it/documenti/"
+        },
+        {
+          "type": "consortium_page",
+          "publisher": "Consorzio Mela Alto Adige",
+          "url": "https://www.melaaltoadige.com/it/qualita-dell-alto-adige.html"
+        }
+      ],
+      "nextAction": "Implement when the product strategy enters high-value fruit workflows."
+    },
+    {
+      "priorityRank": 12,
+      "slug": "terra-di-bari",
+      "name": "Terra di Bari DOP",
+      "implementationStatus": "source_identified_not_implemented",
+      "sourceStatus": "control_plan_and_authorization_identified",
+      "sources": [
+        {
+          "type": "control_plan",
+          "publisher": "CCIAA di Bari",
+          "url": "https://www.ba.camcom.it/articoli/allegato/2024/07/rev.-14-pdc-olio-dop-terra-di-bari.pdf"
+        },
+        {
+          "type": "control_body_authorization",
+          "publisher": "MASAF",
+          "url": "https://www.masaf.gov.it/flex/cm/pages/ServeBLOB.php/L/IT/IDPagina/23663"
+        },
+        {
+          "type": "disciplinare_summary",
+          "publisher": "Regione Puglia",
+          "url": "https://regione.puglia.it/web/produzioni-di-qualita/-/terra-di-bari-dop"
+        }
+      ],
+      "nextAction": "Implement when the product strategy enters olive-oil workflows."
+    }
+  ]
+}

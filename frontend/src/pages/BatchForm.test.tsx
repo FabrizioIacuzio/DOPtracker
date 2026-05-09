@@ -25,6 +25,10 @@ const GORGONZOLA_COMPANY = makeCompany({
   denomination: "Gorgonzola DOP",
   denominationId: "gorgonzola",
 });
+const MOZZARELLA_COMPANY = makeCompany({
+  denomination: "Mozzarella di Bufala Campana DOP",
+  denominationId: "mozzarella-di-bufala-campana",
+});
 
 function mount(opts: Parameters<typeof renderWithProviders>[1] = {}) {
   return renderWithProviders(<BatchForm />, {
@@ -206,6 +210,30 @@ describe("<BatchForm /> - product workflow (Gorgonzola DOP)", () => {
     expect(screen.getByText("Quantita formaggio preconfezionato")).toBeInTheDocument();
     expect(screen.getByText("Grasso sulla sostanza secca")).toBeInTheDocument();
     expect(screen.getByText("Giorni di stagionatura")).toBeInTheDocument();
+  });
+});
+
+describe("<BatchForm /> - product workflow (Mozzarella di Bufala Campana DOP)", () => {
+  beforeEach(() => {
+    freezeTime("2026-04-15T10:00:00.000Z");
+    seedMathRandom([0.123]);
+    seedRandomUuid("uuid");
+  });
+
+  it("renders the buffalo milk supply chain as separate workflow sections", () => {
+    mount({
+      route: "/batch/new",
+      preload: { company: MOZZARELLA_COMPANY, onboardingComplete: true },
+    });
+
+    expect(screen.getByRole("heading", { name: "Allevamento bufalino" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Raccolta latte" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Trasformazione" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Confezionamento" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Lotto Mozzarella di Bufala Campana DOP" })).not.toBeInTheDocument();
+    expect(screen.getByText("Grasso latte")).toBeInTheDocument();
+    expect(screen.getByText("Proteine latte")).toBeInTheDocument();
+    expect(screen.getByText("Tempo mungitura-trasformazione")).toBeInTheDocument();
   });
 });
 

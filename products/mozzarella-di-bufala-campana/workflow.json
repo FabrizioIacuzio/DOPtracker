@@ -1,0 +1,93 @@
+{
+  "sections": [
+    {
+      "id": "buffalo_farm",
+      "title": "Allevamento bufalino",
+      "description": "Origine del latte da bufale iscritte al sistema di controllo della DOP.",
+      "fields": [
+        {
+          "key": "farm_name",
+          "label": "Allevamento",
+          "type": "text"
+        },
+        {
+          "key": "farm_authorization_code",
+          "label": "Codice allevamento",
+          "type": "text"
+        },
+        {
+          "key": "milking_date_time",
+          "label": "Data e ora mungitura",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "milk_collection",
+      "title": "Raccolta latte",
+      "description": "Dati di raccolta e conferimento del latte fresco di bufala.",
+      "fields": [
+        {
+          "key": "milk_collector_name",
+          "label": "Raccoglitore latte",
+          "type": "text"
+        },
+        {
+          "key": "delivery_date_time",
+          "label": "Data e ora conferimento",
+          "type": "text"
+        },
+        {
+          "key": "transport_vehicle_id",
+          "label": "Mezzo di trasporto",
+          "type": "text"
+        }
+      ],
+      "fieldKeys": [
+        "buffalo_milk_kg",
+        "milk_fat_percent",
+        "milk_protein_percent"
+      ]
+    },
+    {
+      "id": "transformation",
+      "title": "Trasformazione",
+      "description": "Lavorazione del latte entro i tempi previsti dalla DOP.",
+      "fields": [
+        {
+          "key": "dairy_authorization_code",
+          "label": "Autorizzazione caseificio",
+          "type": "text"
+        },
+        {
+          "key": "coagulation_batch_id",
+          "label": "Lotto coagulazione",
+          "type": "text"
+        }
+      ],
+      "fieldKeys": [
+        "milk_to_processing_hours"
+      ]
+    },
+    {
+      "id": "packaging",
+      "title": "Confezionamento",
+      "description": "Dati del prodotto finito e confezionato all'origine.",
+      "fields": [
+        {
+          "key": "package_lot_id",
+          "label": "Lotto confezionamento",
+          "type": "text"
+        },
+        {
+          "key": "package_authorization_label",
+          "label": "Autorizzazione in etichetta",
+          "type": "text"
+        }
+      ],
+      "fieldKeys": [
+        "finished_product_kg"
+      ]
+    }
+  ]
+}

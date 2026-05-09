@@ -79,6 +79,13 @@ describe("<Onboarding />", () => {
       expect(screen.getByRole("button", { name: /Avanti/i })).toBeEnabled();
     });
 
+    it("includes Mozzarella di Bufala Campana DOP in the cheese denominations", async () => {
+      const { user } = mount();
+      await advanceToStep1(user);
+      await user.click(screen.getByText("Formaggi"));
+      expect(screen.getByText("Mozzarella di Bufala Campana DOP")).toBeInTheDocument();
+    });
+
     it("uses metadata protection types for classified products", async () => {
       const { user } = mount();
       await advanceToStep1(user);
@@ -103,8 +110,8 @@ describe("<Onboarding />", () => {
     it("category cards show the denomination count", async () => {
       const { user } = mount();
       await advanceToStep1(user);
-      // Formaggi has 15 denominations
-      expect(screen.getByText("15 prodotti")).toBeInTheDocument();
+      // Formaggi has 16 denominations after adding Mozzarella di Bufala Campana DOP.
+      expect(screen.getByText("16 prodotti")).toBeInTheDocument();
     });
 
     it("Back button returns to step 0", async () => {

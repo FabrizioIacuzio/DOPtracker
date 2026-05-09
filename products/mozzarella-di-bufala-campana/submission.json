@@ -1,0 +1,38 @@
+{
+  "id": "mozzarella-di-bufala-campana",
+  "name": "Mozzarella di Bufala Campana DOP",
+  "type": "DOP",
+  "control_body": {
+    "name": "RINA AGRIFOOD S.p.A.",
+    "type": "rina_agrifood",
+    "website": "https://www.rina.org/it/agroqualita/prodotti-tipici/prodotti-tipici-dop"
+  },
+  "submission_rules": [
+    {
+      "id": "rule-milk-traceability",
+      "doc_type": "register",
+      "label": "Tracciabilita latte bufalino e prodotti trasformati",
+      "operator_type": "allevatore_intermediario_trasformatore",
+      "control_code": "DM 9406/2014",
+      "deadline": "Secondo modalita e termini del sistema di tracciabilita latte bufalino",
+      "channel": "ministerial_traceability_system",
+      "automation": "manual",
+      "recipient": "masaf_rina",
+      "schedule": null,
+      "instructions": "Gli operatori della filiera latte bufalino trasmettono dati di produzione, trasformazione, acquisto e vendita secondo il DM 9406/2014 e le istruzioni applicative richiamate dal MASAF."
+    },
+    {
+      "id": "rule-production-register",
+      "doc_type": "register",
+      "label": "Registro di produzione Mozzarella di Bufala Campana DOP",
+      "operator_type": "trasformatore",
+      "control_code": "Registro produzione RINA Rev. 01 12/01/2026",
+      "deadline": "Continuativo, per lotto di produzione",
+      "channel": "control_body_documentation",
+      "automation": "manual",
+      "recipient": "rina_agrifood",
+      "schedule": null,
+      "instructions": "Compilare il registro di produzione RINA dichiarando riconoscimento dell'operatore, provenienza del prodotto da aziende iscritte, requisiti del disciplinare e dispositivo dei controlli."
+    }
+  ]
+}

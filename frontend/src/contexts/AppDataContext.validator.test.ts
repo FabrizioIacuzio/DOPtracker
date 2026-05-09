@@ -4,6 +4,7 @@ import { validateDenominationFields, getDenominationConfig } from "@/lib/denomin
 const ABM = "aceto-balsamico-di-modena";
 const GORGONZOLA = "gorgonzola";
 const GRANA_PADANO = "grana-padano";
+const MOZZARELLA_DI_BUFALA_CAMPANA = "mozzarella-di-bufala-campana";
 const INSALATA_DI_LUSIA = "insalata-di-lusia";
 
 function validate(fields: Record<string, string | number>) {
@@ -16,6 +17,10 @@ function validateGorgonzola(fields: Record<string, string | number>) {
 
 function validateGranaPadano(fields: Record<string, string | number>) {
   return validateDenominationFields(GRANA_PADANO, fields);
+}
+
+function validateMozzarellaDiBufalaCampana(fields: Record<string, string | number>) {
+  return validateDenominationFields(MOZZARELLA_DI_BUFALA_CAMPANA, fields);
 }
 
 function validateInsalataDiLusia(fields: Record<string, string | number>) {
@@ -273,6 +278,41 @@ describe("validateDenominationFields - Grana Padano DOP rules", () => {
     expect(validateGranaPadano({ wheel_weight_kg: 40 })).toEqual([]);
     expect(validateGranaPadano({ wheel_weight_kg: 23.99 })).toContain("Peso forma sotto il minimo (24 kg)");
     expect(validateGranaPadano({ wheel_weight_kg: 40.01 })).toContain("Peso forma sopra il massimo (40 kg)");
+  });
+});
+
+describe("validateDenominationFields - Mozzarella di Bufala Campana DOP rules", () => {
+  it("exposes the traceability and milk quality fields", () => {
+    const config = getDenominationConfig(MOZZARELLA_DI_BUFALA_CAMPANA);
+
+    expect(config.fields.map((field) => field.key)).toEqual([
+      "buffalo_milk_kg",
+      "milk_fat_percent",
+      "milk_protein_percent",
+      "milk_to_processing_hours",
+      "finished_product_kg",
+    ]);
+  });
+
+  it("uses the official 7.2% minimum fat value for buffalo milk", () => {
+    expect(validateMozzarellaDiBufalaCampana({ milk_fat_percent: 7.2 })).toEqual([]);
+    expect(validateMozzarellaDiBufalaCampana({ milk_fat_percent: 7.19 })).toContain(
+      "Grasso latte sotto il minimo (7.2 %)",
+    );
+  });
+
+  it("uses the official 4.2% minimum protein value for buffalo milk", () => {
+    expect(validateMozzarellaDiBufalaCampana({ milk_protein_percent: 4.2 })).toEqual([]);
+    expect(validateMozzarellaDiBufalaCampana({ milk_protein_percent: 4.19 })).toContain(
+      "Proteine latte sotto il minimo (4.2 %)",
+    );
+  });
+
+  it("requires milk transformation within 60 hours", () => {
+    expect(validateMozzarellaDiBufalaCampana({ milk_to_processing_hours: 60 })).toEqual([]);
+    expect(validateMozzarellaDiBufalaCampana({ milk_to_processing_hours: 60.01 })).toContain(
+      "Tempo mungitura-trasformazione sopra il massimo (60 ore)",
+    );
   });
 });
 
