@@ -1,0 +1,209 @@
+{
+  "schemaVersion": 1,
+  "researchDate": "2026-05-09",
+  "scope": {
+    "country": "Italy",
+    "productUniverse": "Food DOP/IGP/STG denominations, excluding wine and spirits",
+    "purpose": "Prioritize denomination support in DOPComply by market size and current growth, avoiding low-market niches until core high-value products are covered."
+  },
+  "selectionMethod": {
+    "primaryCriterion": "2024 production value, in EUR million",
+    "secondaryCriterion": "Positive year-over-year production value growth from 2023 to 2024",
+    "inclusionRule": "Selected the positive-growth denominations from the 2024 top-15 Italian food DOP/IGP products by production value.",
+    "ordering": "Value-first among products with positive YoY growth.",
+    "importantExclusions": [
+      {
+        "denomination": "Prosciutto di Parma DOP",
+        "reason": "Very large 2024 market value, but YoY value declined by 9.5%."
+      },
+      {
+        "denomination": "Pecorino Romano DOP",
+        "reason": "Large 2024 market value, but YoY value declined by 12.8%."
+      },
+      {
+        "denomination": "Asiago DOP",
+        "reason": "In current repo and still relevant, but YoY value declined by 2.8%; not a near-term growth priority."
+      },
+      {
+        "denomination": "Pera Mantovana IGP",
+        "reason": "Not present in the 2024 top-15 by production value; keep as a later/niche candidate unless a customer lead appears."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "ismea-qualivita-2025-cs01",
+      "title": "Rapporto Ismea-Qualivita 2025, Comunicato Stampa n.1 - Dati Generali",
+      "publisher": "ISMEA / Fondazione Qualivita",
+      "publicationDate": "2025-11-26",
+      "url": "https://www.qualivita.it/wp-content/uploads/2025/11/20251126_CS01_DATI-GENERALI.pdf",
+      "usedFor": "Top-15 food DOP/IGP production values for 2023 and 2024, and YoY variation."
+    },
+    {
+      "id": "qualivita-report-2025-page",
+      "title": "Rapporto Ismea-Qualivita 2025",
+      "publisher": "Fondazione Qualivita",
+      "publicationDate": "2025-11-26",
+      "url": "https://www.qualivita.it/rapporto-ismea-qualivita-2025/",
+      "usedFor": "Report context: 2024 food, wine and spirits IG data; 2025 outlook."
+    }
+  ],
+  "denominations": [
+    {
+      "priorityRank": 1,
+      "slug": "grana-padano",
+      "name": "Grana Padano DOP",
+      "protectionType": "DOP",
+      "category": "formaggi",
+      "marketValue2023EurMillion": 1773,
+      "marketValue2024EurMillion": 2185,
+      "yoyGrowthPercent": 23.3,
+      "sourceRankBy2024Value": 1,
+      "currentRepositoryStatus": "present",
+      "strategicRationale": "Largest Italian food DOP/IGP by production value and strongest high-value cheese growth; already in repo and should remain a top validation/workflow priority."
+    },
+    {
+      "priorityRank": 2,
+      "slug": "parmigiano-reggiano",
+      "name": "Parmigiano Reggiano DOP",
+      "protectionType": "DOP",
+      "category": "formaggi",
+      "marketValue2023EurMillion": 1599,
+      "marketValue2024EurMillion": 1760,
+      "yoyGrowthPercent": 10.1,
+      "sourceRankBy2024Value": 2,
+      "currentRepositoryStatus": "missing",
+      "strategicRationale": "Second-largest food denomination with double-digit growth; should be added because it is a much larger opportunity than most current long-tail folders."
+    },
+    {
+      "priorityRank": 3,
+      "slug": "mozzarella-di-bufala-campana",
+      "name": "Mozzarella di Bufala Campana DOP",
+      "protectionType": "DOP",
+      "category": "formaggi",
+      "marketValue2023EurMillion": 528,
+      "marketValue2024EurMillion": 529,
+      "yoyGrowthPercent": 0.2,
+      "sourceRankBy2024Value": 4,
+      "currentRepositoryStatus": "missing",
+      "strategicRationale": "Large market even with flat YoY growth; worth supporting before small fruit/vegetable denominations because the addressable compliance base is materially larger."
+    },
+    {
+      "priorityRank": 4,
+      "slug": "gorgonzola",
+      "name": "Gorgonzola DOP",
+      "protectionType": "DOP",
+      "category": "formaggi",
+      "marketValue2023EurMillion": 430,
+      "marketValue2024EurMillion": 460,
+      "yoyGrowthPercent": 7.1,
+      "sourceRankBy2024Value": 5,
+      "currentRepositoryStatus": "present",
+      "strategicRationale": "Large and growing; already has product rules and workflow work started, making it one of the best near-term products to finish deeply."
+    },
+    {
+      "priorityRank": 5,
+      "slug": "prosciutto-di-san-daniele",
+      "name": "Prosciutto di San Daniele DOP",
+      "protectionType": "DOP",
+      "category": "prodotti-a-base-di-carne",
+      "marketValue2023EurMillion": 370,
+      "marketValue2024EurMillion": 402,
+      "yoyGrowthPercent": 8.5,
+      "sourceRankBy2024Value": 6,
+      "currentRepositoryStatus": "missing",
+      "strategicRationale": "High-value cured-meat denomination with solid growth; good next category expansion after cheeses and ABM."
+    },
+    {
+      "priorityRank": 6,
+      "slug": "aceto-balsamico-di-modena",
+      "name": "Aceto Balsamico di Modena IGP",
+      "protectionType": "IGP",
+      "category": "aceti-balsamici",
+      "marketValue2023EurMillion": 350,
+      "marketValue2024EurMillion": 378,
+      "yoyGrowthPercent": 7.8,
+      "sourceRankBy2024Value": 7,
+      "currentRepositoryStatus": "present",
+      "strategicRationale": "Reference product in the app, sizeable market, positive growth, and complex multi-operator workflow; keep as flagship implementation."
+    },
+    {
+      "priorityRank": 7,
+      "slug": "mortadella-bologna",
+      "name": "Mortadella Bologna IGP",
+      "protectionType": "IGP",
+      "category": "prodotti-a-base-di-carne",
+      "marketValue2023EurMillion": 339,
+      "marketValue2024EurMillion": 343,
+      "yoyGrowthPercent": 1.1,
+      "sourceRankBy2024Value": 8,
+      "currentRepositoryStatus": "missing",
+      "strategicRationale": "Large meat-based IGP; growth is modest but value is high enough to justify prioritization over niche produce."
+    },
+    {
+      "priorityRank": 8,
+      "slug": "pasta-di-gragnano",
+      "name": "Pasta di Gragnano IGP",
+      "protectionType": "IGP",
+      "category": "paste-alimentari",
+      "marketValue2023EurMillion": 273,
+      "marketValue2024EurMillion": 303,
+      "yoyGrowthPercent": 11.0,
+      "sourceRankBy2024Value": 10,
+      "currentRepositoryStatus": "missing",
+      "strategicRationale": "High value plus double-digit growth; good non-cheese expansion with likely distinct workflow and documentation needs."
+    },
+    {
+      "priorityRank": 9,
+      "slug": "bresaola-della-valtellina",
+      "name": "Bresaola della Valtellina IGP",
+      "protectionType": "IGP",
+      "category": "prodotti-a-base-di-carne",
+      "marketValue2023EurMillion": 225,
+      "marketValue2024EurMillion": 253,
+      "yoyGrowthPercent": 12.1,
+      "sourceRankBy2024Value": 11,
+      "currentRepositoryStatus": "present",
+      "strategicRationale": "Already in repo and has double-digit growth; better near-term focus than low-value vegetable/fruit denominations."
+    },
+    {
+      "priorityRank": 10,
+      "slug": "speck-alto-adige",
+      "name": "Speck Alto Adige IGP",
+      "protectionType": "IGP",
+      "category": "prodotti-a-base-di-carne",
+      "marketValue2023EurMillion": 101,
+      "marketValue2024EurMillion": 114,
+      "yoyGrowthPercent": 12.8,
+      "sourceRankBy2024Value": 13,
+      "currentRepositoryStatus": "missing",
+      "strategicRationale": "Smaller than the top meat products but growing quickly; useful if prioritizing cured-meat workflow reuse."
+    },
+    {
+      "priorityRank": 11,
+      "slug": "mela-alto-adige",
+      "name": "Mela Alto Adige IGP",
+      "protectionType": "IGP",
+      "category": "ortofrutticoli-e-cereali",
+      "marketValue2023EurMillion": 81,
+      "marketValue2024EurMillion": 91,
+      "yoyGrowthPercent": 12.9,
+      "sourceRankBy2024Value": 14,
+      "currentRepositoryStatus": "missing",
+      "strategicRationale": "Best large-growth fruit candidate in the top-15; consider before smaller produce such as Pera Mantovana."
+    },
+    {
+      "priorityRank": 12,
+      "slug": "terra-di-bari",
+      "name": "Terra di Bari DOP",
+      "protectionType": "DOP",
+      "category": "oli-di-oliva",
+      "marketValue2023EurMillion": 41,
+      "marketValue2024EurMillion": 77,
+      "yoyGrowthPercent": 89.3,
+      "sourceRankBy2024Value": 15,
+      "currentRepositoryStatus": "missing",
+      "strategicRationale": "Lowest value in this selection but exceptional YoY growth; a strong bet if the product strategy wants to enter oils."
+    }
+  ]
+}
