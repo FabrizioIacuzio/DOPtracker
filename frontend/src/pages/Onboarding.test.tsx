@@ -79,6 +79,19 @@ describe("<Onboarding />", () => {
       expect(screen.getByRole("button", { name: /Avanti/i })).toBeEnabled();
     });
 
+    it("uses metadata protection types for classified products", async () => {
+      const { user } = mount();
+      await advanceToStep1(user);
+
+      await user.click(screen.getByText("Ortaggi & Frutta"));
+      expect(screen.getByText("Aglio Bianco Polesano DOP")).toBeInTheDocument();
+      expect(screen.queryByText("Aglio Bianco Polesano IGP")).not.toBeInTheDocument();
+
+      await user.click(screen.getByText("Altro"));
+      expect(screen.getByText("Salmerino del Trentino IGP")).toBeInTheDocument();
+      expect(screen.queryByText("Salmerino del Trentino DOP")).not.toBeInTheDocument();
+    });
+
     it("selecting ABM enables the Next button", async () => {
       const { user } = mount();
       await advanceToStep1(user);

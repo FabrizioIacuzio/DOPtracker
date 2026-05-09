@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { ElementType } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAppData } from "@/contexts/AppDataContext";
@@ -7,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { getProductMetadata } from "@/lib/productMetadata";
 import { ChevronRight, ChevronLeft, Wine, Beef, Milk, Leaf, Fish, Droplets, Check, Globe } from "lucide-react";
 
 interface Denomination {
@@ -17,99 +19,57 @@ interface Denomination {
 interface Category {
   id: string
   label: string
-  icon: React.ElementType
+  icon: ElementType
   denominations: Denomination[]
 }
 
-const CATEGORIES: Category[] = [
-  {
-    id: 'formaggi',
-    label: 'Formaggi',
-    icon: Milk,
-    denominations: [
-      { id: 'asiago', name: 'Asiago DOP' },
-      { id: 'bitto', name: 'Bitto DOP' },
-      { id: 'casatella-trevigiana', name: 'Casatella Trevigiana DOP' },
-      { id: 'fontina', name: 'Fontina DOP' },
-      { id: 'gorgonzola', name: 'Gorgonzola DOP' },
-      { id: 'grana-padano', name: 'Grana Padano DOP' },
-      { id: 'montasio', name: 'Montasio DOP' },
-      { id: 'monte-veronese', name: 'Monte Veronese DOP' },
-      { id: 'nostrano-valtrompia', name: 'Nostrano Valtrompia DOP' },
-      { id: 'piave', name: 'Piave DOP' },
-      { id: 'provolone-valpadana', name: 'Provolone Valpadana DOP' },
-      { id: 'ricotta-di-bufala-campana', name: 'Ricotta di Bufala Campana DOP' },
-      { id: 'spressa-delle-giudicarie', name: 'Spressa delle Giudicarie DOP' },
-      { id: 'valle-daosta-fromadzo', name: "Valle d'Aosta Fromadzo DOP" },
-      { id: 'valtellina-casera', name: 'Valtellina Casera DOP' },
-    ],
-  },
-  {
-    id: 'salumi',
-    label: 'Salumi',
-    icon: Beef,
-    denominations: [
-      { id: 'bresaola-della-valtellina', name: 'Bresaola della Valtellina IGP' },
-      { id: 'sopressa-vicentina', name: 'Sopressa Vicentina DOP' },
-    ],
-  },
-  {
-    id: 'vino',
-    label: 'Vino',
-    icon: Wine,
-    denominations: [
-      { id: 'chianti-classico', name: 'Chianti Classico DOP' },
-      { id: 'garda', name: 'Garda DOP' },
-    ],
-  },
-  {
-    id: 'aceto',
-    label: 'Aceto',
-    icon: Droplets,
-    denominations: [
-      { id: 'aceto-balsamico-di-modena', name: 'Aceto Balsamico di Modena IGP' },
-    ],
-  },
-  {
-    id: 'ortaggi-frutta',
-    label: 'Ortaggi & Frutta',
-    icon: Leaf,
-    denominations: [
-      { id: 'aglio-bianco-polesano', name: 'Aglio Bianco Polesano IGP' },
-      { id: 'amarene-brusche-di-modena', name: 'Amarene Brusche di Modena IGP' },
-      { id: 'asparago-bianco-di-bassano', name: 'Asparago Bianco di Bassano IGP' },
-      { id: 'asparago-bianco-di-cimadolmo', name: 'Asparago Bianco di Cimadolmo IGP' },
-      { id: 'asparago-di-badoere', name: 'Asparago di Badoere IGP' },
-      { id: 'ciliegia-di-marostica', name: 'Ciliegia di Marostica IGP' },
-      { id: 'cipollotto-nocerino', name: 'Cipollotto Nocerino DOP' },
-      { id: 'fagiolo-di-lamon-della-vallata-bellunese', name: 'Fagiolo di Lamon della Vallata Bellunese IGP' },
-      { id: 'insalata-di-lusia', name: 'Insalata di Lusia IGP' },
-      { id: 'marrone-di-combai', name: 'Marrone di Combai IGP' },
-      { id: 'marrone-di-san-zeno', name: 'Marrone di San Zeno IGP' },
-      { id: 'marroni-del-monfenera', name: 'Marroni del Monfenera IGP' },
-      { id: 'mela-di-valtellina', name: 'Mela di Valtellina IGP' },
-      { id: 'mela-val-di-non', name: 'Mela Val di Non DOP' },
-      { id: 'melanzana-rossa-di-rotonda', name: 'Melanzana Rossa di Rotonda DOP' },
-      { id: 'pera-mantovana', name: 'Pera Mantovana IGP' },
-      { id: 'pesca-di-verona', name: 'Pesca di Verona IGP' },
-      { id: 'radicchio-di-chioggia', name: 'Radicchio di Chioggia IGP' },
-      { id: 'radicchio-di-verona', name: 'Radicchio di Verona IGP' },
-      { id: 'radicchio-rosso-di-treviso', name: 'Radicchio Rosso di Treviso IGP' },
-      { id: 'radicchio-variegato-di-castelfranco', name: 'Radicchio Variegato di Castelfranco IGP' },
-      { id: 'susina-di-dro', name: 'Susina di Dro DOP' },
-      { id: 'uva-da-tavola-di-canicatti', name: "Uva da Tavola di Canicattì IGP" },
-    ],
-  },
-  {
-    id: 'altro',
-    label: 'Altro',
-    icon: Fish,
-    denominations: [
-      { id: 'miele-delle-dolomiti-bellunesi', name: 'Miele delle Dolomiti Bellunesi DOP' },
-      { id: 'salmerino-del-trentino', name: 'Salmerino del Trentino DOP' },
-    ],
-  },
-]
+const CATEGORY_ORDER = ['Formaggi', 'Salumi', 'Vino', 'Aceto', 'Ortaggi & Frutta', 'Altro']
+
+const CATEGORY_ICONS: Record<string, ElementType> = {
+  Formaggi: Milk,
+  Salumi: Beef,
+  Vino: Wine,
+  Aceto: Droplets,
+  'Ortaggi & Frutta': Leaf,
+  Altro: Fish,
+}
+
+function categoryId(label: string): string {
+  return label
+    .toLowerCase()
+    .replace(/&/g, '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
+function buildCategories(): Category[] {
+  const byCategory = new Map<string, Denomination[]>()
+  for (const product of getProductMetadata()) {
+    const list = byCategory.get(product.category) ?? []
+    list.push({ id: product.id, name: product.displayName })
+    byCategory.set(product.category, list)
+  }
+
+  return Array.from(byCategory.entries())
+    .map(([label, denominations]) => ({
+      id: categoryId(label),
+      label,
+      icon: CATEGORY_ICONS[label] ?? Leaf,
+      denominations,
+    }))
+    .sort((a, b) => {
+      const aIndex = CATEGORY_ORDER.indexOf(a.label)
+      const bIndex = CATEGORY_ORDER.indexOf(b.label)
+      if (aIndex !== -1 || bIndex !== -1) {
+        return (aIndex === -1 ? Number.MAX_SAFE_INTEGER : aIndex) - (bIndex === -1 ? Number.MAX_SAFE_INTEGER : bIndex)
+      }
+      return a.label.localeCompare(b.label, 'it')
+    })
+}
+
+const CATEGORIES: Category[] = buildCategories()
 
 export default function Onboarding() {
   const { t, toggleLang, lang } = useLanguage();
