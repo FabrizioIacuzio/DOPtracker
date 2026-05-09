@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { renderWithProviders } from "@/test/render";
 import { freezeTime } from "@/test/fakes";
-import { makeBatch } from "@/test/fixtures";
+import { makeBatch, makeCompany } from "@/test/fixtures";
 import { screen, within } from "@testing-library/react";
 import DashboardPage from "./DashboardPage";
 
@@ -43,7 +43,7 @@ describe("<DashboardPage />", () => {
   it("renders the four KPI labels", () => {
     mount();
     expect(screen.getByText("Lotti questo mese")).toBeInTheDocument();
-    expect(screen.getByText("Volume Produzione")).toBeInTheDocument();
+    expect(screen.getByText("Volume")).toBeInTheDocument();
     expect(screen.getByText("Tasso di Conformità")).toBeInTheDocument();
     expect(screen.getByText("Non conformità")).toBeInTheDocument();
   });
@@ -89,6 +89,48 @@ describe("<DashboardPage />", () => {
     mount({ preload: { batches, onboardingComplete: true } });
     const data = JSON.parse(screen.getByTestId("line-chart").getAttribute("data-chart-data") ?? "[]");
     expect(data.every((d: { min: number }) => d.min === 6)).toBe(true);
+  });
+
+  it("uses only the current product's batches and metric definitions", () => {
+    const batches = [
+      makeBatch({
+        id: "gorgonzola",
+        batchId: "G-20260501-AAAA",
+        date: "2026-05-01",
+        denominationId: "gorgonzola",
+        fields: {
+          milk_liters: 100,
+          fat_on_dry_matter_percent: 48.5,
+        },
+      }),
+      makeBatch({
+        id: "abm",
+        batchId: "ABM-20260501-BBBB",
+        date: "2026-05-01",
+        denominationId: "aceto-balsamico-di-modena",
+        fields: {
+          volume: 9000,
+          acidity: 6.8,
+        },
+      }),
+    ];
+    mount({
+      preload: {
+        company: makeCompany({
+          denomination: "Gorgonzola DOP",
+          denominationId: "gorgonzola",
+        }),
+        batches,
+        onboardingComplete: true,
+      },
+    });
+
+    expect(screen.getByText("100 L")).toBeInTheDocument();
+    expect(screen.queryByText(/9[,.]?100\s*L/)).not.toBeInTheDocument();
+    expect(screen.getByText("Trend Grasso s.s.")).toBeInTheDocument();
+
+    const data = JSON.parse(screen.getByTestId("line-chart").getAttribute("data-chart-data") ?? "[]");
+    expect(data).toEqual([{ batch: "AAAA", metric: 48.5, min: 48 }]);
   });
 
   it("renders chart placeholders instead of charts when there are no batches", () => {

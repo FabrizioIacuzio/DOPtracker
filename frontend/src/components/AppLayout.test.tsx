@@ -135,5 +135,12 @@ describe("<AppLayout />", () => {
       await user.click(calendarItem);
       expect(screen.getByTestId("ROUTE-calendar")).toBeInTheDocument();
     });
+
+    it("lets a user return to onboarding to test another product", async () => {
+      const { user } = mount({ route: "/dashboard" });
+      await user.click(screen.getByRole("button", { name: /Cambia prodotto/i }));
+      expect(screen.getByTestId("ONBOARDING")).toBeInTheDocument();
+      expect(JSON.parse(localStorage.getItem("dop_onboarded") ?? "true")).toBe(false);
+    });
   });
 });

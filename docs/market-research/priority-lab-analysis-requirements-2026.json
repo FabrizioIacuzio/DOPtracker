@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "researchDate": "2026-05-09",
+  "scope": "Preliminary lab-analysis requirement classification for the high-value 2026 priority denominations.",
+  "importantCaveats": [
+    "This is an AI-assisted desk review, not a human regulatory validation.",
+    "Do not mark lab analysis as mandatory in product UX until the denomination's disciplinare, piano dei controlli, control schema, operator forms, and portal obligations have been reviewed by a human.",
+    "The current app should allow product-tagged lab report upload for visible products, but should display the requirement as pending validation."
+  ],
+  "classificationValues": {
+    "requires_human_validation": "The source set shows control or analysis concepts, but the app must not treat user-uploaded lab reports as mandatory yet.",
+    "likely_required_for_specific_phase": "Available source evidence suggests analyses are tied to a defined phase, usually certification or packaging, but exact app workflow still requires human validation.",
+    "skipped_by_user": "Implementation intentionally paused by product-owner instruction."
+  },
+  "denominations": [
+    {
+      "priorityRank": 1,
+      "slug": "grana-padano",
+      "name": "Grana Padano DOP",
+      "appVisibility": "visible_configured",
+      "labAnalysisClassification": "requires_human_validation",
+      "preliminaryFinding": "CSQA publishes a product page with a piano dei controlli and operator documents. The existing app can tag uploads by product, but the required lab-report frequency and whether reports are producer-uploaded per lot still need DPC001 review.",
+      "currentAppTreatment": "Show lab-analysis card as 'Da validare'; do not block lot registration on lab upload.",
+      "sources": [
+        "https://www.csqa.it/it-it/dop-igp-stg/grana-padano-dop",
+        "products/grana-padano/docs/piano-di-controllo.zip"
+      ]
+    },
+    {
+      "priorityRank": 2,
+      "slug": "parmigiano-reggiano",
+      "name": "Parmigiano Reggiano DOP",
+      "appVisibility": "hidden_skipped",
+      "labAnalysisClassification": "skipped_by_user",
+      "preliminaryFinding": "Skipped on 2026-05-09 by product-owner instruction, despite high market value.",
+      "currentAppTreatment": "No UX entry and no lab-analysis workflow until explicitly reopened.",
+      "sources": []
+    },
+    {
+      "priorityRank": 3,
+      "slug": "mozzarella-di-bufala-campana",
+      "name": "Mozzarella di Bufala Campana DOP",
+      "appVisibility": "visible_configured",
+      "labAnalysisClassification": "requires_human_validation",
+      "preliminaryFinding": "RINA publishes a production register and refers operators to the approved piano dei controlli; the register captures process, mass-balance, physical and organoleptic idoneity fields. It does not by itself prove that a lab report must be uploaded for each lot.",
+      "currentAppTreatment": "Show lab-analysis card as 'Da validare'; uploads remain optional and product-tagged.",
+      "sources": [
+        "https://www.rina.org/it/prodotti-tipici-dop",
+        "https://scresources.rina.org/it/food/Registro-di-produzione-mozzarella-bufala-campana-dop.pdf",
+        "https://scresources.rina.org/it/food/MDC3-Mozzarella-di-Bufala-Campana-DOP.pdf"
+      ]
+    },
+    {
+      "priorityRank": 4,
+      "slug": "gorgonzola",
+      "name": "Gorgonzola DOP",
+      "appVisibility": "visible_configured",
+      "labAnalysisClassification": "requires_human_validation",
+      "preliminaryFinding": "The app models product thresholds, and CSQA is the control body. The public product page is sparse, so the local CSQA DPC012 package must be reviewed before making lab upload mandatory.",
+      "currentAppTreatment": "Show lab-analysis card as 'Da validare'; do not assume the Gorgonzola lot form covers all compliance phases.",
+      "sources": [
+        "https://www.csqa.it/it-it/dop-igp-stg/gorgonzola-dop",
+        "products/gorgonzola/docs/piano-di-controllo.zip"
+      ]
+    },
+    {
+      "priorityRank": 5,
+      "slug": "prosciutto-di-san-daniele",
+      "name": "Prosciutto di San Daniele DOP",
+      "appVisibility": "hidden_not_implemented",
+      "labAnalysisClassification": "requires_human_validation",
+      "preliminaryFinding": "IFCQ publishes denomination documents including sampling procedure material. Public secondary material mentions chemical-physical, organoleptic and microbiological controls, but the official operator obligations must be extracted from the current IFCQ package before implementation.",
+      "currentAppTreatment": "Hidden until implemented. Expect a multi-phase cured-meat workflow, not a generic single lab upload.",
+      "sources": [
+        "https://ifcq.it/prosciutto-san-daniele-dop/",
+        "https://www.sandanielemagazine.com/prodotto-prosciutto-di-san-daniele/i-controlli-sul-prosciutto-di-san-daniele/"
+      ]
+    },
+    {
+      "priorityRank": 6,
+      "slug": "aceto-balsamico-di-modena",
+      "name": "Aceto Balsamico di Modena IGP",
+      "appVisibility": "visible_configured",
+      "labAnalysisClassification": "requires_human_validation",
+      "preliminaryFinding": "The disciplinare contains chemical parameters and CSQA DPC030 is the control-plan package. Because ABM has multiple operator phases, lab-report obligation, frequency and attachment points must be validated per operator role.",
+      "currentAppTreatment": "Show lab-analysis card as 'Da validare'; keep upload optional and product-tagged.",
+      "sources": [
+        "https://www.csqa.it/it-it/dop-igp-stg/aceto-balsamico-di-modena-igp",
+        "products/aceto-balsamico-di-modena/docs/piano-di-controllo.zip"
+      ]
+    },
+    {
+      "priorityRank": 7,
+      "slug": "mortadella-bologna",
+      "name": "Mortadella Bologna IGP",
+      "appVisibility": "hidden_not_implemented",
+      "labAnalysisClassification": "requires_human_validation",
+      "preliminaryFinding": "IFCQ publishes the disciplinare, control schema and piano dei controlli. The denomination has organoleptic and chemical-physical product characteristics, but upload/frequency rules still need extraction from the official control plan.",
+      "currentAppTreatment": "Hidden until implemented; likely reusable with meat-product workflow only after IFCQ schema parsing.",
+      "sources": [
+        "https://ifcq.it/mortadella-bologna-igp/",
+        "https://ifcq.it/wp-content/uploads/mortadella-bologna/Schema-di-controlli-MB-Rev_-5-del-27_01_2023.pdf"
+      ]
+    },
+    {
+      "priorityRank": 8,
+      "slug": "pasta-di-gragnano",
+      "name": "Pasta di Gragnano IGP",
+      "appVisibility": "hidden_not_implemented",
+      "labAnalysisClassification": "requires_human_validation",
+      "preliminaryFinding": "CSQA is identified as the control body and the consortium publishes the disciplinare. Product-specific lab-report obligations are not yet classified from the public pages alone.",
+      "currentAppTreatment": "Hidden until implemented; validate whether controls are document/process based, analytical, or both.",
+      "sources": [
+        "https://www.csqa.it/it-it/dop-igp-stg/pasta-di-gragnano-i-g-p",
+        "https://www.pastadigragnanoigp.it/disciplinare/"
+      ]
+    },
+    {
+      "priorityRank": 9,
+      "slug": "bresaola-della-valtellina",
+      "name": "Bresaola della Valtellina IGP",
+      "appVisibility": "visible_configured",
+      "labAnalysisClassification": "requires_human_validation",
+      "preliminaryFinding": "The repo has a thin working config and CSQA is identified as control body. The exact lab-analysis obligation and frequency are still open because no local VALIDATION.md exists for this product.",
+      "currentAppTreatment": "Visible because lot fields exist, but show lab-analysis status as 'Da validare'.",
+      "sources": [
+        "https://www.csqa.it/it-it/dop-igp-stg/bresaola-della-valtellina-i-g-p",
+        "https://bresaolavaltellina.it/disciplinare-di-produzione/"
+      ]
+    },
+    {
+      "priorityRank": 10,
+      "slug": "speck-alto-adige",
+      "name": "Speck Alto Adige IGP",
+      "appVisibility": "hidden_not_implemented",
+      "labAnalysisClassification": "likely_required_for_specific_phase",
+      "preliminaryFinding": "IFCQ's 2026 control schema explicitly references organoleptic self-control sheets, chemical-physical and microbiological requirements for seasoned product, and IGP portal evidence for organoleptic sheets. This is a strong signal for phase-specific controls, but exact lab-report upload UX still needs official workflow extraction.",
+      "currentAppTreatment": "Hidden until implemented; model organoleptic, chemical-physical and microbiological checks as separate phase candidates.",
+      "sources": [
+        "https://ifcq.it/speck-alto-adige-igp/",
+        "https://ifcq.it/wp-content/uploads/speck-alto-adige/Schema-dei-controlli-SAA-Rev_-3-del-6_3_2026.pdf",
+        "https://ifcq.it/wp-content/uploads/speck-alto-adige/PDC-SAA-Rev_-3-del-6_3_2026.pdf"
+      ]
+    },
+    {
+      "priorityRank": 11,
+      "slug": "mela-alto-adige",
+      "name": "Mela Alto Adige IGP",
+      "appVisibility": "hidden_not_implemented",
+      "labAnalysisClassification": "requires_human_validation",
+      "preliminaryFinding": "SQK's control plan defines analytical control among document, inspection and analytical activities, while later sections emphasize traceability and packaging reports. It is not yet enough to require a producer lab report upload per lot.",
+      "currentAppTreatment": "Hidden until implemented; validate whether analytical checks are control-body sampling, operator self-control, or both.",
+      "sources": [
+        "https://sqk.it/wp-content/uploads/2025/04/PdC-Mela-Alto-Adige-1.pdf",
+        "https://sqk.it/it/documenti/"
+      ]
+    },
+    {
+      "priorityRank": 12,
+      "slug": "terra-di-bari",
+      "name": "Terra di Bari DOP",
+      "appVisibility": "hidden_not_implemented",
+      "labAnalysisClassification": "likely_required_for_specific_phase",
+      "preliminaryFinding": "The CCIAA Bari control plan/schema references analysis requests, chemical-physical and organoleptic revision procedures, and conformity reports before packaging authorization. This looks materially different from a generic optional lab upload.",
+      "currentAppTreatment": "Hidden until implemented; likely needs a certification-before-packaging workflow with SIAN/request-analysis data.",
+      "sources": [
+        "https://www.ba.camcom.it/articoli/allegato/2024/07/rev.-14-pdc-olio-dop-terra-di-bari.pdf",
+        "https://www.ba.camcom.it/articoli/allegato/2014/03/SCHEMA_DI_CONTROLLO.pdf",
+        "https://www.ba.camcom.it/info/certificazione-olio-atto-a-divenire-dop-chiarimenti--2583"
+      ]
+    }
+  ]
+}

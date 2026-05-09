@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { getProductMetadata } from "@/lib/productMetadata";
+import { getWorkingPriorityProductMetadata } from "@/lib/priorityProducts";
 import { ChevronRight, ChevronLeft, Wine, Beef, Milk, Leaf, Fish, Droplets, Check, Globe } from "lucide-react";
 
 interface Denomination {
@@ -46,7 +46,7 @@ function categoryId(label: string): string {
 
 function buildCategories(): Category[] {
   const byCategory = new Map<string, Denomination[]>()
-  for (const product of getProductMetadata()) {
+  for (const product of getWorkingPriorityProductMetadata()) {
     const list = byCategory.get(product.category) ?? []
     list.push({ id: product.id, name: product.displayName })
     byCategory.set(product.category, list)
@@ -57,7 +57,7 @@ function buildCategories(): Category[] {
       id: categoryId(label),
       label,
       icon: CATEGORY_ICONS[label] ?? Leaf,
-      denominations,
+      denominations: denominations.sort((a, b) => a.name.localeCompare(b.name, "it")),
     }))
     .sort((a, b) => {
       const aIndex = CATEGORY_ORDER.indexOf(a.label)

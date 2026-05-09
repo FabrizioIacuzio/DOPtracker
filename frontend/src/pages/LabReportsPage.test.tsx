@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { renderWithProviders } from "@/test/render";
 import { freezeTime, seedRandomUuid } from "@/test/fakes";
-import { makeLabReport } from "@/test/fixtures";
+import { makeCompany, makeLabReport } from "@/test/fixtures";
 import { screen, within } from "@testing-library/react";
 import LabReportsPage from "./LabReportsPage";
 
@@ -35,6 +35,21 @@ describe("<LabReportsPage />", () => {
       mount();
       expect(screen.queryByText("Valori Estratti (simulazione AI)")).not.toBeInTheDocument();
     });
+
+    it("shows that lab-analysis obligations must be validated for the selected product", () => {
+      mount({
+        preload: {
+          company: makeCompany({
+            denomination: "Mozzarella di Bufala Campana DOP",
+            denominationId: "mozzarella-di-bufala-campana",
+          }),
+          onboardingComplete: true,
+        },
+      });
+      expect(screen.getByText("Mozzarella di Bufala Campana DOP")).toBeInTheDocument();
+      expect(screen.getByText("Da validare")).toBeInTheDocument();
+      expect(screen.getByText(/Non trattare il caricamento come obbligatorio/)).toBeInTheDocument();
+    });
   });
 
   describe("upload via file input", () => {
@@ -49,6 +64,7 @@ describe("<LabReportsPage />", () => {
       expect(stored).toHaveLength(1);
       expect(stored[0]).toMatchObject({
         id: "lab-uuid-1",
+        denominationId: "aceto-balsamico-di-modena",
         fileName: "test-report.pdf",
         labName: "Laboratorio Analisi Modena",
         date: "2026-05-15",
@@ -60,6 +76,26 @@ describe("<LabReportsPage />", () => {
           dryExtract: 30.2,
           ash: 0.8,
         },
+      });
+    });
+
+    it("stores uploaded reports against the selected product", async () => {
+      const { container, user } = mount({
+        preload: {
+          company: makeCompany({
+            denomination: "Gorgonzola DOP",
+            denominationId: "gorgonzola",
+          }),
+          onboardingComplete: true,
+        },
+      });
+      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+      await user.upload(input, new File(["fake pdf bytes"], "gorgonzola.pdf", { type: "application/pdf" }));
+
+      const stored = JSON.parse(localStorage.getItem("dop_labReports") ?? "[]");
+      expect(stored[0]).toMatchObject({
+        fileName: "gorgonzola.pdf",
+        denominationId: "gorgonzola",
       });
     });
 

@@ -14,17 +14,12 @@ export interface BatchEntry {
 
 export interface LabReport {
   id: string;
+  denominationId?: string;
   fileName: string;
   labName: string;
   date: string;
   status: "pending" | "processed";
-  extractedValues?: {
-    acidity?: number;
-    density?: number;
-    sugars?: number;
-    dryExtract?: number;
-    ash?: number;
-  };
+  extractedValues?: Record<string, number | undefined>;
 }
 
 export interface CompanyInfo {

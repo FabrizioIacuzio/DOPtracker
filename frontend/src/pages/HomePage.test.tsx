@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { renderWithProviders } from "@/test/render";
 import { freezeTime } from "@/test/fakes";
-import { makeBatch } from "@/test/fixtures";
+import { makeBatch, makeCompany } from "@/test/fixtures";
 import { screen, within } from "@testing-library/react";
 import HomePage from "./HomePage";
 
@@ -173,6 +173,45 @@ describe("<HomePage /> — KPIs", () => {
     const label = screen.getByText("Non conformità");
     const card = label.closest("div")?.parentElement;
     expect(within(card!).getByText("2")).toBeInTheDocument();
+  });
+
+  it("dashboard cards only use batches for the selected product", () => {
+    const batches = [
+      makeBatch({
+        id: "mozzarella",
+        batchId: "MBC-20260501-AAAA",
+        date: "2026-05-01",
+        denominationId: "mozzarella-di-bufala-campana",
+        fields: {
+          buffalo_milk_kg: 250,
+          milk_fat_percent: 7.3,
+        },
+      }),
+      makeBatch({
+        id: "abm",
+        batchId: "ABM-20260501-BBBB",
+        date: "2026-05-01",
+        denominationId: "aceto-balsamico-di-modena",
+        fields: {
+          volume: 1200,
+          acidity: 6.4,
+        },
+      }),
+    ];
+    mount({
+      preload: {
+        company: makeCompany({
+          denomination: "Mozzarella di Bufala Campana DOP",
+          denominationId: "mozzarella-di-bufala-campana",
+        }),
+        batches,
+        onboardingComplete: true,
+      },
+    });
+
+    expect(screen.getByText("250 kg")).toBeInTheDocument();
+    expect(screen.queryByText(/1[,.]?450\s*kg/)).not.toBeInTheDocument();
+    expect(screen.getByText("Trend Grasso latte")).toBeInTheDocument();
   });
 });
 

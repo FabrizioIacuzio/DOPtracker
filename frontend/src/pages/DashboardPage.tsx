@@ -4,49 +4,20 @@ import { useAppData } from "@/contexts/AppDataContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Activity, BarChart3, CheckCircle, AlertTriangle } from "lucide-react";
-import { format, parseISO, startOfMonth } from "date-fns";
+import { buildDashboardModel } from "@/lib/dashboardMetrics";
 
 export default function DashboardPage() {
   const { t } = useLanguage();
-  const { batches } = useAppData();
+  const { batches, companyInfo } = useAppData();
+  const denominationId = companyInfo?.denominationId ?? "aceto-balsamico-di-modena";
 
-  const getPrimaryVolume = (b: typeof batches[0]) =>
-    Number(b.fields['volume'] ?? b.fields['total_liters'] ?? b.fields['total_weight_kg'] ?? b.fields['milk_liters'] ?? b.fields['cow_milk_liters'] ?? 0)
-
-  const stats = useMemo(() => {
-    const now = new Date();
-    const thisMonth = format(now, "yyyy-MM");
-    const monthBatches = batches.filter((b) => b.date.startsWith(thisMonth));
-    const totalVolume = monthBatches.reduce((s, b) => s + getPrimaryVolume(b), 0);
-    const conformant = monthBatches.filter((b) => !b.hasWarnings).length;
-    const rate = monthBatches.length > 0 ? Math.round((conformant / monthBatches.length) * 100) : 100;
-    const nonConf = monthBatches.filter((b) => b.hasWarnings).length;
-    return { monthCount: monthBatches.length, totalVolume, rate, nonConf };
-  }, [batches]);
-
-  const volumeData = useMemo(() => {
-    const months: Record<string, number> = {};
-    batches.forEach((b) => {
-      const m = format(parseISO(b.date), "yyyy-MM");
-      months[m] = (months[m] || 0) + getPrimaryVolume(b);
-    });
-    return Object.entries(months)
-      .sort(([a], [b]) => a.localeCompare(b))
-      .slice(-6)
-      .map(([month, volume]) => ({ month: format(parseISO(month + "-01"), "MMM yy"), volume: Math.round(volume) }));
-  }, [batches]);
-
-  const acidityData = useMemo(() => {
-    return batches
-      .slice(-20)
-      .map((b) => ({ batch: b.batchId.slice(-4), acidity: Number(b.fields['acidity'] ?? 0), min: 6 }));
-  }, [batches]);
+  const dashboard = useMemo(() => buildDashboardModel(batches, denominationId), [batches, denominationId]);
 
   const kpis = [
-    { label: t("dashboard.batchesMonth"), value: stats.monthCount, icon: BarChart3, color: "text-primary" },
-    { label: t("dashboard.volume"), value: `${stats.totalVolume.toLocaleString()} L`, icon: Activity, color: "text-blue-500" },
-    { label: t("dashboard.compliance"), value: `${stats.rate}%`, icon: CheckCircle, color: "text-green-500" },
-    { label: t("dashboard.nonConformity"), value: stats.nonConf, icon: AlertTriangle, color: "text-destructive" },
+    { label: t("dashboard.batchesMonth"), value: dashboard.stats.monthCount, icon: BarChart3, color: "text-primary" },
+    { label: dashboard.primaryField?.label ?? t("dashboard.volume"), value: dashboard.stats.totalQuantityLabel, icon: Activity, color: "text-blue-500" },
+    { label: t("dashboard.compliance"), value: `${dashboard.stats.rate}%`, icon: CheckCircle, color: "text-green-500" },
+    { label: t("dashboard.nonConformity"), value: dashboard.stats.nonConf, icon: AlertTriangle, color: "text-destructive" },
   ];
 
   return (
@@ -72,12 +43,12 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t("dashboard.volume")} ({t("dashboard.liters")})</CardTitle>
+            <CardTitle className="text-base">{dashboard.primaryChartTitle}</CardTitle>
           </CardHeader>
           <CardContent>
-            {volumeData.length > 0 ? (
+            {dashboard.volumeData.length > 0 ? (
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={volumeData}>
+                <BarChart data={dashboard.volumeData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                   <YAxis tick={{ fontSize: 12 }} />
@@ -95,18 +66,23 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t("dashboard.acidity")}</CardTitle>
+            <CardTitle className="text-base">{dashboard.metricChartTitle}</CardTitle>
           </CardHeader>
           <CardContent>
-            {acidityData.length > 0 ? (
+            {dashboard.metricData.length > 0 ? (
               <ResponsiveContainer width="100%" height={250}>
-                <LineChart data={acidityData}>
+                <LineChart data={dashboard.metricData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="batch" tick={{ fontSize: 12 }} />
-                  <YAxis domain={[4, 10]} tick={{ fontSize: 12 }} />
+                  <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip />
-                  <Line type="monotone" dataKey="acidity" stroke="hsl(32, 95%, 44%)" strokeWidth={2} dot={{ r: 4 }} />
-                  <Line type="monotone" dataKey="min" stroke="hsl(0, 84%, 60%)" strokeWidth={1} strokeDasharray="5 5" dot={false} />
+                  <Line type="monotone" dataKey="metric" stroke="hsl(32, 95%, 44%)" strokeWidth={2} dot={{ r: 4 }} />
+                  {dashboard.metricData.some((item) => item.min !== undefined) && (
+                    <Line type="monotone" dataKey="min" stroke="hsl(0, 84%, 60%)" strokeWidth={1} strokeDasharray="5 5" dot={false} />
+                  )}
+                  {dashboard.metricData.some((item) => item.max !== undefined) && (
+                    <Line type="monotone" dataKey="max" stroke="hsl(0, 84%, 60%)" strokeWidth={1} strokeDasharray="5 5" dot={false} />
+                  )}
                 </LineChart>
               </ResponsiveContainer>
             ) : (

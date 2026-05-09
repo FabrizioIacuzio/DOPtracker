@@ -7,18 +7,30 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight, Plus, Pencil, Activity, BarChart3, CheckCircle, AlertTriangle } from "lucide-react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isToday, isSameMonth, parseISO } from "date-fns";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isToday, isSameMonth } from "date-fns";
 import { it as itLocale, enUS } from "date-fns/locale";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { buildDashboardModel } from "@/lib/dashboardMetrics";
 
 export default function HomePage() {
   const { t, lang } = useLanguage();
-  const { batches } = useAppData();
+  const { batches, companyInfo } = useAppData();
   const navigate = useNavigate();
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const locale = lang === "it" ? itLocale : enUS;
+  const denominationId = companyInfo?.denominationId ?? "aceto-balsamico-di-modena";
+  const dashboard = useMemo(() => buildDashboardModel(batches, denominationId), [batches, denominationId]);
+  const currentProductBatches = dashboard.batches;
+
+  const displayBatchQuantity = (batch: typeof batches[0]) => {
+    if (!dashboard.primaryField) return "-";
+    const raw = batch.fields[dashboard.primaryField.key];
+    const value = typeof raw === "string" ? Number.parseFloat(raw) : raw;
+    if (typeof value !== "number" || !Number.isFinite(value)) return "-";
+    return `${value}${dashboard.primaryField.unit ? ` ${dashboard.primaryField.unit}` : ""}`;
+  };
 
   // Calendar logic
   const days = useMemo(() => {
@@ -27,23 +39,20 @@ export default function HomePage() {
     return eachDayOfInterval({ start, end });
   }, [currentMonth]);
 
-  const getPrimaryVolume = (b: typeof batches[0]) =>
-    Number(b.fields['volume'] ?? b.fields['total_liters'] ?? b.fields['total_weight_kg'] ?? b.fields['milk_liters'] ?? b.fields['cow_milk_liters'] ?? 0)
-
   const batchDates = useMemo(() => {
     const map: Record<string, { count: number; hasWarnings: boolean }> = {};
-    batches.forEach((b) => {
+    currentProductBatches.forEach((b) => {
       if (!map[b.date]) map[b.date] = { count: 0, hasWarnings: false };
       map[b.date].count++;
       if (b.hasWarnings) map[b.date].hasWarnings = true;
     });
     return map;
-  }, [batches]);
+  }, [currentProductBatches]);
 
   const selectedDayBatches = useMemo(() => {
     if (!selectedDate) return [];
-    return batches.filter((b) => b.date === selectedDate);
-  }, [selectedDate, batches]);
+    return currentProductBatches.filter((b) => b.date === selectedDate);
+  }, [selectedDate, currentProductBatches]);
 
   const startDayOfWeek = getDay(startOfMonth(currentMonth));
   const offset = startDayOfWeek === 0 ? 6 : startDayOfWeek - 1;
@@ -52,7 +61,7 @@ export default function HomePage() {
     : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   const handleDayClick = (dateStr: string) => {
-    const dayBatches = batches.filter((b) => b.date === dateStr);
+    const dayBatches = currentProductBatches.filter((b) => b.date === dateStr);
     if (dayBatches.length === 0) {
       navigate(`/batch/new?date=${dateStr}`);
     } else {
@@ -62,42 +71,14 @@ export default function HomePage() {
 
   // Recent batches (last 10)
   const recentBatches = useMemo(() => {
-    return [...batches].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);
-  }, [batches]);
-
-  // Dashboard stats
-  const stats = useMemo(() => {
-    const now = new Date();
-    const thisMonth = format(now, "yyyy-MM");
-    const monthBatches = batches.filter((b) => b.date.startsWith(thisMonth));
-    const totalVolume = monthBatches.reduce((s, b) => s + getPrimaryVolume(b), 0);
-    const conformant = monthBatches.filter((b) => !b.hasWarnings).length;
-    const rate = monthBatches.length > 0 ? Math.round((conformant / monthBatches.length) * 100) : 100;
-    const nonConf = monthBatches.filter((b) => b.hasWarnings).length;
-    return { monthCount: monthBatches.length, totalVolume, rate, nonConf };
-  }, [batches]);
-
-  const volumeData = useMemo(() => {
-    const months: Record<string, number> = {};
-    batches.forEach((b) => {
-      const m = format(parseISO(b.date), "yyyy-MM");
-      months[m] = (months[m] || 0) + getPrimaryVolume(b);
-    });
-    return Object.entries(months)
-      .sort(([a], [b]) => a.localeCompare(b))
-      .slice(-6)
-      .map(([month, volume]) => ({ month: format(parseISO(month + "-01"), "MMM yy"), volume: Math.round(volume) }));
-  }, [batches]);
-
-  const acidityData = useMemo(() => {
-    return batches.slice(-20).map((b) => ({ batch: b.batchId.slice(-4), acidity: Number(b.fields['acidity'] ?? 0), min: 6 }));
-  }, [batches]);
+    return [...currentProductBatches].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);
+  }, [currentProductBatches]);
 
   const kpis = [
-    { label: t("dashboard.batchesMonth"), value: stats.monthCount, icon: BarChart3, color: "text-primary" },
-    { label: t("dashboard.volume"), value: `${stats.totalVolume.toLocaleString()} L`, icon: Activity, color: "text-blue-500" },
-    { label: t("dashboard.compliance"), value: `${stats.rate}%`, icon: CheckCircle, color: "text-green-500" },
-    { label: t("dashboard.nonConformity"), value: stats.nonConf, icon: AlertTriangle, color: "text-destructive" },
+    { label: t("dashboard.batchesMonth"), value: dashboard.stats.monthCount, icon: BarChart3, color: "text-primary" },
+    { label: dashboard.primaryField?.label ?? t("dashboard.volume"), value: dashboard.stats.totalQuantityLabel, icon: Activity, color: "text-blue-500" },
+    { label: t("dashboard.compliance"), value: `${dashboard.stats.rate}%`, icon: CheckCircle, color: "text-green-500" },
+    { label: t("dashboard.nonConformity"), value: dashboard.stats.nonConf, icon: AlertTriangle, color: "text-destructive" },
   ];
 
   return (
@@ -181,7 +162,7 @@ export default function HomePage() {
                     <div>
                       <p className="font-semibold">{batch.batchId}</p>
                       <p className="text-sm text-muted-foreground">
-                        {batch.date} · {getPrimaryVolume(batch)}{batch.fields['volume'] !== undefined ? 'L' : ''} · {String(batch.fields['supplier'] ?? '—')}
+                        {batch.date} · {displayBatchQuantity(batch)} · {String(batch.fields['supplier'] ?? '—')}
                       </p>
                     </div>
                   </div>
@@ -219,12 +200,12 @@ export default function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">{t("dashboard.volume")} ({t("dashboard.liters")})</CardTitle>
+              <CardTitle className="text-base">{dashboard.primaryChartTitle}</CardTitle>
             </CardHeader>
             <CardContent>
-              {volumeData.length > 0 ? (
+              {dashboard.volumeData.length > 0 ? (
                 <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={volumeData}>
+                  <BarChart data={dashboard.volumeData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                     <YAxis tick={{ fontSize: 12 }} />
@@ -241,18 +222,23 @@ export default function HomePage() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">{t("dashboard.acidity")}</CardTitle>
+              <CardTitle className="text-base">{dashboard.metricChartTitle}</CardTitle>
             </CardHeader>
             <CardContent>
-              {acidityData.length > 0 ? (
+              {dashboard.metricData.length > 0 ? (
                 <ResponsiveContainer width="100%" height={250}>
-                  <LineChart data={acidityData}>
+                  <LineChart data={dashboard.metricData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="batch" tick={{ fontSize: 12 }} />
-                    <YAxis domain={[4, 10]} tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
                     <Tooltip />
-                    <Line type="monotone" dataKey="acidity" stroke="hsl(32, 95%, 44%)" strokeWidth={2} dot={{ r: 4 }} />
-                    <Line type="monotone" dataKey="min" stroke="hsl(0, 84%, 60%)" strokeWidth={1} strokeDasharray="5 5" dot={false} />
+                    <Line type="monotone" dataKey="metric" stroke="hsl(32, 95%, 44%)" strokeWidth={2} dot={{ r: 4 }} />
+                    {dashboard.metricData.some((item) => item.min !== undefined) && (
+                      <Line type="monotone" dataKey="min" stroke="hsl(0, 84%, 60%)" strokeWidth={1} strokeDasharray="5 5" dot={false} />
+                    )}
+                    {dashboard.metricData.some((item) => item.max !== undefined) && (
+                      <Line type="monotone" dataKey="max" stroke="hsl(0, 84%, 60%)" strokeWidth={1} strokeDasharray="5 5" dot={false} />
+                    )}
                   </LineChart>
                 </ResponsiveContainer>
               ) : (
@@ -283,7 +269,7 @@ export default function HomePage() {
                 <div className="text-left">
                   <div className="font-medium">{batch.batchId}</div>
                   <div className="text-xs text-muted-foreground">
-                    {getPrimaryVolume(batch)}{batch.fields['volume'] !== undefined ? 'L' : ''} · {String(batch.fields['supplier'] ?? '—')}
+                    {displayBatchQuantity(batch)} · {String(batch.fields['supplier'] ?? '—')}
                     {batch.hasWarnings && <Badge variant="destructive" className="ml-2 text-[10px] px-1 py-0">⚠</Badge>}
                   </div>
                 </div>

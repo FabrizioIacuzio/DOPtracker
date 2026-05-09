@@ -157,22 +157,43 @@ The following product folders have been analyzed and corrected by Codex against 
 | Denomination | Status | Primary sources checked |
 |--------------|--------|-------------------------|
 | `aceto-balsamico-di-modena` | AI-audited, pending human review | MASAF 2025 disciplinare and local CSQA DPC030 package |
+| `bresaola-della-valtellina` | Thin working config, pending deeper audit | Consorzio disciplinare page and CSQA product page identified |
 | `gorgonzola` | AI-audited, pending human review | Official disciplinare, CSQA product page, local CSQA DPC012 package |
 | `grana-padano` | AI-audited, pending human review | Consorzio disciplinare page/PDF, local CSQA DPC001 package |
 | `insalata-di-lusia` | AI-audited, pending human review | EU 2019/C 3/11 single document, CSQA product page, local CSQA DPC041 package |
 | `mozzarella-di-bufala-campana` | AI-audited initial config, pending human review | Official disciplinare/Consorzio source, RINA AGRIFOOD production register, MASAF RINA authorization, MASAF buffalo milk traceability page |
 
-Each audited product has a `products/{id}/VALIDATION.md` file with the document list, modeled rules, submission mapping, and open questions.
+Each fully audited product has a `products/{id}/VALIDATION.md` file with the document list, modeled rules, submission mapping, and open questions. `bresaola-della-valtellina` is visible because it has a working config, but still needs that deeper validation file.
+
+### Product UX visibility as of 2026-05-09
+
+The onboarding UX intentionally shows only high-value priority denominations that currently have working product configs:
+
+- `aceto-balsamico-di-modena`
+- `bresaola-della-valtellina`
+- `gorgonzola`
+- `grana-padano`
+- `mozzarella-di-bufala-campana`
+
+All other products are hidden from onboarding until they are implemented one at a time. `parmigiano-reggiano` remains excluded by product-owner instruction.
+
+Dashboard metrics and lab report uploads must be scoped to the selected product. Lab analysis is not considered mandatory for any product until the specific control plan has been human-validated. See `docs/market-research/priority-lab-analysis-requirements-2026.json`.
 
 | Priority | Denomination | Why |
 |----------|-------------|-----|
-| 1 | `aceto-balsamico-di-modena` | Reference denomination, most documentation available |
-| 2 | `gorgonzola` | Large producer base, CSQA-controlled, well-documented |
-| 3 | `fontina` | DOP, well-known, regulatory docs available |
-| 4 | `chianti-classico` | Wine — different regulatory framework (DOCG) |
-| 5 | `bresaola-della-valtellina` | Salumi — thin config, needs research |
+| 1 | `grana-padano` | Largest 2024 food DOP/IGP value and strong YoY growth |
+| 2 | `mozzarella-di-bufala-campana` | Large market, implemented initial config |
+| 3 | `gorgonzola` | Large and growing, implemented config |
+| 4 | `prosciutto-di-san-daniele` | High-value missing cured-meat workflow |
+| 5 | `aceto-balsamico-di-modena` | Reference product with multi-operator workflow |
+| 6 | `mortadella-bologna` | High-value meat IGP, source package identified |
+| 7 | `pasta-di-gragnano` | High value plus double-digit growth |
+| 8 | `bresaola-della-valtellina` | Visible thin config, needs deeper audit |
+| 9 | `speck-alto-adige` | Fast-growing cured-meat workflow candidate |
+| 10 | `mela-alto-adige` | Best high-growth fruit candidate in the top-15 |
+| 11 | `terra-di-bari` | Lower value but exceptional YoY growth |
 
-The fruit and vegetable denominations (23 total) have simpler rules and can be validated in batches once the pattern is established.
+`parmigiano-reggiano` would rank second by market value, but is intentionally skipped until reopened by the product owner. Smaller fruit and vegetable denominations should stay hidden unless a customer lead justifies them.
 
 ---
 

@@ -2,7 +2,7 @@ import { Outlet, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAppData } from "@/contexts/AppDataContext";
 import { Button } from "@/components/ui/button";
-import { Globe, User, Menu, CalendarDays, ClipboardList, BarChart3, FlaskConical, FileText, Home } from "lucide-react";
+import { Globe, User, Menu, CalendarDays, ClipboardList, BarChart3, FlaskConical, FileText, Home, RefreshCcw } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,13 +21,18 @@ const navItems = [
 
 export default function AppLayout() {
   const { toggleLang, lang, t } = useLanguage();
-  const { companyInfo, onboardingComplete } = useAppData();
+  const { companyInfo, onboardingComplete, setOnboardingComplete } = useAppData();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
   if (!onboardingComplete) {
     return <Navigate to="/onboarding" replace />;
   }
+
+  const returnToOnboarding = () => {
+    setOnboardingComplete(false);
+    navigate("/onboarding");
+  };
 
   return (
     <div className="min-h-screen flex flex-col w-full">
@@ -63,6 +68,10 @@ export default function AppLayout() {
           )}
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={returnToOnboarding} className="gap-1.5">
+            <RefreshCcw className="h-4 w-4" />
+            <span className="hidden sm:inline">Cambia prodotto</span>
+          </Button>
           <Button variant="ghost" size="sm" onClick={toggleLang} className="gap-1.5">
             <Globe className="h-4 w-4" />
             {lang === "it" ? "EN" : "IT"}

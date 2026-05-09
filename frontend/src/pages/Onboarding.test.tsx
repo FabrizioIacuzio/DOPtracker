@@ -86,17 +86,21 @@ describe("<Onboarding />", () => {
       expect(screen.getByText("Mozzarella di Bufala Campana DOP")).toBeInTheDocument();
     });
 
-    it("uses metadata protection types for classified products", async () => {
+    it("shows only priority products that already have working configuration", async () => {
       const { user } = mount();
       await advanceToStep1(user);
 
-      await user.click(screen.getByText("Ortaggi & Frutta"));
-      expect(screen.getByText("Aglio Bianco Polesano DOP")).toBeInTheDocument();
-      expect(screen.queryByText("Aglio Bianco Polesano IGP")).not.toBeInTheDocument();
+      await user.click(screen.getByText("Formaggi"));
+      expect(screen.getByText("Gorgonzola DOP")).toBeInTheDocument();
+      expect(screen.getByText("Grana Padano DOP")).toBeInTheDocument();
+      expect(screen.getByText("Mozzarella di Bufala Campana DOP")).toBeInTheDocument();
+      expect(screen.queryByText("Parmigiano Reggiano DOP")).not.toBeInTheDocument();
 
-      await user.click(screen.getByText("Altro"));
-      expect(screen.getByText("Salmerino del Trentino IGP")).toBeInTheDocument();
-      expect(screen.queryByText("Salmerino del Trentino DOP")).not.toBeInTheDocument();
+      await user.click(screen.getByText("Salumi"));
+      expect(screen.getByText("Bresaola della Valtellina IGP")).toBeInTheDocument();
+      expect(screen.queryByText("Prosciutto di San Daniele DOP")).not.toBeInTheDocument();
+
+      expect(screen.queryByText("Ortaggi & Frutta")).not.toBeInTheDocument();
     });
 
     it("selecting ABM enables the Next button", async () => {
@@ -110,8 +114,8 @@ describe("<Onboarding />", () => {
     it("category cards show the denomination count", async () => {
       const { user } = mount();
       await advanceToStep1(user);
-      // Formaggi has 16 denominations after adding Mozzarella di Bufala Campana DOP.
-      expect(screen.getByText("16 prodotti")).toBeInTheDocument();
+      expect(screen.getByText("3 prodotti")).toBeInTheDocument();
+      expect(screen.getAllByText("1 prodotti")).toHaveLength(2);
     });
 
     it("Back button returns to step 0", async () => {
